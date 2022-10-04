@@ -1,1 +1,1 @@
-![test.yml](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/test.yml/badge.svg)
+![test.yml](https://github.com/CS107/team23/actions/workflows/test.yml/badge.svg)
