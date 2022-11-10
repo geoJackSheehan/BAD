@@ -51,7 +51,7 @@ class TestDualNumber:
         assert isinstance(2.0 * DualNumber(1, 1), DualNumber)
         assert isinstance(DualNumber(1, 1) * DualNumber(2, 2.0), DualNumber)
         with pytest.raises(TypeError):
-            DualNumber(1,1) * '2'
+            DualNumber(1, 1) * '2'
             '2' * DualNumber(1,1)
 
         x = DualNumber(1, 1)
@@ -64,3 +64,47 @@ class TestDualNumber:
         y = 2 * x
         assert y.real == 2
         assert y.dual == 2
+
+    def test_truediv(self):
+        assert isinstance(DualNumber(2, 2) / 2, DualNumber)
+        assert isinstance(2 / DualNumber(2, 2), DualNumber)
+        assert isinstance(DualNumber(1, 1) / DualNumber(2, 2), DualNumber)
+        with pytest.raises(TypeError):
+            DualNumber(1, 1) / '3'
+            '3' / DualNumber(1, 1)
+
+        x = DualNumber(2, 1)
+        y = x / 2
+        assert y.real == 1
+        assert r.dual == 1/2
+
+    def test_rtruediv(self):
+        x = DualNumber(2, 1)
+        y = 2 / x
+        assert y.real == 1
+        assert y.dual == -1/2
+
+    def test_neg(self):
+        assert isinstance(-DualNumber(1, 1), DualNumber)
+
+        x = DualNumber(1, 1)
+        y = -x
+        assert y.real == -1
+        assert y.dual == -1
+
+    def test_pow(self):
+        assert isinstance(DualNumber(1, 1) ** 2, DualNumber)
+        assert isinstance(DualNumber(1, 1) ** DualNumber(1, 1), DualNumber)
+        with pytest.raises(TypeError):
+            DualNumber(1, 1) ** '5'
+
+        x = DualNumber(2, 1)
+        y = x**2
+        assert y.real == 4
+        assert y.dual == 4
+
+    def test_rpow(self):
+        x = DualNumber(2, 1)
+        y = 2**x
+        assert y.real == 4
+        assert y.dual == np.log(2)*2 ** 2
