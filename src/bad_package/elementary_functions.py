@@ -1,6 +1,17 @@
 # Defines and describes the behavior of overloaded operators on different data types within the package
-# Numpy handles scalar and vector input by default, returning a scalar float and element-wise vector of floats respectively
 # All dual number computations used a trace table with V0 = x.real,  DpV0 = x.dual
+# Elementary functions are recursive in the DualNumber computation s.t. we pass the real part and/or dual part to another function 
+#   within this module to compute the scalar output. Ensures all Numpy errors are overwritten with custom errors so the user does not
+#   need to interact with numpy using our module (expect for in cases where they are not using an AD object). Also allows us to 
+#   ensure functional domain restrictions are met.
+# Domain restrictions on functions are imposed by most restrictive case 
+
+# Expectations:
+# 1. Any elementary function is being applied to a single DualNumber instance or int / float
+# 2. DualNumber real parts have been converted to floats already, the dual part will be done by us explicitly (setting the seed vector, ect)
+# 3. NotImplementedError raised if there is (1) unexpected behavior or (2) devs haven't gotten to implementing something yet
+# 4. TypeError raised if an inappropriate data type was passed from the user
+# 5. ArithmeticError raised if there was a (generally) mathematically inappropriate calculation about to happen 
 
 import numpy as np
 from bad_forward_mode import DualNumber
@@ -10,196 +21,239 @@ e = np.e
 pi = np.pi
 inf = np.inf
 
+# Helper functions
+def _validate(x, fun):
+    # So we avoid any kind of truncation errors and things, better to do so explicitly
+    if isinstance(x, int):
+        return float(x)
+
+    # Check if the element is something we can do the computation with (would have casted int to float already)
+    if not isinstance(x, (DualNumber, float)):
+        raise TypeError(f'{fun} -- Elementary functions can only do computations on DualNumbers, integers, and floats.')
+
 # OVERLOADING FUNCTIONS
 def exp(x):
+    # Ensure the input is as expected, otherwise make minor data cleaning changes
+    x = _validate(x, 'exp()')
+
     if isinstance(x, DualNumber):
         # Defined for all reals; Using our implementation of exp
         return DualNumber(exp(x.real), x.dual * exp(x.real))
 
-    elif isinstance(x, (int, float, np.array)):
+    elif isinstance(x, float):
         # Returns basic e^x computation
         return np.exp(x)
 
     else:
-        raise TypeError('The exp() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def ln(x):
-    # Using our implementation of ln to handle domain issues
+    x = _validate(x, 'ln()')
+
     if isinstance(x, DualNumber):
-        if x.real != 0:
+        # ln Defined for [1, infinity); x.real cannot be 0
+        if x.real >= 1:
             return DualNumber(ln(x.real), x.dual / x.real)
         
         else:
-            raise ZeroDivisionError('DualNumber real part cannot be 0 for dual part creation.')
+            raise ArithmeticError('ln() -- Natural log is defined only for values greater than or equal to 1.')
 
-    elif isinstance(x, (int, float, np.array)):
-        # Returns natural log
+    elif isinstance(x, float):
+        # Returns natural log of scalar input to user or DualNumber creation
         if x >= 1:
             return np.log(x)
 
         else: 
-            raise ValueError('Natural log is defined only for values greater than or equal to 1.')
+            raise ArithmeticError('ln() -- Natural log is defined only for values greater than or equal to 1.')
 
     else:
-        raise TypeError('The ln() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def logBase(base, x):
-    # Used for all other base types; Using our implementation of logBase and ln to handle domain issues
+    x = _validate(x, 'logBase()')
+
+    # Taking two arguments requires another check not included in basic validation
+    if not isinstance(base, (int, float)):
+        raise TypeError('logBase() -- Base must be an integer or a float.')
+
     if isinstance(x, DualNumber):
-        if x.real != 0:
+        # log (general) is defined for (0, infinity); ln handled elsewhere; x.real != 0
+        if x.real > 0 and base > 0:
+            # ln is used in the base because it is the easiest version of custom log base derivative
             return DualNumber(logBase(base, x.real), x.dual / (x.real * ln(base)))
         
         else:
-            raise ZeroDivisionError('logBase() DualNumber real part cannot be 0 for the creation of the dual part.')
+            raise ArithmeticError('logBase() -- Ensure base is greater than or equal to 1 and DualNumber real part is greater than 0.')
     
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, float):    
+        # Defined everywhere that x and base are non-negative
         if x > 0 and base > 0:
             # Use change of base formula with common 10 base for custom log base computation
             return (np.log10(x) / np.log10(base))
         
         else:
-            raise ValueError('Cannot take log10 of a negative number.')
+            raise ArithmeticError('logBase() -- Ensure base is greater than or equal to 1 and DualNumber real part is greater than 0.')
     
     else:
-        raise TypeError('The logBase() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.') 
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.') 
 
 def sin(x):
+    x = _validate(x, 'sin()')
+
     if isinstance(x, DualNumber):
-        # Defined for all reals; Using our implementation of sin and cos
         return DualNumber(sin(x.real), x.dual * cos(x.real))
     
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, float):
+        # Defined for (-infinity, infinity)
         return np.sin(x)
 
     else:
-        raise TypeError('The sin() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')      
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')      
 
 def cos(x):
+    x = _validate(x, 'cos()')
+
     if isinstance(x, DualNumber):
-        # Defined for all reals; Using our implementation of cos and sin
         return DualNumber(cos(x.real), -1 * sin(x.real) * x.dual)
 
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, float):    
+        # Defined for (-infinity, infinity)
         return np.cos(x)
 
     else:
-        raise TypeError('The cos() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def tan(x):
+    x = _validate(x, 'tan()')
+
     if isinstance(x, DualNumber):
-        # Using our implementation of tan and sec to handle domain issues
         return DualNumber(tan(x.real), x.dual * sec(x.real) * sec(x.real))
 
-    elif isinstance(x, (int, float, np.array)):
+    elif isinstance(x, float):
+        # Defined everywhere expect where cosine = 0
         if np.cos(x) != 0:    
             return np.tan(x)
 
         else:
-            raise ZeroDivisionError('Tangent is not defined for the input value.')
+            raise ArithmeticError('tan() -- Ensure the input is defined within tangent\'s domain.')
 
     else:
-        raise TypeError('The tan() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def csc(x):
+    x = _validate(x, 'csc()')
+
     if isinstance(x, DualNumber):
-        # Using our implementation of csc and cot to handle domain issues
         return DualNumber(csc(x.real), -1 * csc(x.real) * cot(x.dual) * x.dual)
     
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, float):
+        # Defined everywhere expect where sine = 0     
         if np.sin(x) != 0:
             return (1 / np.sin(x))
 
         else:
-            raise ZeroDivisionError('Cosecant is not defined for the input value.')
+            raise ArithmeticError('csc() -- The sine of the input cannot be 0 due to division.')
 
     else:
-        raise TypeError('The csc() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
             
 
 def sec(x):
+    x = _validate(x, 'sec()')
+
     if isinstance(x, DualNumber):
-        # Using our implementations of sec and tan to handle domain issues
         return DualNumber(sec(x.real), sec(x.real) * tan(x.real) * x.dual)
     
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, float):    
         if np.cos(x) != 0:
             return (1 / np.cos(x))
 
         else:
-            raise ZeroDivisionError('Secant is not defined for the input value')
+            raise ArithmeticError('sec() -- The cosine of the input cannot be 0 due to division.')
 
     else:
-        raise TypeError('The sec() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def cot(x):
+    x = _validate(x, 'cot()')
+
     if isinstance(x, DualNumber):
-        # Using our implementation of cot and csc
         return DualNumber(cot(x.real), -1 * csc(x.real) * csc(x.real) * x.dual)
 
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, float):    
         if np.tan(x) != 0:
             return (1 / np.tan(x))
 
         else:
-            raise ZeroDivisionError('Cotangent is not defined for the input value.')
+            raise ArithmeticError('cot() -- The tangent of the input cannot be 0 due to division.')
 
     else:
-        raise TypeError('The cot() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def sinh(x):
+    x = _validate(x, 'sinh()')
+
     if isinstance(x, DualNumber):
-        # Defined for all reals; Using our implementations of sinh and cosh
         return DualNumber(sinh(x.real), cosh(x.real) * x.dual)
     
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, float):  
+        # Defined for (-infinity, infinity)  
         return np.sinh(x)
 
     else:
-        raise TypeError('The sinh() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def cosh(x):
+    x = _validate(x, 'cosh()')
+
     if isinstance(x, DualNumber):
-        # Defined for all reals; Using our implementation of cosh and sinh
+        # Defined for (-infinity, infinity)
         return DualNumber(cosh(x.real), sinh(x.real) * x.dual)
     
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, float):    
         return np.cosh(x)
 
     else:
-        raise TypeError('The cosh() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def tanh(x):
+    x = _validate(x, 'tanh()')
+
     if isinstance(x, DualNumber):
-        # Defined for all reals; Sech is not directly implemented; Using our tanh and cosh
-        return DualNumber(tanh(x.real), x.dual / (1 / cosh(x.real) ** 2))
+        if cosh(x.real) != 0:
+            return DualNumber(tanh(x.real), x.dual / (1 / cosh(x.real) ** 2))
+
+        else:
+            raise ArithmeticError('tanh() -- DualNumber dual part creation tried to divide by zero since cosh of real = 0.')
     
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, float):    
+        # Defined for (-infinity, infinity)
         return np.tanh(x)
 
     else:
-        raise TypeError('The tanh() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def arcsin(x):
+    x = _validate(x, 'arcsin()')
+
     if isinstance(x, DualNumber):
-        # Cases in this part deal with dual part creation; Using our implementation of arcsin and sqrt to catch other domain issues
+        # Cases in this part deal with dual part creation
         if x.real > -1 and x.real < 1:
             return DualNumber(arcsin(x.real), x.dual / sqrt(1 - x.real ** 2))
 
-        elif x.real in [-1, 1]:
-            raise ZeroDivisionError('arcsin() DualNumber real part cannot be -1 or 1 for dual part creation.')
-
         else:
-            raise ValueError('arcsin() DualNumber real part must be within defined domain (-1, 1) for dual part creation.')
+            raise ArithmeticError('arcsin() -- Tried to square-root a negative number during dual part creation. Ensure real part is within (-1, 1).')
     
-    elif isinstance(x, (int, float, np.array)):  
+    elif isinstance(x, float):  
+        # Defined for [-1, 1]
         if x >= -1 and x <= 1:
             return np.arcsin(x)
 
         else:
-            raise ValueError('arcsin() is only defined in the domain [-1, 1]')
+            raise ArithmeticError('arcsin() -- Arcsine is only defined in the domain [-1, 1]')
 
     else:
-        raise TypeError('The arcsin() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def arccos(x):
     if isinstance(x, DualNumber):
@@ -213,7 +267,7 @@ def arccos(x):
         else:
             raise ValueError('arccos() DualNumber real part must be within defined domain (-1, 1) for dual part creation.')
     
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, (int, float, np.ndarray)):    
         if x >= -1 and x <= 1:
             return np.arccos(x)
 
@@ -228,7 +282,7 @@ def arctan(x):
         # Defined for all reals; Use our implementation of arctan
         return DualNumber(arctan(x.real), x.dual / (1 + x.real ** 2))
     
-    elif isinstance(x, (int, float, np.array)):  
+    elif isinstance(x, (int, float, np.ndarray)):  
         return np.arctan(x)
 
     else:
@@ -239,7 +293,7 @@ def arcsinh(x):
         # Defined for all reals; Use our implementation of arcsinh
         return DualNumber(arcsinh(x.real), x.dual / sqrt(1 + x.real ** 2))
     
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, (int, float, np.ndarray)):    
         return np.arcsinh(x)
 
     else:
@@ -257,7 +311,7 @@ def arccosh(x):
         else: 
             raise ValueError('arccosh() DualNumber real part must be within defined domain (1, infinity) for dual part creation.')
     
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, (int, float, np.ndarray)):    
         if x >= 1:
             return np.arccosh(x)
         
@@ -277,7 +331,7 @@ def arctanh(x):
         else:
             raise ZeroDivisionError('arctanh(): DualNumber real part cannot be -1 or 1 for dual part creation.')
     
-    elif isinstance(x, (int, float, np.array)):  
+    elif isinstance(x, (int, float, np.ndarray)):  
         if x > -1 and x < 1:  
             return np.arctanh(x)
         
@@ -296,7 +350,7 @@ def sqrt(x):
         else:
             raise ValueError('Cannot take the square root of a negative number or 0 for dual part creation.')
     
-    elif isinstance(x, (int, float, np.array)):    
+    elif isinstance(x, (int, float, np.ndarray)):    
         if x >= 0:
             return np.sqrt(x)
 
@@ -306,14 +360,17 @@ def sqrt(x):
     else:
         raise TypeError('The sqrt() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
 
-
 if __name__ == "__main__":
     # Basic test code, move to test suite
 
-    print(exp(ln(2)), exp([0, 1, 2, 3]))
-    print(cos(1), cos([0, pi/2, pi, 3*pi/2]))
-    print(sinh(2*pi), sinh([0, pi/2, pi, 3*pi/2]))
-    print(logBase(2, 32))
+    print(exp(2))
+    # print(exp(1))
 
-    # Constants
-    print(e, pi, inf)
+    # print(exp(['3']))
+    # print(exp(ln(2)), exp([0, 1, 2, 3]))
+    # print(cos(1), cos([0, pi/2, pi, 3*pi/2]))
+    # print(sinh(2*pi), sinh([0, pi/2, pi, 3*pi/2]))
+    # print(logBase(2, 32))
+
+    # # Constants
+    # print(e, pi, inf)
