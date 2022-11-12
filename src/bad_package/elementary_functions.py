@@ -256,109 +256,119 @@ def arcsin(x):
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def arccos(x):
+    x = _validate(x, 'arccos()')
+
     if isinstance(x, DualNumber):
-        # Cases in this part deal with dual part creation; Using our implementation of arccos and sqrt to catch other domain issues
+        # Cases in this part deal with dual part creation
         if x.real > -1 and x.real < 1:
             return DualNumber(arccos(x.real), (-1 * x.dual) / sqrt(1 - x.real ** 2))
 
-        elif x.real in [-1, 1]:
-            raise ZeroDivisionError('arccos() DualNumber real part cannot be -1 or 1 for dual part creation.')
-
         else:
-            raise ValueError('arccos() DualNumber real part must be within defined domain (-1, 1) for dual part creation.')
+            raise ArithmeticError('arccos() -- DualNumber real part must be within defined domain (-1, 1) for dual part creation.')
     
-    elif isinstance(x, (int, float, np.ndarray)):    
+    elif isinstance(x, float):    
+        # Defined for [-1, 1]
         if x >= -1 and x <= 1:
             return np.arccos(x)
 
         else:
-            raise ValueError('arccos() is only defined in the domain [-1, 1]')
+            raise ValueError('arccos() -- Function is only defined in the domain [-1, 1]')
 
     else:
-        raise TypeError('The arccos() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def arctan(x):
+    x = _validate(x)
+
     if isinstance(x, DualNumber):
-        # Defined for all reals; Use our implementation of arctan
+        # Defined for all reals
         return DualNumber(arctan(x.real), x.dual / (1 + x.real ** 2))
     
-    elif isinstance(x, (int, float, np.ndarray)):  
+    elif isinstance(x, float):  
+        # Defined for all reals
         return np.arctan(x)
 
     else:
-        raise TypeError('The arctan() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def arcsinh(x):
+    x = _validate(x)
+
     if isinstance(x, DualNumber):
-        # Defined for all reals; Use our implementation of arcsinh
+        # Defined for all reals
         return DualNumber(arcsinh(x.real), x.dual / sqrt(1 + x.real ** 2))
     
-    elif isinstance(x, (int, float, np.ndarray)):    
+    elif isinstance(x, float):    
+        # Defined for all reals
         return np.arcsinh(x)
 
     else:
-        raise TypeError('The arcsinh() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def arccosh(x):
+    x = _validate(x)
+
     if isinstance(x, DualNumber):
-        # Cases involve dual part creation; Using our implementation of arccosh and sqrt to handle domain issues
+        # Cases involve dual part creation
         if x.real > 1:
             return DualNumber(arccosh(x.real), x.dual / (sqrt(x.real - 1) * sqrt(x.real + 1)))
         
-        elif x.real == 1:
-            raise ZeroDivisionError('arccosh() DualNumber real part cannot be 1 for dual part creation.')
-
         else: 
-            raise ValueError('arccosh() DualNumber real part must be within defined domain (1, infinity) for dual part creation.')
+            raise ArithmeticError('arccosh() -- DualNumber real part must be greater than 1 for dual part creation involving square-roots.')
     
-    elif isinstance(x, (int, float, np.ndarray)):    
+    elif isinstance(x, float):    
+        # Defined for [1, infinity)
         if x >= 1:
             return np.arccosh(x)
         
         else:
-            raise ValueError('arccosh() is only defined for domain [1, infinity)')
+            raise ArithmeticError('arccosh() -- Function is only defined for domain [1, infinity)')
 
     else:
-        raise TypeError('The arccosh() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
         
 
 def arctanh(x):
     if isinstance(x, DualNumber):
-        # Cases involve dual part creation; Using our implementation of arctanh to handle domain issues
+        # Cases involve dual part creation
         if x.real is not [-1, 1]:
             return DualNumber(arctanh(x.real), x.dual / (1 - x.real **2))
         
         else:
-            raise ZeroDivisionError('arctanh(): DualNumber real part cannot be -1 or 1 for dual part creation.')
+            raise ArithmeticError('arctanh() -- DualNumber dual part creation produces divide by 0 if real part is -1 or 1.')
     
-    elif isinstance(x, (int, float, np.ndarray)):  
+    elif isinstance(x, float):  
+        # Defined for (-1, 1)
         if x > -1 and x < 1:  
             return np.arctanh(x)
         
         else: 
-            raise ValueError('arctanh() is only defined for domain (-1, 1)')
+            raise ArithmeticError('arctanh() -- Function is only defined for domain (-1, 1).')
 
     else:
-        raise TypeError('The arctanh() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def sqrt(x):
-    # Using our implementation of sqrt to catch domain issues
+    x = _validate(x)
+
     if isinstance(x, DualNumber):
+        # Domain for reals mut be positive, or divide by 0 error or negative square-root
         if x.real > 0:
             return DualNumber(sqrt(x.real), (x.dual / 2) * (1 / sqrt(x.real)))
         
         else:
-            raise ValueError('Cannot take the square root of a negative number or 0 for dual part creation.')
+            raise ArithmeticError('sqrt() -- Cannot take the square root of a negative number and cannot divide by 0 for dual part creation.')
     
-    elif isinstance(x, (int, float, np.ndarray)):    
+    elif isinstance(x, float,):    
+        # Defined for [0, infinity)
         if x >= 0:
             return np.sqrt(x)
 
         else:
-            raise ValueError('Cannot take the square root of a negative number.')
+            raise ArithmeticError('sqrt() -- Cannot take the square root of a negative number.')
 
     else:
-        raise TypeError('The sqrt() function can only handle single DualNumbers, ints, floats, or lists, numpy arrays of these types.')
+        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 if __name__ == "__main__":
     # Basic test code, move to test suite
