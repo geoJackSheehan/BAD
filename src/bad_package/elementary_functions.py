@@ -278,7 +278,7 @@ def arccos(x):
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def arctan(x):
-    x = _validate(x)
+    x = _validate(x, 'arctan()')
 
     if isinstance(x, DualNumber):
         # Defined for all reals
@@ -292,7 +292,7 @@ def arctan(x):
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def arcsinh(x):
-    x = _validate(x)
+    x = _validate(x, 'arcsinh()')
 
     if isinstance(x, DualNumber):
         # Defined for all reals
@@ -306,7 +306,7 @@ def arcsinh(x):
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def arccosh(x):
-    x = _validate(x)
+    x = _validate(x, 'arccosh()')
 
     if isinstance(x, DualNumber):
         # Cases involve dual part creation
@@ -329,6 +329,8 @@ def arccosh(x):
         
 
 def arctanh(x):
+    x = _validate(x, 'arctanh()')
+
     if isinstance(x, DualNumber):
         # Cases involve dual part creation
         if x.real is not [-1, 1]:
@@ -349,7 +351,7 @@ def arctanh(x):
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def sqrt(x):
-    x = _validate(x)
+    x = _validate(x, 'sqrt()')
 
     if isinstance(x, DualNumber):
         # Domain for reals mut be positive, or divide by 0 error or negative square-root
