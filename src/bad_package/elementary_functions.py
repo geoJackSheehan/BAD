@@ -4,10 +4,11 @@
 #   within this module to compute the scalar output. Ensures all Numpy errors are overwritten with custom errors so the user does not
 #   need to interact with numpy using our module (expect for in cases where they are not using an AD object). Also allows us to 
 #   ensure functional domain restrictions are met.
-# Domain restrictions on functions are imposed by most restrictive case 
+# Domain restrictions on functions are imposed by most restrictive case.
 
 # Expectations:
 # 1. Any elementary function is being applied to a single DualNumber instance or int / float
+# 2. Any DualNumber instance already has float-type real and integer parts
 # 2. DualNumber real parts have been converted to floats already, the dual part will be done by us explicitly (setting the seed vector, ect)
 # 3. NotImplementedError raised if there is (1) unexpected behavior or (2) devs haven't gotten to implementing something yet
 # 4. TypeError raised if an inappropriate data type was passed from the user
@@ -28,7 +29,10 @@ def _validate(x, fun):
         return float(x)
 
     # Check if the element is something we can do the computation with (would have casted int to float already)
-    if not isinstance(x, (DualNumber, float)):
+    if isinstance(x, (DualNumber, float)):
+        return x
+
+    else:
         raise TypeError(f'{fun} -- Elementary functions can only do computations on DualNumbers, integers, and floats.')
 
 # OVERLOADING FUNCTIONS
