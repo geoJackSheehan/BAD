@@ -9,10 +9,10 @@
 # Expectations:
 # 1. Any elementary function is being applied to a single DualNumber instance or int / float
 # 2. Any DualNumber instance already has float-type real and integer parts
-# 2. DualNumber real parts have been converted to floats already, the dual part will be done by us explicitly (setting the seed vector, ect)
-# 3. NotImplementedError raised if there is (1) unexpected behavior or (2) devs haven't gotten to implementing something yet
-# 4. TypeError raised if an inappropriate data type was passed from the user
-# 5. ArithmeticError raised if there was a (generally) mathematically inappropriate calculation about to happen 
+# 3. DualNumber real parts have been converted to floats already, the dual part will be done by us explicitly (setting the seed vector, ect)
+# 4. NotImplementedError raised if there is (1) unexpected behavior or (2) devs haven't gotten to implementing something yet
+# 5. TypeError raised if an inappropriate data type was passed from the user
+# 6. ArithmeticError raised if there was a (generally) mathematically inappropriate calculation about to happen 
 
 import numpy as np
 from bad_forward_mode import DualNumber
