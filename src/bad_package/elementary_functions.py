@@ -15,7 +15,7 @@
 # 6. ArithmeticError raised if there was a (generally) mathematically inappropriate calculation about to happen 
 
 import numpy as np
-from bad_forward_mode import DualNumber
+from fad.fad import DualNumber
 
 # OVERLOADING CONSTANTS (/ symbols)
 e = np.e
