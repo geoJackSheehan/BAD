@@ -21,6 +21,6 @@ jobs:
       #   run: (python -m build --wheel && python -m pip install dist/*)
 
       - name: Run dual numbers test suite
-        run: run_tests.sh
+        run: cd tests && pytest
 
 
