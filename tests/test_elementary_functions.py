@@ -5,7 +5,7 @@ import pytest
 import numpy as np
 
 from bad_package.elementary_functions import *
-from bad_package.bad_forward_mode import DualNumber
+from bad_package.fad.fad import DualNumber
 
 class TestElementaryFunctions():
 

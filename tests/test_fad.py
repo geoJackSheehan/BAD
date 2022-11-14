@@ -1,6 +1,6 @@
 import pytest
 
-from bad_package.bad_forward_mode import DualNumber
+from bad_package.fad.fad import DualNumber
 
 class TestDualNumber:
 
