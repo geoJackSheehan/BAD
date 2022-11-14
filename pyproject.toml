@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bad_package"
+version = "0.0.1"
+authors = [
+  { name="Danhee Kim", email="sharonkim@g.harvard.edu" },
+  { name="Hope Neveux", email="hopeneveux@g.harvard.edu" },
+  { name="Jack Sheehan", email="jacksheehan@g.harvard.edu" },
+  { name="Annabel Yim", email="annabelyim@g.harvard.edu" }
+]
+description = "Final Systems Development Project -- Automatic Differentiation Python Package"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
