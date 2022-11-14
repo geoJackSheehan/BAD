@@ -2,6 +2,7 @@
 
 tests=(
     test_fad.py
+    test_elementary_functions.py
 )
 
 export PYTHONPATH="$(pwd -P)/../src":${PYTHONPATH}
