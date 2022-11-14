@@ -17,6 +17,8 @@
 import numpy as np
 from fad.fad import DualNumber
 
+__all__ = ['_validate', 'exp', 'ln', 'logBase', 'sin', 'cos', 'tan', 'csc', 'sec', 'cot', 'sinh', 'cosh', 'tanh', 'arcsin', 'arccos', 'arctan', 'arcsinh', 'arccosh', 'arctanh', 'sqrt']
+
 # OVERLOADING CONSTANTS (/ symbols)
 e = np.e
 pi = np.pi
