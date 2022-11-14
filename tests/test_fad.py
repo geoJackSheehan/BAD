@@ -1,5 +1,4 @@
 import pytest
-
 from bad_package.fad.fad import DualNumber
 
 class TestDualNumber:
