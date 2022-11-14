@@ -19,5 +19,6 @@ jobs:
 
       - name: Run dual numbers test suite
         run: (cd tests && run_tests.sh)
+        shell: bash
 
 
