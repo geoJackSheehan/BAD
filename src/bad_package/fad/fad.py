@@ -26,6 +26,11 @@ class DualNumber:
         2
         >>> x.dual
         1
+        >>> x = DualNumber(2,2)
+        >>> x.real
+        2
+        >>> x.dual
+        2
         
         Notes
         ------------------------------------
@@ -358,6 +363,10 @@ class DualNumber:
         >>> print(x.real); print(x.dual)
         5.0
         -4.0
+        
+        Notes
+        ------------------------------------
+        Only truediv is implemented here (as opposed to truediv and floordiv). Therefore, using the '/' operator will return a floating-point approximation, not the truncated down result of '//'
         '''
         
         if not isinstance(other, (*self._supported_scalars, DualNumber)):
@@ -407,6 +416,10 @@ class DualNumber:
         >>> print(x.real); print(x.dual)
         5.0
         -4.0
+        
+        Notes
+        ------------------------------------
+        Only rtruediv is implemented here (as opposed to rtruediv and rfloordiv). Therefore, using the '/' operator will return a floating-point approximation, not the truncated down result of '//'
         '''
         
         if not isinstance(other, (*self._supported_scalars, DualNumber)):
