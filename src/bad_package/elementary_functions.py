@@ -17,6 +17,7 @@
 import numpy as np
 from fad.fad import DualNumber
 
+
 # OVERLOADING CONSTANTS (/ symbols)
 e = np.e
 pi = np.pi
