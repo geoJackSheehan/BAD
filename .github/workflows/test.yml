@@ -3,7 +3,7 @@ name: test
 on:
   push:
     branches:
-      - milestone2
+      - testHarness
 
 jobs:
   test_dual_number:
