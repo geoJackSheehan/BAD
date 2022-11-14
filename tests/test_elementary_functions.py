@@ -4,7 +4,7 @@ from typing import Type
 import pytest
 import numpy as np
 
-from bad_package.elementary_functions import *
+import bad_package.elementary_functions
 from bad_package.fad.fad import DualNumber
 
 class TestElementaryFunctions():
