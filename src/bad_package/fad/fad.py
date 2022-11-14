@@ -61,12 +61,20 @@ class DualNumber:
         >>> print(x.real); print(x.dual)
         5
         1.0
+        >>> x = DualNumber(2,3) + 3
+        >>> print(x.real); print(x.dual)
+        5
+        3
         
         DualNumber + DualNumber:
         >>> x = DualNumber(2) + DualNumber(3)
         >>> print(x.real); print(x.dual)
         5
         2.0
+        >>> x = DualNumber(2,3) + DualNumber(3,3)
+        >>> print(x.real); print(x.dual)
+        5
+        6
         '''
         
         if not isinstance(other, (*self._supported_scalars, DualNumber)):
@@ -101,12 +109,20 @@ class DualNumber:
         >>> print(x.real); print(x.dual)
         5
         1.0
+        >>> x = 2 + DualNumber(3,10)
+        >>> print(x.real); print(x.dual)
+        5
+        10
         
         DualNumber + DualNumber:
         >>> x = DualNumber(2) + DualNumber(3)
         >>> print(x.real); print(x.dual)
         5
         2.0
+        >>> x = DualNumber(2,7) + DualNumber(3,11)
+        >>> print(x.real); print(x.dual)
+        5
+        18
         '''
         
         return self.__add__(other)
@@ -133,20 +149,24 @@ class DualNumber:
         Examples
         ------------------------------------
         DualNumber - int
-        >>> x = DualNumber(3,5) - 2
+        >>> x = DualNumber(3) - 2
         >>> print(x.real); print(x.dual)
         1
         5
+        >>> x = DualNumber(3,5) - 2
+        >>> print(x.real); print(x.dual)
+        1
+        1.0
         
         DualNumber - DualNumber:
-        >>> x = DualNumber(3,5)-DualNumber(3,3)
-        >>> print(x.real); print(x.dual)
-        0
-        2
         >>> x = DualNumber(3)-DualNumber(3)
         >>> print(x.real); print(x.dual)
         0
         0.0
+        >>> x = DualNumber(3,5)-DualNumber(3,3)
+        >>> print(x.real); print(x.dual)
+        0
+        2
         '''
         
         if not isinstance(other, (*self._supported_scalars, DualNumber)):
@@ -188,6 +208,10 @@ class DualNumber:
         -10
         
         DualNumber - DualNumber:
+        >>> x = DualNumber(3)-DualNumber(3)
+        >>> print(x.real); print(x.dual)
+        0
+        0.0
         >>> x = DualNumber(3,5)-DualNumber(3,3)
         >>> print(x.real); print(x.dual)
         0
@@ -271,7 +295,7 @@ class DualNumber:
         
         Examples
         ------------------------------------
-        int*DualNumber
+        int*DualNumber:
         >>> x = 3*DualNumber(2)
         >>> print(x.real); print(x.dual)
         6
@@ -282,6 +306,10 @@ class DualNumber:
         30
         
         DualNumber*DualNumber:
+        >>> x = DualNumber(3)*DualNumber(2)
+        >>> print(x.real); print(x.dual)
+        6
+        5.0
         >>> x = DualNumber(3,2)*DualNumber(2,5)
         >>> print(x.real); print(x.dual)
         6
@@ -311,7 +339,7 @@ class DualNumber:
         
         Examples
         ------------------------------------
-        DualNumber/int
+        DualNumber/int:
         >>> x = DualNumber(6)/3
         >>> print(x.real); print(x.dual)
         2.0
@@ -360,7 +388,7 @@ class DualNumber:
         
         Examples
         ------------------------------------
-        int/DualNumber
+        int/DualNumber:
         >>> x = 6/DualNumber(3)
         >>> print(x.real); print(x.dual)
         2.0
