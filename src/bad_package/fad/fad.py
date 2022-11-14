@@ -35,6 +35,7 @@ class DualNumber:
         self.real = real
         self.dual = dual
 
+        
     def __add__(self, other):
         '''
         Explanation
@@ -43,7 +44,7 @@ class DualNumber:
         
         Inputs
         ------------------------------------
-        self: object being added to; a in a + b
+        self: object to which the second object is added; a in a + b
               DualNumber object
         other: the object being added; b in a + b
                DualNumber object, int, or float
@@ -85,7 +86,7 @@ class DualNumber:
         ------------------------------------
         self: object being added; a in b + a
               DualNumber object
-        other: the object being added to; b in b + a
+        other: the object to which the second object is added; b in b + a
                DualNumber object, int, or float
         
         Outputs
@@ -110,6 +111,7 @@ class DualNumber:
         
         return self.__add__(other)
 
+    
     def __sub__(self, other):
         '''
         Explanation
@@ -118,7 +120,7 @@ class DualNumber:
         
         Inputs
         ------------------------------------
-        self: object being subtracted from; a in a - b
+        self: object from which the second object is subtracted; a in a - b
               DualNumber object
         other: the object being subtracted; b in a - b
                DualNumber object, int, or float
@@ -154,17 +156,18 @@ class DualNumber:
         else:
             return DualNumber(self.real-other.real, self.dual-other.dual)
 
+        
     def __rsub__(self, other):
         '''
         Explanation
         ------------------------------------
-        Overloaded dunder method for subtraction operator (b - a)
+        Overloaded dunder method for subtraction operator in reverse case (b - a)
         
         Inputs
         ------------------------------------
         self: object being subtracted; a in b - a
               DualNumber object
-        other: the object being subtracted from; b in b - a
+        other: the object from which the second object is subtracted; b in b - a
                DualNumber object, int, or float
         
         Outputs
@@ -197,7 +200,49 @@ class DualNumber:
             return DualNumber(other-self.real, -self.dual)
         else:
             return DualNumber(-self.real+other.real, -self.dual+other.dual)
+    
+    
     def __mul__(self, other):
+        '''
+        Explanation
+        ------------------------------------
+        Overloaded dunder method for multiplication operator (a * b)
+        
+        Inputs
+        ------------------------------------
+        self: first object being multiplied by another; a in a*b
+              DualNumber object
+        other: object by which the first object is multiplied; b in a*b
+               DualNumber object, int, or float
+        
+        Outputs
+        ------------------------------------
+        x = a*b
+        a DualNumber object with the value and derivative of the self*other operation
+        
+        Examples
+        ------------------------------------
+        DualNumber*int
+        >>> x = DualNumber(2)*3
+        >>> print(x.real); print(x.dual)
+        6
+        3.0
+        >>> x = DualNumber(2,10)*3
+        >>> print(x.real); print(x.dual)
+        6
+        30
+        
+        DualNumber*DualNumber:
+        >>> x = DualNumber(3)*DualNumber(2)
+        >>> print(x.real); print(x.dual)
+        6
+        5.0
+        >>> x = DualNumber(3,2)*DualNumber(2,5)
+        >>> print(x.real); print(x.dual)
+        6
+        19
+        '''
+            
         if not isinstance(other, (*self._supported_scalars, DualNumber)):
             raise TypeError("Type not supported: must be int or float")
         if isinstance(other, self._supported_scalars):
@@ -205,10 +250,88 @@ class DualNumber:
         else:
             return DualNumber(self.real*other.real, self.real*other.dual+other.real*self.dual)
 
+        
     def __rmul__(self, other):
+        '''
+        Explanation
+        ------------------------------------
+        Overloaded dunder method for multiplication operator in reverse case (a*b)
+        
+        Inputs
+        ------------------------------------
+        self: object by which the first object is multiplied; a in b*a
+              DualNumber object
+        other: first object being multiplied by another; b in b*a
+               DualNumber object, int, or float
+        
+        Outputs
+        ------------------------------------
+        x = b*a
+        a DualNumber object with the value and derivative of the other*self operation
+        
+        Examples
+        ------------------------------------
+        int*DualNumber
+        >>> x = 3*DualNumber(2)
+        >>> print(x.real); print(x.dual)
+        6
+        3.0
+        >>> x = 3*DualNumber(2,10)
+        >>> print(x.real); print(x.dual)
+        6
+        30
+        
+        DualNumber*DualNumber:
+        >>> x = DualNumber(3,2)*DualNumber(2,5)
+        >>> print(x.real); print(x.dual)
+        6
+        19
+        '''
+        
         return self.__mul__(other)
 
+    
     def __truediv__(self, other):
+        '''
+        Explanation
+        ------------------------------------
+        Overloaded dunder method for division operator (a / b)
+        
+        Inputs
+        ------------------------------------
+        self: object being divided; a in a/b
+              DualNumber object
+        other: object by which the first object is divided; b in a/b
+               DualNumber object, int, or float
+        
+        Outputs
+        ------------------------------------
+        x = a/b
+        a DualNumber object with the value and derivative of the self/other operation
+        
+        Examples
+        ------------------------------------
+        DualNumber/int
+        >>> x = DualNumber(6)/3
+        >>> print(x.real); print(x.dual)
+        2.0
+        0.3333333333333333
+        >>> x = DualNumber(6,10)/3
+        >>> print(x.real); print(x.dual)
+        2.0
+        3.3333333333333335
+        
+        DualNumber/DualNumber:
+        >>> x = DualNumber(6)/DualNumber(2)
+        >>> print(x.real); print(x.dual)
+        3.0
+        -1.0
+        >>> x = DualNumber(10,7)/DualNumber(2,3)
+        >>> print(x.real); print(x.dual)
+        5.0
+        -4.0
+        '''
+        
         if not isinstance(other, (*self._supported_scalars, DualNumber)):
             raise TypeError("Type not supported: must be int or float")
         if isinstance(other, self._supported_scalars):
@@ -216,7 +339,48 @@ class DualNumber:
         else:
             return DualNumber(self.real/other.real, (other.real*self.dual - self.real*other.dual)/(other.real*other.real))
 
+        
     def __rtruediv__(self, other):
+        '''
+        Explanation
+        ------------------------------------
+        Overloaded dunder method for division operator in reverse case (b / a)
+        
+        Inputs
+        ------------------------------------
+        self: object by which the first object is divided; a in b/a
+              DualNumber object
+        other: object being divided; b in b/a
+               DualNumber object, int, or float
+        
+        Outputs
+        ------------------------------------
+        x = b/a
+        a DualNumber object with the value and derivative of the other/self operation
+        
+        Examples
+        ------------------------------------
+        int/DualNumber
+        >>> x = 6/DualNumber(3)
+        >>> print(x.real); print(x.dual)
+        2.0
+        -0.6666666666666666
+        >>> x = 10/DualNumber(5,2)
+        >>> print(x.real); print(x.dual)
+        2.0
+        -0.8
+        
+        DualNumber/DualNumber:
+        >>> x = DualNumber(6)/DualNumber(2)
+        >>> print(x.real); print(x.dual)
+        3.0
+        -1.0
+        >>> x = DualNumber(10,7)/DualNumber(2,3)
+        >>> print(x.real); print(x.dual)
+        5.0
+        -4.0
+        '''
+        
         if not isinstance(other, (*self._supported_scalars, DualNumber)):
             raise TypeError("Type not supported: must be int or float")
         if isinstance(other, self._supported_scalars):
@@ -224,6 +388,7 @@ class DualNumber:
         else:
             return DualNumber(other.real/self.real, -(other.real*self.dual - self.real*other.dual)/(other.dual*other.dual))
 
+        
     def __neg__(self):
         if not isinstance(self, (*self._supported_scalars, DualNumber)):
             raise TypeError("Type not supported: must be int or float")
