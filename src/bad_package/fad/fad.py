@@ -1,7 +1,10 @@
 '''
 This module defines dunder methods to overload Python built-in operators in the Dual class.
 '''
+# Imports
+import numpy as np
 
+# Dual Class
 class DualNumber:
 
     _supported_scalars = (int, float)
@@ -489,7 +492,52 @@ class DualNumber:
 
         
     def __rpow__(self, other):
-        raise NotImplementedError
+        '''
+        Explanation
+        ------------------------------------
+        Overloaded dunder method for power operator in reverse case (b**a)
+        
+        Inputs
+        ------------------------------------
+        self: object that is the exponent; a in b**a
+              DualNumber object, int, or float
+        other: object that is raised to an exponent; b in b**a
+               DualNumber object
+        
+        Outputs
+        ------------------------------------
+        x = b**a
+        a DualNumber object with the value and derivative of the other**self operation
+        
+        Examples
+        ------------------------------------
+        int**DualNumber:
+        >>> x = 2**DualNumber(5)
+        >>> print(x.real); print(x.dual)
+        32
+        22.18070977791825
+        >>> x = 2**DualNumber(5,3)
+        >>> print(x.real); print(x.dual)
+        32
+        66.54212933375474
+        
+        DualNumber**DualNumber:
+        >>> x = x = DualNumber(5)**DualNumber(2)
+        >>> print(x.real); print(x.dual)
+        25
+        50.23594781085251
+        >>> x = DualNumber(5,3)**DualNumber(2,7)
+        >>> print(x.real); print(x.dual)
+        25
+        311.6516346759676
+        '''
+        
+        if not isinstance(self, (*self._supported_scalars, DualNumber)):
+            raise TypeError("Type not supported: must be int or float")
+        if isinstance(other, self._supported_scalars):
+            return DualNumber(other.real**self.real, (other.real**self.real)*self.dual*np.log(other.real))
+        else:
+            return DualNumber(other.real**self.real, (other.real**self.real)*self.dual*np.log(other.real))
 
 
 if __name__ == "__main__":
@@ -517,9 +565,13 @@ if __name__ == "__main__":
     f8 = 2/z
     # neg
     f9 = -z
+    # pow
+    f10 = z**2
+    # rpow
+    f11 = 2**z
 
-    f = np.array([f1, f2, f3, f4, f5, f6, f7, f8, f9])
-    values = ["add", "radd", "sub", "rsub", "mul", "rmul", "truediv", "rtruediv", "neg"]
-
-    for i in range(9):
+    f = np.array([f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11])
+    values = ["add", "radd", "sub", "rsub", "mul", "rmul", "truediv", "rtruediv", "neg", "pow", "rpow"]
+    
+    for i in range(11):
         print(f' {values[i]}: real = {f[i].real} dual = {f[i].dual}')
