@@ -434,6 +434,34 @@ class DualNumber:
 
         
     def __neg__(self):
+        '''
+        Explanation
+        ------------------------------------
+        Overloaded dunder method for negative operator (-a)
+        
+        Inputs
+        ------------------------------------
+        self: object raised to an exponent; a in a**b
+              DualNumber object, int, or float
+        
+        Outputs
+        ------------------------------------
+        x = -a
+        a DualNumber object with the value and derivative of the -self operation
+        
+        Examples
+        ------------------------------------
+        -DualNumber:
+        >>> x = -DualNumber(5)
+        >>> print(x.real); print(x.dual)
+        -5
+        -1.0
+        >>> x = -DualNumber(5,3)
+        >>> print(x.real); print(x.dual)
+        -5
+        -3
+        '''
+        
         if not isinstance(self, (*self._supported_scalars, DualNumber)):
             raise TypeError("Type not supported: must be int or float")
         if isinstance(self, self._supported_scalars):
@@ -462,7 +490,7 @@ class DualNumber:
         
         Examples
         ------------------------------------
-        DualNumber**int
+        DualNumber**int:
         >>> x = DualNumber(5)**2
         >>> print(x.real); print(x.dual)
         25
