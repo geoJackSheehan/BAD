@@ -438,14 +438,56 @@ class DualNumber:
         else:
             return DualNumber(self.real*(-1), self.dual*(-1))
 
+        
     def __pow__(self, other):
+        '''
+        Explanation
+        ------------------------------------
+        Overloaded dunder method for power operator (a**b)
+        
+        Inputs
+        ------------------------------------
+        self: object raised to an exponent; a in a**b
+              DualNumber object
+        other: object that is the exponent; b in a**b
+               DualNumber object, int, or float
+        
+        Outputs
+        ------------------------------------
+        x = a**b
+        a DualNumber object with the value and derivative of the self**other operation
+        
+        Examples
+        ------------------------------------
+        DualNumber**int
+        >>> x = DualNumber(5)**2
+        >>> print(x.real); print(x.dual)
+        25
+        10.0
+        >>> x = DualNumber(5,3)**2
+        >>> print(x.real); print(x.dual)
+        25
+        30
+        
+        DualNumber**DualNumber:
+        >>> x = x = DualNumber(5)**DualNumber(2)
+        >>> print(x.real); print(x.dual)
+        25
+        50.23594781085251
+        >>> x = DualNumber(5,3)**DualNumber(2,7)
+        >>> print(x.real); print(x.dual)
+        25
+        311.6516346759676
+        '''
+        
         if not isinstance(self, (*self._supported_scalars, DualNumber)):
             raise TypeError("Type not supported: must be int or float")
         if isinstance(other, self._supported_scalars):
-            return DualNumber(self.real ** other, self.dual)
+            return DualNumber(self.real**other.real, self.dual*other.real*self.real**(other.real-1))
         else:
-            raise NotImplementedError
+            return DualNumber(self.real**other.real, self.real**other.real*(self.dual*(other.real/self.real) + other.dual*np.log(self.real)))
 
+        
     def __rpow__(self, other):
         raise NotImplementedError
 
