@@ -98,9 +98,9 @@ class DualNumber:
         Inputs
         ------------------------------------
         self: object being added; a in b + a
-              DualNumber object
+              DualNumber object, int, or float
         other: the object to which the second object is added; b in b + a
-               DualNumber object, int, or float
+               DualNumber object
         
         Outputs
         ------------------------------------
@@ -191,9 +191,9 @@ class DualNumber:
         Inputs
         ------------------------------------
         self: object being subtracted; a in b - a
-              DualNumber object
+              DualNumber object, int, or float
         other: the object from which the second object is subtracted; b in b - a
-               DualNumber object, int, or float
+               DualNumber object
         
         Outputs
         ------------------------------------
@@ -289,9 +289,9 @@ class DualNumber:
         Inputs
         ------------------------------------
         self: object by which the first object is multiplied; a in b*a
-              DualNumber object
+              DualNumber object, int, or float
         other: first object being multiplied by another; b in b*a
-               DualNumber object, int, or float
+               DualNumber object
         
         Outputs
         ------------------------------------
@@ -386,9 +386,9 @@ class DualNumber:
         Inputs
         ------------------------------------
         self: object by which the first object is divided; a in b/a
-              DualNumber object
+              DualNumber object, int, or float
         other: object being divided; b in b/a
-               DualNumber object, int, or float
+               DualNumber object
         
         Outputs
         ------------------------------------
