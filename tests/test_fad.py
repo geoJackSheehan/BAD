@@ -1,5 +1,6 @@
 import pytest
 from bad_package.fad.fad import DualNumber
+import numpy as np
 
 class TestDualNumber:
 
@@ -43,7 +44,7 @@ class TestDualNumber:
         x = DualNumber(1, 1)
         y = 1 - x
         assert y.real == 0
-        assert y.dual == 1
+        assert y.dual == -1
 
     def test_mul(self):
         assert isinstance(DualNumber(1, 1) * 2, DualNumber)
@@ -75,7 +76,13 @@ class TestDualNumber:
         x = DualNumber(2, 1)
         y = x / 2
         assert y.real == 1
-        assert r.dual == 1/2
+        assert y.dual == 1/2
+
+        z = DualNumber(3, 2)
+        dual_dual = x / z
+        assert isinstance(dual_dual, DualNumber)
+        assert dual_dual.real == 2/3
+        assert dual_dual.dual == -1/9
 
     def test_rtruediv(self):
         x = DualNumber(2, 1)
@@ -94,7 +101,7 @@ class TestDualNumber:
     def test_pow(self):
         assert isinstance(DualNumber(1, 1) ** 2, DualNumber)
         assert isinstance(DualNumber(1, 1) ** DualNumber(1, 1), DualNumber)
-        with pytest.raises(TypeError):
+        with pytest.raises(TypeError or AttributeError):
             DualNumber(1, 1) ** '5'
 
         x = DualNumber(2, 1)
