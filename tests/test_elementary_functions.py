@@ -37,9 +37,9 @@ class TestElementaryFunctions():
         # self.assertAlmostEqual(np.ln(2), y.real)
 
     def test_logbase(self):
-        assert isinstance(logBase(np.e, DualNumber(2, 5)), DualNumber)
+        assert isinstance(logBase(DualNumber(2, 5), np.e), DualNumber)
         x = DualNumber(2, 5)
-        result = logBase(np.e, x)
+        result = logBase(x, np.e)
         assert pytest.approx(np.log(2)/np.log(5)) == result.real
         assert pytest.approx(5*(1/(2*np.log(5)))) == result.dual
 
