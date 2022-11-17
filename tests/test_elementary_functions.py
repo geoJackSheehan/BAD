@@ -40,7 +40,7 @@ class TestElementaryFunctions():
         x = DualNumber(2, 5)
         result = logBase(x, np.e)
         assert pytest.approx(np.log(2)/np.log(5)) == result.real
-        assert pytest.approx(5*(1/(2*np.log(5)))) == result.dual
+        assert pytest.approx(5*(1/(2*np.log(np.e)))) == result.dual
 
     def test_sin(self):
         assert isinstance(sin(DualNumber(2, 2)), DualNumber)
