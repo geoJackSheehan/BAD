@@ -88,8 +88,8 @@ def logBase(x, base):
     elif isinstance(x, float):    
         # Defined everywhere that x and base are non-negative
         if x > 0 and base > 0:
-            # Use change of base formula with common 10 base for custom log base computation
-            return (np.log10(x) / np.log10(base))
+            # Use change of base formula with natural base for custom log base computation
+            return (np.log(x) / np.log(base))
         
         else:
             raise ArithmeticError('logBase() -- Ensure base is greater than or equal to 1 and DualNumber real part is greater than 0.')
