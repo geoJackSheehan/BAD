@@ -27,6 +27,5 @@ jobs:
     - name: Build and install project in container (using PEP517/518)
       run: (python -m build --wheel && python -m pip install dist/*)
       
-      # Run the test coverage for the build
-      - name: Run tests and generate coverage html
-        run: (cd tests && ./run_tests.sh CI --cov=bad_package --cov-report=term-missing)
+    - name: Run tests and generate coverage html
+      run: (cd tests && ./run_tests.sh CI --cov=bad_package --cov-report=term-missing)
