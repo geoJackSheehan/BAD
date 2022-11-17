@@ -15,11 +15,10 @@ class TestElementaryFunctions():
             exp('3')
             exp(['3'])
 
-        x = DualNumber(2, 2)
+        x = DualNumber(2, 3)
         y = exp(x)
-        num = 5
-        result = exp(5)
         assert np.exp(2) == y.real
+        assert 3*np.exp(2)
         # test the dual part
 
     def test_ln(self):
@@ -31,10 +30,10 @@ class TestElementaryFunctions():
             ln(0)
             ln(-1)
 
-        # x = DualNumber(2, 2)
-        # y = ln(x)
-        #
-        # self.assertAlmostEqual(np.ln(2), y.real)
+        x = DualNumber(2, 3)
+        y = ln(x)
+        assert ln(2) == y.real
+        assert 3/2 == y.dual
 
     def test_logbase(self):
         assert isinstance(logBase(DualNumber(2, 5), np.e), DualNumber)
