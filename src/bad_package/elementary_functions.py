@@ -54,9 +54,6 @@ def exp(x):
         # Returns basic e^x computation
         return np.exp(x)
 
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-
 def ln(x):
     x = _validate(x, 'ln()')
 
@@ -75,9 +72,6 @@ def ln(x):
 
         else: 
             raise ArithmeticError('ln() -- Natural log is defined only for values greater than or equal to 1.')
-
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def logBase(x, base):
     x = _validate(x, 'logBase()')
@@ -104,9 +98,6 @@ def logBase(x, base):
         else:
             raise ArithmeticError('logBase() -- Ensure base is greater than or equal to 1 and DualNumber real part is greater than 0.')
 
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.') 
-
 def sin(x):
     x = _validate(x, 'sin()')
 
@@ -115,10 +106,7 @@ def sin(x):
     
     elif isinstance(x, float):
         # Defined for (-infinity, infinity)
-        return np.sin(x)
-
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')      
+        return np.sin(x)     
 
 def cos(x):
     x = _validate(x, 'cos()')
@@ -129,9 +117,6 @@ def cos(x):
     elif isinstance(x, float):    
         # Defined for (-infinity, infinity)
         return np.cos(x)
-
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def tan(x):
     x = _validate(x, 'tan()')
@@ -147,9 +132,6 @@ def tan(x):
         else:
             raise ArithmeticError('tan() -- Ensure the input is defined within tangent\'s domain.')
 
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-
 def csc(x):
     x = _validate(x, 'csc()')
 
@@ -162,11 +144,7 @@ def csc(x):
             return (1 / np.sin(x))
 
         else:
-            raise ArithmeticError('csc() -- The sine of the input cannot be 0 due to division.')
-
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-            
+            raise ArithmeticError('csc() -- The sine of the input cannot be 0 due to division.')       
 
 def sec(x):
     x = _validate(x, 'sec()')
@@ -181,9 +159,6 @@ def sec(x):
         else:
             raise ArithmeticError('sec() -- The cosine of the input cannot be 0 due to division.')
 
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-
 def cot(x):
     x = _validate(x, 'cot()')
 
@@ -197,9 +172,6 @@ def cot(x):
         else:
             raise ArithmeticError('cot() -- The tangent of the input cannot be 0 due to division.')
 
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-
 def sinh(x):
     x = _validate(x, 'sinh()')
 
@@ -210,9 +182,6 @@ def sinh(x):
         # Defined for (-infinity, infinity)  
         return np.sinh(x)
 
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-
 def cosh(x):
     x = _validate(x, 'cosh()')
 
@@ -222,9 +191,6 @@ def cosh(x):
     
     elif isinstance(x, float):    
         return np.cosh(x)
-
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def tanh(x):
     x = _validate(x, 'tanh()')
@@ -239,9 +205,6 @@ def tanh(x):
     elif isinstance(x, float):    
         # Defined for (-infinity, infinity)
         return np.tanh(x)
-
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def arcsin(x):
     x = _validate(x, 'arcsin()')
@@ -262,9 +225,6 @@ def arcsin(x):
         else:
             raise ArithmeticError('arcsin() -- Arcsine is only defined in the domain [-1, 1]')
 
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-
 def arccos(x):
     x = _validate(x, 'arccos()')
 
@@ -284,9 +244,6 @@ def arccos(x):
         else:
             raise ValueError('arccos() -- Function is only defined in the domain [-1, 1]')
 
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-
 def arctan(x):
     x = _validate(x, 'arctan()')
 
@@ -298,9 +255,6 @@ def arctan(x):
         # Defined for all reals
         return np.arctan(x)
 
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-
 def arcsinh(x):
     x = _validate(x, 'arcsinh()')
 
@@ -311,9 +265,6 @@ def arcsinh(x):
     elif isinstance(x, float):    
         # Defined for all reals
         return np.arcsinh(x)
-
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
 def arccosh(x):
     x = _validate(x, 'arccosh()')
@@ -334,10 +285,6 @@ def arccosh(x):
         else:
             raise ArithmeticError('arccosh() -- Function is only defined for domain [1, infinity)')
 
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-        
-
 def arctanh(x):
     x = _validate(x, 'arctanh()')
 
@@ -357,9 +304,6 @@ def arctanh(x):
         else: 
             raise ArithmeticError('arctanh() -- Function is only defined for domain (-1, 1).')
 
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-
 def sqrt(x):
     x = _validate(x, 'sqrt()')
 
@@ -378,6 +322,3 @@ def sqrt(x):
 
         else:
             raise ArithmeticError('sqrt() -- Cannot take the square root of a negative number.')
-
-    else:
-        raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
