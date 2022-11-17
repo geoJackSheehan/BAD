@@ -79,7 +79,7 @@ def ln(x):
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
-def logBase(base, x):
+def logBase(x, base):
     x = _validate(x, 'logBase()')
 
     # Taking two arguments requires another check not included in basic validation
@@ -90,7 +90,7 @@ def logBase(base, x):
         # log (general) is defined for (0, infinity); ln handled elsewhere; x.real != 0
         if x.real > 0 and base > 0:
             # ln is used in the base because it is the easiest version of custom log base derivative
-            return DualNumber(logBase(base, x.real), x.dual / (x.real * ln(base)))
+            return DualNumber(logBase(x.real, base), x.dual / (x.real * ln(base)))
         
         else:
             raise ArithmeticError('logBase() -- Ensure base is greater than or equal to 1 and DualNumber real part is greater than 0.')
