@@ -123,7 +123,7 @@ class TestElementaryFunctions():
         x = DualNumber(.1, .2)
         result = tanh(x)
         assert pytest.approx(np.tanh(.1)) == result.real
-        assert pytest.approx(.2 * (1 - (np.tanh(.1)**2))) == result.dual
+        assert pytest.approx(.2 * (1/(np.cosh(.1)))**2) == result.dual
 
     def test_arcsin(self):
         assert isinstance(arcsin(DualNumber(1, 1)), DualNumber)
