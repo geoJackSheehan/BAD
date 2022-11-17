@@ -125,14 +125,14 @@ class TestElementaryFunctions():
         assert pytest.approx(.2 * (1/(np.cosh(.1)))**2) == result.dual
 
     def test_arcsin(self):
-        assert isinstance(arcsin(DualNumber(1, 1)), DualNumber)
+        assert isinstance(arcsin(DualNumber(0.9, 1)), DualNumber)
         x = DualNumber(0.25, 5)
         result = arcsin(x)
         assert np.arcsin(0.25) == result.real
         assert pytest.approx(5/np.sqrt(1 - 0.25**2)) ==  result.dual
 
     def test_arccos(self):
-        assert isinstance(arccos(DualNumber(2, 3)), DualNumber)
+        assert isinstance(arccos(DualNumber(0.9, 3)), DualNumber)
         x = DualNumber(0.75, -.2)
         result = arccos(x)
         assert np.arccos(0.75) == result.real
