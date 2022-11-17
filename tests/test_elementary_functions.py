@@ -39,7 +39,7 @@ class TestElementaryFunctions():
         assert isinstance(logBase(DualNumber(2, 5), np.e), DualNumber)
         x = DualNumber(2, 5)
         result = logBase(x, np.e)
-        assert pytest.approx(np.log(2)/np.log(5)) == result.real
+        assert pytest.approx(np.log(2)/np.log(np.e)) == result.real
         assert pytest.approx(5*(1/(2*np.log(np.e)))) == result.dual
 
     def test_sin(self):
