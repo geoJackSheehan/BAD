@@ -567,7 +567,7 @@ class DualNumber:
         else:
             return DualNumber(other.real**self.real, (other.real**self.real)*self.dual*np.log(other.real))
 
-
+        
 if __name__ == "__main__":
     # rudimentary test code
 
