@@ -151,14 +151,14 @@ class TestElementaryFunctions():
         x = DualNumber(2, 3)
         result = arcsinh(x)
         assert np.arcsinh(2) == result.real
-        assert pytest.approx(3/(np.sqrt(2**2)+1)) == result.dual
+        assert pytest.approx(3/(np.sqrt(2**2 + 1))) == result.dual
 
     def test_arccosh(self):
         assert isinstance(arccosh(DualNumber(2, 2)), DualNumber)
-        x = DualNumber(0.2, 0.3)
+        x = DualNumber(2, 0.3)
         result = arccosh(x)
-        assert np.arccosh(0.2) == result.real
-        assert pytest.approx(0.2/(np.sqrt(0.2**2) - 1)) == result.dual
+        assert np.arccosh(2) == result.real
+        assert pytest.approx(0.3/(np.sqrt(2**2 - 1))) == result.dual
 
     def test_arctanh(self):
         assert isinstance(arctanh(DualNumber(.1, .3)), DualNumber)
