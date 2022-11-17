@@ -101,7 +101,7 @@ class TestDualNumber:
     def test_pow(self):
         assert isinstance(DualNumber(1, 1) ** 2, DualNumber)
         assert isinstance(DualNumber(1, 1) ** DualNumber(1, 1), DualNumber)
-        with pytest.raises(TypeError or AttributeError):
+        with pytest.raises(TypeError):
             DualNumber(1, 1) ** '5'
 
         x = DualNumber(2, 1)
