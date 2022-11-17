@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
-# File       : check_coverage.sh
-
-set -e
 
 tool='coverage'
+
 if [[ $# -gt 0 ]]; then
     # optional argument to use different tool to check coverage
     tool="${1}"; shift
