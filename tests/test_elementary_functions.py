@@ -85,7 +85,7 @@ class TestElementaryFunctions():
         x = DualNumber(2, 3)
         result = csc(x)
         assert 1/sin(2) == result.real
-        assert pytest.approx(-3*(1/np.sin(2))*cot(2)) == result.dual
+        assert pytest.approx(-3*(1/np.sin(2))*(1/np.tan(2))) == result.dual
 
     def test_sec(self):
         # sec'(x) = sec(x)tan(x)
