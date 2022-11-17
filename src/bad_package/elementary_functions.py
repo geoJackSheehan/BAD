@@ -31,7 +31,7 @@ def _validate(x, fun):
         return float(x)
 
     # Check if the element is something we can do the computation with (would have casted int to float already)
-    elif isinstance(x, (DualNumber, float, np.ndarray)):
+    elif isinstance(x, (DualNumber, float)):
         return x
 
     # Handle lists by casting them to numpy arrays for lighter handling in the (already computationally heavy) method
@@ -54,15 +54,6 @@ def exp(x):
         # Returns basic e^x computation
         return np.exp(x)
 
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'exp()')
-            result.append(exp(attempt))
-
-        return np.array(result)
-
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
@@ -84,15 +75,6 @@ def ln(x):
 
         else: 
             raise ArithmeticError('ln() -- Natural log is defined only for values greater than or equal to 1.')
-
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'ln()')
-            result.append(ln(attempt))
-
-        return np.array(result)
 
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
@@ -121,15 +103,6 @@ def logBase(base, x):
         
         else:
             raise ArithmeticError('logBase() -- Ensure base is greater than or equal to 1 and DualNumber real part is greater than 0.')
-    
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'logBase()')
-            result.append(logBase(base, attempt))
-
-        return np.array(result)
 
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.') 
@@ -144,15 +117,6 @@ def sin(x):
         # Defined for (-infinity, infinity)
         return np.sin(x)
 
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'sin()')
-            result.append(sin(attempt))
-
-        return np.array(result)
-
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')      
 
@@ -165,15 +129,6 @@ def cos(x):
     elif isinstance(x, float):    
         # Defined for (-infinity, infinity)
         return np.cos(x)
-
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'cos()')
-            result.append(cos(attempt))
-
-        return np.array(result)
 
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
@@ -192,15 +147,6 @@ def tan(x):
         else:
             raise ArithmeticError('tan() -- Ensure the input is defined within tangent\'s domain.')
 
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'tan()')
-            result.append(tan(attempt))
-
-        return np.array(result)
-
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
@@ -217,15 +163,6 @@ def csc(x):
 
         else:
             raise ArithmeticError('csc() -- The sine of the input cannot be 0 due to division.')
-
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'csc()')
-            result.append(csc(attempt))
-
-        return np.array(result)
 
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
@@ -244,15 +181,6 @@ def sec(x):
         else:
             raise ArithmeticError('sec() -- The cosine of the input cannot be 0 due to division.')
 
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'sec()')
-            result.append(sec(attempt))
-
-        return np.array(result)
-
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
@@ -269,15 +197,6 @@ def cot(x):
         else:
             raise ArithmeticError('cot() -- The tangent of the input cannot be 0 due to division.')
 
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'cot()')
-            result.append(cot(attempt))
-
-        return np.array(result)
-
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
@@ -291,15 +210,6 @@ def sinh(x):
         # Defined for (-infinity, infinity)  
         return np.sinh(x)
 
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'sinh()')
-            result.append(sinh(attempt))
-
-        return np.array(result)
-
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
@@ -312,15 +222,6 @@ def cosh(x):
     
     elif isinstance(x, float):    
         return np.cosh(x)
-
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'cosh()')
-            result.append(cosh(attempt))
-
-        return np.array(result)
 
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
@@ -338,15 +239,6 @@ def tanh(x):
     elif isinstance(x, float):    
         # Defined for (-infinity, infinity)
         return np.tanh(x)
-
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'tanh()')
-            result.append(tanh(attempt))
-
-        return np.array(result)
 
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
@@ -370,15 +262,6 @@ def arcsin(x):
         else:
             raise ArithmeticError('arcsin() -- Arcsine is only defined in the domain [-1, 1]')
 
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'arcsin()')
-            result.append(arcsin(attempt))
-
-        return np.array(result)
-
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
@@ -401,15 +284,6 @@ def arccos(x):
         else:
             raise ValueError('arccos() -- Function is only defined in the domain [-1, 1]')
 
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'arccos()')
-            result.append(arccos(attempt))
-
-        return np.array(result)
-
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
@@ -424,15 +298,6 @@ def arctan(x):
         # Defined for all reals
         return np.arctan(x)
 
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'arctan()')
-            result.append(arctan(attempt))
-
-        return np.array(result)
-
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
@@ -446,15 +311,6 @@ def arcsinh(x):
     elif isinstance(x, float):    
         # Defined for all reals
         return np.arcsinh(x)
-
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'arcsinh()')
-            result.append(arcsinh(attempt))
-
-        return np.array(result)
 
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
@@ -477,15 +333,6 @@ def arccosh(x):
         
         else:
             raise ArithmeticError('arccosh() -- Function is only defined for domain [1, infinity)')
-
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'arccosh()')
-            result.append(arccosh(attempt))
-
-        return np.array(result)
 
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
@@ -510,15 +357,6 @@ def arctanh(x):
         else: 
             raise ArithmeticError('arctanh() -- Function is only defined for domain (-1, 1).')
 
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'arctanh()')
-            result.append(arctanh(attempt))
-
-        return np.array(result)
-
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
 
@@ -541,15 +379,5 @@ def sqrt(x):
         else:
             raise ArithmeticError('sqrt() -- Cannot take the square root of a negative number.')
 
-    elif isinstance(x, np.ndarray):
-        result = []
-        for val in x:
-            # Handles TypeErrors again
-            attempt = _validate(val, 'sqrt()')
-            result.append(sqrt(attempt))
-
-        return np.array(result)
-
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
-
