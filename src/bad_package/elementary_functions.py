@@ -154,7 +154,7 @@ def csc(x):
     x = _validate(x, 'csc()')
 
     if isinstance(x, DualNumber):
-        return DualNumber(csc(x.real), -1 * csc(x.real) * cot(x.dual) * x.dual)
+        return DualNumber(csc(x.real), -x.dual * csc(x.real) * cot(x.real))
     
     elif isinstance(x, float):
         # Defined everywhere expect where sine = 0     
