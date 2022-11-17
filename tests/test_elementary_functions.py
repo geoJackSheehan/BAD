@@ -37,9 +37,9 @@ class TestElementaryFunctions():
         # self.assertAlmostEqual(np.ln(2), y.real)
 
     def test_logbase(self):
-        assert isinstance(logBase(DualNumber(2, 5), np.e), DualNumber)
+        assert isinstance(logBase(np.e, DualNumber(2, 5)), DualNumber)
         x = DualNumber(2, 5)
-        result = logBase(x, np.e)
+        result = logBase(np.e, x)
         assert pytest.approx(np.log(2)/np.log(5)) == result.real
         assert pytest.approx(5*(1/(2*np.log(5)))) == result.dual
 
@@ -134,10 +134,10 @@ class TestElementaryFunctions():
 
     def test_arccos(self):
         assert isinstance(arccos(DualNumber(2, 3)), DualNumber)
-        x = DualNumber(0.75, -2)
+        x = DualNumber(0.75, -.2)
         result = arccos(x)
         assert np.arccos(0.75) == result.real
-        assert pytest.approx((-1)*(-2)/(np.sqrt((1-(0.75)**2)))) == result.dual
+        assert pytest.approx((-1)*(-.2)/(np.sqrt((1-(0.75)**2)))) == result.dual
 
     def test_arctan(self):
         assert isinstance(arctan(DualNumber(2, 2)), DualNumber)
