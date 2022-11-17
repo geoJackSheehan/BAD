@@ -76,7 +76,7 @@ class TestElementaryFunctions():
         x_neg = DualNumber(-0.5, -3)
         result_neg = tan(x_neg)
         assert np.tan(-0.5) == result_neg.real
-        assert pytest.approx(-3/(np.cos(-0.3)**2)) == result_neg.dual
+        assert pytest.approx(-3/(np.cos(-0.5)**2)) == result_neg.dual
 
     def test_csc(self):
         # csc'(x) = -csc(x)cot(x)
