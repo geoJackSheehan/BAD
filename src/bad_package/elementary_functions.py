@@ -193,7 +193,7 @@ def tanh(x):
 
     if isinstance(x, DualNumber):
         if cosh(x.real) != 0:
-            return DualNumber(tanh(x.real), x.dual / (1 / cosh(x.real) ** 2))
+            return DualNumber(tanh(x.real), x.dual / cosh(x.real) ** 2))
 
         else:
             raise ArithmeticError('tanh() -- DualNumber dual part creation tried to divide by zero since cosh of real = 0.')
