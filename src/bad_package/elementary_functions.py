@@ -118,7 +118,7 @@ def tan(x):
     x = _validate(x, 'tan()')
 
     if isinstance(x, DualNumber):
-        return DualNumber(tan(x.real), x.dual * sec(x.real) * sec(x.real))
+        return DualNumber(tan(x.real), x.dual / cos(x.real)**2)
 
     elif isinstance(x, float):
         # Defined everywhere expect where cosine = 0
