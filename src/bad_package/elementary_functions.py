@@ -34,10 +34,6 @@ def _validate(x, fun):
     elif isinstance(x, (DualNumber, float)):
         return x
 
-    # Handle lists by casting them to numpy arrays for lighter handling in the (already computationally heavy) method
-    elif isinstance(x, list):
-        return np.array(x)
-
     else:
         raise TypeError(fr'{fun} -- Elementary functions can only do computations on DualNumbers, integers, and floats.')
 
