@@ -31,8 +31,11 @@ def _validate(x, fun):
         return float(x)
 
     # Check if the element is something we can do the computation with (would have casted int to float already)
-    if isinstance(x, (DualNumber, float)):
+    elif isinstance(x, (DualNumber, float, np.ndarray)):
         return x
+
+    elif isinstance(x, list):
+        return np.array(x)
 
     else:
         raise TypeError(f'{fun} -- Elementary functions can only do computations on DualNumbers, integers, and floats.')
@@ -49,6 +52,15 @@ def exp(x):
     elif isinstance(x, float):
         # Returns basic e^x computation
         return np.exp(x)
+
+    elif isinstance(x, np.ndarray):
+        result = []
+        for val in x:
+            # Handles TypeErrors again
+            attempt = _validate(val)
+            result.append(exp(attempt))
+
+        return np.array(result)
 
     else:
         raise NotImplementedError('Unexpected behavior detected. Please contact developers.')
@@ -381,10 +393,10 @@ def sqrt(x):
 if __name__ == "__main__":
     # Basic test code, move to test suite
 
-    print(exp(2))
+    # print(exp(2))
     # print(exp(1))
 
-    # print(exp(['3']))
+    print(exp(['3']))
     # print(exp(ln(2)), exp([0, 1, 2, 3]))
     # print(cos(1), cos([0, pi/2, pi, 3*pi/2]))
     # print(sinh(2*pi), sinh([0, pi/2, pi, 3*pi/2]))
