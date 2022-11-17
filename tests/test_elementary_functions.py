@@ -7,7 +7,7 @@ import numpy as np
 from bad_package.elementary_functions import *
 from bad_package.fad.fad import DualNumber
 
-class TestElementaryFunctions():
+class TestElementaryFunctions(unittest.TestCase):
 
     def test_exp(self):
         assert isinstance(exp(DualNumber(1, 1)), DualNumber)
