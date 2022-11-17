@@ -271,7 +271,7 @@ def arccosh(x):
 
     if isinstance(x, DualNumber):
         # Cases involve dual part creation
-        if x.real < 1:
+        if x.real > 1:
             return DualNumber(arccosh(x.real), x.dual / (sqrt(x.real - 1) * sqrt(x.real + 1)))
         
         else: 
