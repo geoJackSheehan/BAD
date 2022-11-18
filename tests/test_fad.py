@@ -103,7 +103,8 @@ class TestDualNumber:
         assert isinstance(DualNumber(1, 1) ** DualNumber(1, 1), DualNumber)
         with pytest.raises(TypeError):
             DualNumber(1, 1) ** '5'
-
+            '5' ** DualNumber(1, 1)
+        
         x = DualNumber(2, 1)
         y = x**2
         assert y.real == 4

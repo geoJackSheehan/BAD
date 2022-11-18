@@ -515,6 +515,8 @@ class DualNumber:
             raise TypeError("Type not supported: must be int or float")
         if isinstance(other, self._supported_scalars):
             return DualNumber(self.real**other.real, self.dual*other.real*self.real**(other.real-1))
+        elif isinstance(other, str):
+            raise TypeError("Type not supported: must be int or float")
         else:
             return DualNumber(self.real**other.real, self.real**other.real*(self.dual*(other.real/self.real) + other.dual*np.log(self.real)))
 
