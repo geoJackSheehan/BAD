@@ -12,7 +12,7 @@ class TestDerivs():
         # Deriv should be 4 * exp(4)
         x1 = DualNumber(2)
         result = exp(x1**2)
-        assert pytest.approx(2 * np.e) == result.dual
+        assert pytest.approx(4 * np.exp(4)) == result.dual
 
         # Compute deriv of sin(2x) + 3 evaluated at x = pi
         # Deriv should be cos(2x) * 2 == 2 * cos(2pi) == 2
