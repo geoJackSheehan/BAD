@@ -23,7 +23,7 @@ class TestDerivs():
 
     def test_scalarLn(self):
         # Compute deriv of ln(2x^3) evaluated at x = 4
-        # Deriv should be x/3 (simplified) == 4/3
+        # Deriv should be 3/x (simplified) == 3/4 == 0.75
         x1 = DualNumber(4)
         result = ln(2*x1**3)
-        assert pytest.approx(4/3) == result.dual
+        assert pytest.approx(3/4) == result.dual
