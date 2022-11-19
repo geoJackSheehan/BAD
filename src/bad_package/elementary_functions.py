@@ -123,7 +123,7 @@ def tan(x):
     elif isinstance(x, float):
         # Defined everywhere expect where cosine = 0
         # Numpy does not actually have it go to 0, just machine precision
-        if np.cos(x) > 1e-16:    
+        if np.cos(x) > 9e-17:    
             return np.tan(x)
 
         else:
@@ -138,7 +138,7 @@ def csc(x):
     elif isinstance(x, float):
         # Defined everywhere expect where sine = 0
         # Numpy does not actually have it go to 0, just machine precision
-        if np.sin(x) > 1e-16:
+        if np.sin(x) > 9e-17:
             return (1 / np.sin(x))
 
         else:
@@ -153,7 +153,7 @@ def sec(x):
     elif isinstance(x, float):    
         # Defined everywhere expect where cosine = 0
         # Numpy does not actually have it go to 0, just machine precision
-        if np.cos(x) > 1e-16:
+        if np.cos(x) > 9e-17:
             return (1 / np.cos(x))
 
         else:
@@ -168,7 +168,7 @@ def cot(x):
     elif isinstance(x, float):    
         # Defined everywhere expect where tan = 0 (or sine = 0)
         # Numpy does not actually have it go to 0, just machine precision
-        if np.tan(x) > 1e-16:
+        if np.tan(x) > 9e-17:
             return (1 / np.tan(x))
 
         else:
