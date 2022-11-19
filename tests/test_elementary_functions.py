@@ -30,6 +30,9 @@ class TestElementaryFunctions():
             ln(0)
             ln(-1)
 
+        with pytest.raises(ArithmeticError):
+            ln(DualNumber(-1, -1))
+
         x = DualNumber(2, 3)
         y = ln(x)
         assert ln(2) == y.real
@@ -41,6 +44,10 @@ class TestElementaryFunctions():
         result = logBase(x, np.e)
         assert pytest.approx(np.log(2)/np.log(np.e)) == result.real
         assert pytest.approx(5*(1/(2*np.log(np.e)))) == result.dual
+
+        with pytest.raises(ArithmeticError):
+            logBase(DualNumber(0, 0))
+            logBase(0, 1)
 
     def test_sin(self):
         assert isinstance(sin(DualNumber(2, 2)), DualNumber)
@@ -78,6 +85,9 @@ class TestElementaryFunctions():
         assert np.tan(-0.5) == result_neg.real
         assert pytest.approx(-3/(np.cos(-0.5)**2)) == result_neg.dual
 
+        with pytest.raises(ArithmeticError):
+            tan(DualNumber(pi/2))
+
     def test_csc(self):
         # csc'(x) = -csc(x)cot(x)
         assert isinstance(csc(DualNumber(2, 2)), DualNumber)
@@ -85,6 +95,9 @@ class TestElementaryFunctions():
         result = csc(x)
         assert 1/sin(2) == result.real
         assert pytest.approx(-3*(1/np.sin(2))*(1/np.tan(2))) == result.dual
+
+        with pytest.raises(ArithmeticError):
+            csc(DualNumber(pi))
 
     def test_sec(self):
         # sec'(x) = sec(x)tan(x)
@@ -94,6 +107,9 @@ class TestElementaryFunctions():
         assert 1/cos(2) == result.real
         assert pytest.approx(3*(1/np.cos(2))*np.tan(2)) == result.dual
 
+        with pytest.raises(ArithmeticError):
+            sec(DualNumber(pi/2))
+
     def test_cot(self):
         # cot'(x) = -csc^2(x)
         assert isinstance(cot(DualNumber(2, 2)), DualNumber)
@@ -101,6 +117,9 @@ class TestElementaryFunctions():
         result = cot(x)
         assert 1/tan(4) == result.real
         assert pytest.approx(-3*((1/np.sin(4))**2)) == result.dual
+
+        with pytest.raises(ArithmeticError):
+            cot(DualNumber(pi))
 
     def test_sinh(self):
         assert isinstance(sinh(DualNumber(1, 1)), DualNumber)
@@ -131,12 +150,20 @@ class TestElementaryFunctions():
         assert np.arcsin(0.25) == result.real
         assert pytest.approx(5/np.sqrt(1 - 0.25**2)) ==  result.dual
 
+        with pytest.raises(ArithmeticError):
+            arcsin(DualNumber(-1, -1))
+            arcsin(0)
+
     def test_arccos(self):
         assert isinstance(arccos(DualNumber(0.9, 3)), DualNumber)
         x = DualNumber(0.75, -.2)
         result = arccos(x)
         assert np.arccos(0.75) == result.real
         assert pytest.approx((-1)*(-.2)/(np.sqrt((1-(0.75)**2)))) == result.dual
+
+        with pytest.raises(ArithmeticError):
+            arccos(DualNumber(-1, -1))
+            arccos(0)
 
     def test_arctan(self):
         assert isinstance(arctan(DualNumber(2, 2)), DualNumber)
@@ -159,6 +186,10 @@ class TestElementaryFunctions():
         assert np.arccosh(2) == result.real
         assert pytest.approx(0.3/(np.sqrt(2**2 - 1))) == result.dual
 
+        with pytest.raises(ArithmeticError):
+            arccosh(DualNumber(0.5))
+            arcccosh(0.5)
+
     def test_arctanh(self):
         assert isinstance(arctanh(DualNumber(.1, .3)), DualNumber)
         x = DualNumber(.3, .5)
@@ -166,9 +197,17 @@ class TestElementaryFunctions():
         assert np.arctanh(.3) == result.real
         assert pytest.approx(.5/(1 - .3**2)) ==  result.dual
 
+        with pytest.raises(ArithmeticError):
+            arctanh(DualNumber(1))
+            archtanh(DualNumber(0.5, 0.5))
+
     def test_sqrt(self):
         assert isinstance(sqrt(DualNumber(4, 2)), DualNumber)
         x = DualNumber(4, -1)
         result = sqrt(x)
         assert np.sqrt(4) == result.real
         assert pytest.approx((-1 * 0.5)*np.power(4, -0.5)) == result.dual
+
+        with pytest.raises(ArithmeticError):
+            sqrt(DualNumber(-1))
+            sqrt(-1)

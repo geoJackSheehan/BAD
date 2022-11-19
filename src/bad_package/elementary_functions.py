@@ -192,12 +192,9 @@ def tanh(x):
     x = _validate(x, 'tanh()')
 
     if isinstance(x, DualNumber):
-        if cosh(x.real) != 0:
-            return DualNumber(tanh(x.real), x.dual / cosh(x.real) ** 2)
+        # Cosh is never 0, (-infinity, infinity)
+        return DualNumber(tanh(x.real), x.dual / cosh(x.real) ** 2)
 
-        else:
-            raise ArithmeticError('tanh() -- DualNumber dual part creation tried to divide by zero since cosh of real = 0.')
-    
     elif isinstance(x, float):    
         # Defined for (-infinity, infinity)
         return np.tanh(x)
