@@ -18,7 +18,7 @@ class TestDerivs():
         # Deriv should be cos(2x) * 2 == 2 * cos(2pi) == 2
         x2 = DualNumber(pi)
         result2 = sin(2*x2) + 3
-        assert pytest.approx(2 * np.cos(2*x2)) == result.dual
+        assert pytest.approx(2 * np.cos(2*np.pi)) == result.dual
 
         # Compute deriv of ln(2x^3) evaluated at x = 4
         # Deriv should be 3/x (simplified) == 3/4 == 0.75
