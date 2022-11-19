@@ -46,7 +46,7 @@ class TestElementaryFunctions():
         assert pytest.approx(5*(1/(2*np.log(np.e)))) == result.dual
 
         with pytest.raises(ArithmeticError):
-            logBase(DualNumber(0, 0))
+            logBase(DualNumber(0, 0), 2)
             logBase(0, 1)
 
     def test_sin(self):

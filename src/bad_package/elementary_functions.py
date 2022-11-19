@@ -122,7 +122,7 @@ def tan(x):
 
     elif isinstance(x, float):
         # Defined everywhere expect where cosine = 0
-        if np.cos(x) != 0:    
+        if round(np.cos(x)) != 0:    
             return np.tan(x)
 
         else:
@@ -135,8 +135,9 @@ def csc(x):
         return DualNumber(csc(x.real), -x.dual * csc(x.real) * cot(x.real))
     
     elif isinstance(x, float):
-        # Defined everywhere expect where sine = 0     
-        if np.sin(x) != 0:
+        # Defined everywhere expect where sine = 0
+        # Numpy does not actually have it go to 0, just machine precision
+        if round(np.sin(x)) != 0:
             return (1 / np.sin(x))
 
         else:
@@ -149,7 +150,9 @@ def sec(x):
         return DualNumber(sec(x.real), sec(x.real) * tan(x.real) * x.dual)
     
     elif isinstance(x, float):    
-        if np.cos(x) != 0:
+        # Defined everywhere expect where cosine = 0
+        # Numpy does not actually have it go to 0, just machine precision
+        if round(np.cos(x)) != 0:
             return (1 / np.cos(x))
 
         else:
@@ -162,7 +165,9 @@ def cot(x):
         return DualNumber(cot(x.real), -1 * csc(x.real) * csc(x.real) * x.dual)
 
     elif isinstance(x, float):    
-        if np.tan(x) != 0:
+        # Defined everywhere expect where tan = 0 (or sine = 0)
+        # Numpy does not actually have it go to 0, just machine precision
+        if round(np.tan(x)) != 0:
             return (1 / np.tan(x))
 
         else:
