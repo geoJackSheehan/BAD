@@ -17,12 +17,14 @@
 import numpy as np
 from bad_package.fad.fad import DualNumber
 
-__all__ = ['e', 'pi', 'inf', 'exp', 'ln', 'logBase', 'sin', 'cos', 'tan', 'csc', 'sec', 'cot', 'sinh', 'cosh', 'tanh', 'arcsin', 'arccos', 'arctan', 'arcsinh', 'arccosh', 'arctanh', 'sqrt']
+__all__ = ['e', 'pi', 'inf', 'zero', 'exp', 'ln', 'logBase', 'sin', 'cos', 'tan', 'csc', 'sec', 'cot', 'sinh', 'cosh', 'tanh', 'arcsin', 'arccos', 'arctan', 'arcsinh', 'arccosh', 'arctanh', 'sqrt']
 
-# OVERLOADING CONSTANTS (/ symbols)
+# OVERLOADING CONSTANTS
 e = np.e
 pi = np.pi
-inf = np.inf
+
+# A machine precision 0 that Numpy produces
+zero = np.sin(pi)
 
 # Helper functions
 def _validate(x, fun):
@@ -122,8 +124,7 @@ def tan(x):
 
     elif isinstance(x, float):
         # Defined everywhere expect where cosine = 0
-        # Numpy does not actually have it go to 0, just machine precision
-        if np.cos(x) > np.cos(pi/2) or np.cos(x) < -np.cos(pi/2):    
+        if abs(np.cos(x)) > zero:
             return np.tan(x)
 
         else:
@@ -137,8 +138,7 @@ def csc(x):
     
     elif isinstance(x, float):
         # Defined everywhere expect where sine = 0
-        # Numpy does not actually have it go to 0, just machine precision
-        if np.sin(x) > np.sin(pi) or np.sin(x) < -np.sin(pi):
+        if abs(np.sin(x)) > zero:
             return (1 / np.sin(x))
 
         else:
@@ -152,8 +152,7 @@ def sec(x):
     
     elif isinstance(x, float):    
         # Defined everywhere expect where cosine = 0
-        # Numpy does not actually have it go to 0, just machine precision
-        if np.cos(x) > np.cos(pi/2) or np.cos(x) < -np.cos(pi/2):
+        if abs(np.cos(x)) > zero:
             return (1 / np.cos(x))
 
         else:
@@ -167,8 +166,7 @@ def cot(x):
 
     elif isinstance(x, float):    
         # Defined everywhere expect where tan = 0 (or sine = 0)
-        # Numpy does not actually have it go to 0, just machine precision
-        if np.tan(x) > np.sin(pi) or np.tan(x) < -np.sin(pi):
+        if abs(np.tan(x)) > zero:
             return (1 / np.tan(x))
 
         else:
