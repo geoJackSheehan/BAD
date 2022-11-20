@@ -49,6 +49,9 @@ class TestElementaryFunctions():
             logBase(DualNumber(0, 0), 2)
             logBase(0, 1)
 
+        with pytest.raises(TypeError):
+            logBase(64, '2')
+
     def test_sin(self):
         assert isinstance(sin(DualNumber(2, 2)), DualNumber)
         x = DualNumber(5, 2)
