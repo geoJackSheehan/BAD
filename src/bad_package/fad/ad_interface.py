@@ -50,20 +50,24 @@ class AutoDiff:
     get_f(self)
         Getter method of self.f
 
-    Examples/How to use
-    ------------------------------------
+    Example Driver Script to utilize forward interface
+    --------------------------------------------------
     Scalar:
-    def scalar(x):
-        return 4*x + 3
-    x = np.array([2])
-    ad = AutoDiff(scalar, x)
-    ad.compute()
-    print(f'Primal: {ad.get_primal()}')
-    >>> 11
-    print(f'Tangent: {ad.get_jacobian()}')
-    >>> [4]
+    
+    >>> import numpy as np
+    >>> from ad_interface import AutoDiff
+    >>> def scalar(x):
+    >>>     return 4*x + 3
+    >>> x = np.array([2])
+    >>> ad = AutoDiff(scalar, x)
+    >>> ad.compute()
+    >>> print(f'Primal: {ad.get_primal()}')
+    11
+    >>> print(f'Tangent: {ad.get_jacobian()}')
+    [4]
 
     Vector:
+    
     def vector(x):
         return x[0]**2 + 3*x[1] + 5
     x = np.array([1, 2])
@@ -76,6 +80,8 @@ class AutoDiff:
     '''
 
     def __init__(self, f, var_list):
+        if not isinstance(var_list, np.ndarray):
+            raise TypeError("Second argument must be numpy.ndarray")
         self.f = f
         self.var_list = var_list
         self.len_var_list = len(var_list)
@@ -86,7 +92,6 @@ class AutoDiff:
         self.trace = trace
 
     def __str__(self):
-        # Are we doing the computational graph here?
         raise NotImplementedError
 
     def compute(self):
