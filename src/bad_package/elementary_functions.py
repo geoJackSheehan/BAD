@@ -1,7 +1,7 @@
 # Defines and describes the behavior of overloaded operators on different data types within the package
 
 import numpy as np
-from fad import DualNumber
+from bad_package.fad import DualNumber
 
 __all__ = ['e', 'pi', 'zero', 'exp', 'ln', 'logBase', 'sin', 'cos', 'tan', 'csc', 'sec', 'cot', 'sinh', 'cosh', 'tanh', 'arcsin', 'arccos', 'arctan', 'arcsinh', 'arccosh', 'arctanh', 'sqrt']
 

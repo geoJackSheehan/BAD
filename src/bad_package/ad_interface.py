@@ -4,7 +4,7 @@ Implements AutoDiff class in order to execute auto differentiation
 """
 
 import numpy as np
-from fad import DualNumber
+from bad_package.fad import DualNumber
 
 class AutoDiff:
     '''
