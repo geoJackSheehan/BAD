@@ -4,8 +4,8 @@ from typing import Type
 import pytest
 import numpy as np
 
-from bad_package.elementary_functions import *
-from bad_package.fad.fad import DualNumber
+from bad_package import *
+from bad_package.fad import DualNumber
 
 class TestElementaryFunctions():
 

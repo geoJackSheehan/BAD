@@ -1,7 +1,7 @@
 # Defines and describes the behavior of overloaded operators on different data types within the package
 
 import numpy as np
-from bad_package.fad.fad import DualNumber
+from fad import DualNumber
 
 __all__ = ['e', 'pi', 'zero', 'exp', 'ln', 'logBase', 'sin', 'cos', 'tan', 'csc', 'sec', 'cot', 'sinh', 'cosh', 'tanh', 'arcsin', 'arccos', 'arctan', 'arcsinh', 'arccosh', 'arctanh', 'sqrt']
 
@@ -45,7 +45,7 @@ def ln(x):
         # Derivative defined (0, infinity); x.real cannot be 0
         if x.real > 0:
             return DualNumber(ln(x.real), x.dual / x.real)
-        
+
         else:
             raise ArithmeticError('ln() -- Natural log is defined only for values greater than or equal to 1.')
 
@@ -54,7 +54,7 @@ def ln(x):
         if x >= 1:
             return np.log(x)
 
-        else: 
+        else:
             raise ArithmeticError('ln() -- Natural log is defined only for values greater than or equal to 1.')
 
 def logBase(x, base):
@@ -67,13 +67,13 @@ def logBase(x, base):
     if isinstance(x, DualNumber):
         # Derivative bounding is the same as the float version, which is delegated below
         return DualNumber(logBase(x.real, base), x.dual / (x.real * ln(base)))
-        
-    elif isinstance(x, float):    
+
+    elif isinstance(x, float):
         # Defined everywhere that x and base are non-negative
         if x > 0 and base > 0:
             # Use change of base formula with natural base for custom log base computation
             return (np.log(x) / np.log(base))
-        
+
         else:
             raise ArithmeticError('logBase() -- Ensure base is greater than or equal to 1 and DualNumber real part is greater than 0.')
 
@@ -83,10 +83,10 @@ def sin(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, inf)
         return DualNumber(sin(x.real), x.dual * cos(x.real))
-    
+
     elif isinstance(x, float):
         # Defined for (-inf, inf)
-        return np.sin(x)     
+        return np.sin(x)
 
 def cos(x):
     x = _validate(x, 'cos()')
@@ -95,7 +95,7 @@ def cos(x):
         # Derivative defined (-inf, inf)
         return DualNumber(cos(x.real), -1 * sin(x.real) * x.dual)
 
-    elif isinstance(x, float):    
+    elif isinstance(x, float):
         # Defined for (-inf, inf)
         return np.cos(x)
 
@@ -105,7 +105,7 @@ def tan(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, 0) U (0, inf), but tan has the same bounding which is handled below before div 0 occurs
         return DualNumber(tan(x.real), x.dual / cos(x.real)**2)
-           
+
     elif isinstance(x, float):
         # Defined everywhere expect where cosine = 0
         if abs(np.cos(x)) > zero:
@@ -120,14 +120,14 @@ def csc(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, inf)
         return DualNumber(csc(x.real), -1 * x.dual * csc(x.real) * cot(x.real))
-    
+
     elif isinstance(x, float):
         # Defined everywhere expect where sine = 0
         if abs(np.sin(x)) > zero:
             return (1 / np.sin(x))
 
         else:
-            raise ArithmeticError('csc() -- The sine of the input cannot be 0 due to division.')       
+            raise ArithmeticError('csc() -- The sine of the input cannot be 0 due to division.')
 
 def sec(x):
     x = _validate(x, 'sec()')
@@ -135,8 +135,8 @@ def sec(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, inf)
         return DualNumber(sec(x.real), sec(x.real) * tan(x.real) * x.dual)
-    
-    elif isinstance(x, float):    
+
+    elif isinstance(x, float):
         # Defined everywhere expect where cosine = 0
         if abs(np.cos(x)) > zero:
             return (1 / np.cos(x))
@@ -151,7 +151,7 @@ def cot(x):
         # Derivative defined (-inf, inf)
         return DualNumber(cot(x.real), -1 * csc(x.real) * csc(x.real) * x.dual)
 
-    elif isinstance(x, float):    
+    elif isinstance(x, float):
         # Defined everywhere expect where tan = 0 (or sine = 0)
         if abs(np.tan(x)) > zero:
             return (1 / np.tan(x))
@@ -165,9 +165,9 @@ def sinh(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, inf)
         return DualNumber(sinh(x.real), cosh(x.real) * x.dual)
-    
-    elif isinstance(x, float):  
-        # Defined for (-infinity, infinity)  
+
+    elif isinstance(x, float):
+        # Defined for (-infinity, infinity)
         return np.sinh(x)
 
 def cosh(x):
@@ -176,8 +176,8 @@ def cosh(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, inf)
         return DualNumber(cosh(x.real), sinh(x.real) * x.dual)
-    
-    elif isinstance(x, float):    
+
+    elif isinstance(x, float):
         # Defined (-inf, inf)
         return np.cosh(x)
 
@@ -188,7 +188,7 @@ def tanh(x):
         # Derivative defined (-inf, inf), Cosh is never 0
         return DualNumber(tanh(x.real), x.dual / cosh(x.real) ** 2)
 
-    elif isinstance(x, float):    
+    elif isinstance(x, float):
         # Defined for (-inf, inf)
         return np.tanh(x)
 
@@ -202,8 +202,8 @@ def arcsin(x):
 
         else:
             raise ArithmeticError('arcsin() -- Tried to square-root a negative number during dual part creation. Ensure real part is within (-1, 1).')
-    
-    elif isinstance(x, float):  
+
+    elif isinstance(x, float):
         # Defined for [-1, 1]
         if x >= -1 and x <= 1:
             return np.arcsin(x)
@@ -221,8 +221,8 @@ def arccos(x):
 
         else:
             raise ArithmeticError('arccos() -- DualNumber real part must be within defined domain (-1, 1) for dual part creation.')
-    
-    elif isinstance(x, float):    
+
+    elif isinstance(x, float):
         # Defined for [-1, 1]
         if x >= -1 and x <= 1:
             return np.arccos(x)
@@ -236,8 +236,8 @@ def arctan(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, inf)
         return DualNumber(arctan(x.real), x.dual / (1 + x.real ** 2))
-    
-    elif isinstance(x, float):  
+
+    elif isinstance(x, float):
         # Defined for (-inf, inf)
         return np.arctan(x)
 
@@ -247,8 +247,8 @@ def arcsinh(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, inf)
         return DualNumber(arcsinh(x.real), x.dual / sqrt(1 + x.real ** 2))
-    
-    elif isinstance(x, float):    
+
+    elif isinstance(x, float):
         # Defined for (-inf, inf)
         return np.arcsinh(x)
 
@@ -259,15 +259,15 @@ def arccosh(x):
         # Derivative defined (1, inf)
         if x.real > 1:
             return DualNumber(arccosh(x.real), x.dual / (sqrt(x.real - 1) * sqrt(x.real + 1)))
-        
-        else: 
+
+        else:
             raise ArithmeticError('arccosh() -- DualNumber real part must be greater than 1 for dual part creation involving square-roots.')
-    
-    elif isinstance(x, float):    
+
+    elif isinstance(x, float):
         # Defined for [1, infinity)
         if x >= 1:
             return np.arccosh(x)
-        
+
         else:
             raise ArithmeticError('arccosh() -- Function is only defined for domain [1, infinity)')
 
@@ -278,16 +278,16 @@ def arctanh(x):
         # Derivative defined (-inf, -1) U (-1, 1) U (1, inf)
         if x.real is not [-1, 1]:
             return DualNumber(arctanh(x.real), x.dual / (1 - x.real **2))
-        
+
         else:
             raise ArithmeticError('arctanh() -- DualNumber dual part creation produces divide by 0 if real part is -1 or 1.')
-    
-    elif isinstance(x, float):  
+
+    elif isinstance(x, float):
         # Defined for (-1, 1)
-        if x > -1 and x < 1:  
+        if x > -1 and x < 1:
             return np.arctanh(x)
-        
-        else: 
+
+        else:
             raise ArithmeticError('arctanh() -- Function is only defined for domain (-1, 1).')
 
 def sqrt(x):
@@ -297,11 +297,11 @@ def sqrt(x):
         # Derivative defined (0, inf)
         if x.real > 0:
             return DualNumber(sqrt(x.real), (x.dual / 2) * (1 / sqrt(x.real)))
-        
+
         else:
             raise ArithmeticError('sqrt() -- Cannot take the square root of a negative number and cannot divide by 0 for dual part creation.')
-    
-    elif isinstance(x, float,):    
+
+    elif isinstance(x, float,):
         # Defined for [0, infinity)
         if x >= 0:
             return np.sqrt(x)

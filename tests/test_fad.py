@@ -1,5 +1,5 @@
 import pytest
-from bad_package.fad.fad import DualNumber
+from bad_package.fad import DualNumber
 import numpy as np
 
 class TestDualNumber:
@@ -104,7 +104,7 @@ class TestDualNumber:
         with pytest.raises(TypeError):
             DualNumber(1, 1) ** '5'
             '5' ** DualNumber(1, 1)
-        
+
         x = DualNumber(2, 1)
         y = x**2
         assert y.real == 4
