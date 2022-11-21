@@ -62,9 +62,9 @@ class AutoDiff:
     >>> ad = AutoDiff(scalar, x)
     >>> ad.compute()
     >>> print(f'Primal: {ad.get_primal()}')
-    11
+    Primal: 11
     >>> print(f'Tangent: {ad.get_jacobian()}')
-    [4]
+    Tangent: [4]
 
     Vector:
     
