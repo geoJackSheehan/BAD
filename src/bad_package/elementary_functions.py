@@ -1,18 +1,4 @@
 # Defines and describes the behavior of overloaded operators on different data types within the package
-# All dual number computations used a trace table with V0 = x.real,  DpV0 = x.dual
-# Elementary functions are recursive in the DualNumber computation s.t. we pass the real part and/or dual part to another function 
-#   within this module to compute the scalar output. Ensures all Numpy errors are overwritten with custom errors so the user does not
-#   need to interact with numpy using our module (expect for in cases where they are not using an AD object). Also allows us to 
-#   ensure functional domain restrictions are met.
-# Domain restrictions on functions are imposed by most restrictive case.
-
-# Expectations:
-# 1. Any elementary function is being applied to a single DualNumber instance or int / float
-# 2. Any DualNumber instance already has float-type real and integer parts
-# 3. DualNumber real parts have been converted to floats already, the dual part will be done by us explicitly (setting the seed vector, ect)
-# 4. NotImplementedError raised if there is (1) unexpected behavior or (2) devs haven't gotten to implementing something yet
-# 5. TypeError raised if an inappropriate data type was passed from the user
-# 6. ArithmeticError raised if there was a (generally) mathematically inappropriate calculation about to happen 
 
 import numpy as np
 from bad_package.fad.fad import DualNumber
