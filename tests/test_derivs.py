@@ -27,3 +27,10 @@ class TestDerivs():
         x1 = DualNumber(4)
         result = ln(2*x1**3)
         assert pytest.approx(3/4) == result.dual
+        
+    def test_scalarMathCombo(self):
+        # Compute deriv of a complicated random function evaluated at x = 16
+        # Deriv should be == 235.132
+        x1 = DualNumber(16)
+        result = ((1 + 2*x1**2)*(x1**3)**2)/((x1+19*x1**3)**(1/2) * (4*x1)**(5/2)) + ((1 + 3*x1)**(1/2))/(x1 + (1+x1**2)**(1/2))
+        assert pytest.approx(235.132) == result.dual
