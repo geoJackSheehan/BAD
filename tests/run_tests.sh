@@ -4,6 +4,7 @@ tests=(
     test_fad.py
     test_elementary_functions.py
     test_derivs.py
+    test_ad_interface.py
 )
 
 export PYTHONPATH="$(pwd -P)/../src":${PYTHONPATH}
