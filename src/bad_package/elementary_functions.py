@@ -17,12 +17,14 @@
 import numpy as np
 from bad_package.fad.fad import DualNumber
 
-__all__ = ['e', 'pi', 'inf', 'exp', 'ln', 'logBase', 'sin', 'cos', 'tan', 'csc', 'sec', 'cot', 'sinh', 'cosh', 'tanh', 'arcsin', 'arccos', 'arctan', 'arcsinh', 'arccosh', 'arctanh', 'sqrt']
+__all__ = ['e', 'pi', 'zero', 'exp', 'ln', 'logBase', 'sin', 'cos', 'tan', 'csc', 'sec', 'cot', 'sinh', 'cosh', 'tanh', 'arcsin', 'arccos', 'arctan', 'arcsinh', 'arccosh', 'arctanh', 'sqrt']
 
-# OVERLOADING CONSTANTS (/ symbols)
+# OVERLOADING CONSTANTS
 e = np.e
 pi = np.pi
-inf = np.inf
+
+# A machine precision 0 that Numpy produces
+zero = np.sin(pi)
 
 # Helper functions
 def _validate(x, fun):
@@ -43,26 +45,26 @@ def exp(x):
     x = _validate(x, 'exp()')
 
     if isinstance(x, DualNumber):
-        # Defined for all reals; Using our implementation of exp
+        # Derivative defined (-inf, inf)
         return DualNumber(exp(x.real), x.dual * exp(x.real))
 
     elif isinstance(x, float):
-        # Returns basic e^x computation
+        # Defined (-inf, inf)
         return np.exp(x)
 
 def ln(x):
     x = _validate(x, 'ln()')
 
     if isinstance(x, DualNumber):
-        # ln Defined for [1, infinity); x.real cannot be 0
-        if x.real >= 1:
+        # Derivative defined (0, infinity); x.real cannot be 0
+        if x.real > 0:
             return DualNumber(ln(x.real), x.dual / x.real)
         
         else:
             raise ArithmeticError('ln() -- Natural log is defined only for values greater than or equal to 1.')
 
     elif isinstance(x, float):
-        # Returns natural log of scalar input to user or DualNumber creation
+        # Defined [1, inf)
         if x >= 1:
             return np.log(x)
 
@@ -77,14 +79,9 @@ def logBase(x, base):
         raise TypeError('logBase() -- Base must be an integer or a float.')
 
     if isinstance(x, DualNumber):
-        # log (general) is defined for (0, infinity); ln handled elsewhere; x.real != 0
-        if x.real > 0 and base > 0:
-            # ln is used in the base because it is the easiest version of custom log base derivative
-            return DualNumber(logBase(x.real, base), x.dual / (x.real * ln(base)))
+        # Derivative bounding is the same as the float version, which is delegated below
+        return DualNumber(logBase(x.real, base), x.dual / (x.real * ln(base)))
         
-        else:
-            raise ArithmeticError('logBase() -- Ensure base is greater than or equal to 1 and DualNumber real part is greater than 0.')
-    
     elif isinstance(x, float):    
         # Defined everywhere that x and base are non-negative
         if x > 0 and base > 0:
@@ -98,47 +95,49 @@ def sin(x):
     x = _validate(x, 'sin()')
 
     if isinstance(x, DualNumber):
+        # Derivative defined (-inf, inf)
         return DualNumber(sin(x.real), x.dual * cos(x.real))
     
     elif isinstance(x, float):
-        # Defined for (-infinity, infinity)
+        # Defined for (-inf, inf)
         return np.sin(x)     
 
 def cos(x):
     x = _validate(x, 'cos()')
 
     if isinstance(x, DualNumber):
+        # Derivative defined (-inf, inf)
         return DualNumber(cos(x.real), -1 * sin(x.real) * x.dual)
 
     elif isinstance(x, float):    
-        # Defined for (-infinity, infinity)
+        # Defined for (-inf, inf)
         return np.cos(x)
 
 def tan(x):
     x = _validate(x, 'tan()')
 
     if isinstance(x, DualNumber):
+        # Derivative defined (-inf, 0) U (0, inf), but tan has the same bounding which is handled below before div 0 occurs
         return DualNumber(tan(x.real), x.dual / cos(x.real)**2)
-
+           
     elif isinstance(x, float):
         # Defined everywhere expect where cosine = 0
-        # Numpy does not actually have it go to 0, just machine precision
-        if np.cos(x) > np.cos(pi/2) or np.cos(x) < -np.cos(pi/2):    
+        if abs(np.cos(x)) > zero:
             return np.tan(x)
 
         else:
-            raise ArithmeticError('tan() -- Ensure the input is defined within tangent\'s domain.')
+            raise ArithmeticError('tan() -- Ensure the input does not cause cosine to be 0.')
 
 def csc(x):
     x = _validate(x, 'csc()')
 
     if isinstance(x, DualNumber):
-        return DualNumber(csc(x.real), -x.dual * csc(x.real) * cot(x.real))
+        # Derivative defined (-inf, inf)
+        return DualNumber(csc(x.real), -1 * x.dual * csc(x.real) * cot(x.real))
     
     elif isinstance(x, float):
         # Defined everywhere expect where sine = 0
-        # Numpy does not actually have it go to 0, just machine precision
-        if np.sin(x) > np.sin(pi) or np.sin(x) < -np.sin(pi):
+        if abs(np.sin(x)) > zero:
             return (1 / np.sin(x))
 
         else:
@@ -148,12 +147,12 @@ def sec(x):
     x = _validate(x, 'sec()')
 
     if isinstance(x, DualNumber):
+        # Derivative defined (-inf, inf)
         return DualNumber(sec(x.real), sec(x.real) * tan(x.real) * x.dual)
     
     elif isinstance(x, float):    
         # Defined everywhere expect where cosine = 0
-        # Numpy does not actually have it go to 0, just machine precision
-        if np.cos(x) > np.cos(pi/2) or np.cos(x) < -np.cos(pi/2):
+        if abs(np.cos(x)) > zero:
             return (1 / np.cos(x))
 
         else:
@@ -163,12 +162,12 @@ def cot(x):
     x = _validate(x, 'cot()')
 
     if isinstance(x, DualNumber):
+        # Derivative defined (-inf, inf)
         return DualNumber(cot(x.real), -1 * csc(x.real) * csc(x.real) * x.dual)
 
     elif isinstance(x, float):    
         # Defined everywhere expect where tan = 0 (or sine = 0)
-        # Numpy does not actually have it go to 0, just machine precision
-        if np.tan(x) > np.sin(pi) or np.tan(x) < -np.sin(pi):
+        if abs(np.tan(x)) > zero:
             return (1 / np.tan(x))
 
         else:
@@ -178,6 +177,7 @@ def sinh(x):
     x = _validate(x, 'sinh()')
 
     if isinstance(x, DualNumber):
+        # Derivative defined (-inf, inf)
         return DualNumber(sinh(x.real), cosh(x.real) * x.dual)
     
     elif isinstance(x, float):  
@@ -188,28 +188,29 @@ def cosh(x):
     x = _validate(x, 'cosh()')
 
     if isinstance(x, DualNumber):
-        # Defined for (-infinity, infinity)
+        # Derivative defined (-inf, inf)
         return DualNumber(cosh(x.real), sinh(x.real) * x.dual)
     
     elif isinstance(x, float):    
+        # Defined (-inf, inf)
         return np.cosh(x)
 
 def tanh(x):
     x = _validate(x, 'tanh()')
 
     if isinstance(x, DualNumber):
-        # Cosh is never 0, (-infinity, infinity)
+        # Derivative defined (-inf, inf), Cosh is never 0
         return DualNumber(tanh(x.real), x.dual / cosh(x.real) ** 2)
 
     elif isinstance(x, float):    
-        # Defined for (-infinity, infinity)
+        # Defined for (-inf, inf)
         return np.tanh(x)
 
 def arcsin(x):
     x = _validate(x, 'arcsin()')
 
     if isinstance(x, DualNumber):
-        # Cases in this part deal with dual part creation
+        # Derivative defined (-1, 1)
         if x.real > -1 and x.real < 1:
             return DualNumber(arcsin(x.real), x.dual / sqrt(1 - x.real ** 2))
 
@@ -228,7 +229,7 @@ def arccos(x):
     x = _validate(x, 'arccos()')
 
     if isinstance(x, DualNumber):
-        # Cases in this part deal with dual part creation
+        # Derivative defined (-1, 1)
         if x.real > -1 and x.real < 1:
             return DualNumber(arccos(x.real), (-1 * x.dual) / sqrt(1 - x.real ** 2))
 
@@ -247,29 +248,29 @@ def arctan(x):
     x = _validate(x, 'arctan()')
 
     if isinstance(x, DualNumber):
-        # Defined for all reals
+        # Derivative defined (-inf, inf)
         return DualNumber(arctan(x.real), x.dual / (1 + x.real ** 2))
     
     elif isinstance(x, float):  
-        # Defined for all reals
+        # Defined for (-inf, inf)
         return np.arctan(x)
 
 def arcsinh(x):
     x = _validate(x, 'arcsinh()')
 
     if isinstance(x, DualNumber):
-        # Defined for all reals
+        # Derivative defined (-inf, inf)
         return DualNumber(arcsinh(x.real), x.dual / sqrt(1 + x.real ** 2))
     
     elif isinstance(x, float):    
-        # Defined for all reals
+        # Defined for (-inf, inf)
         return np.arcsinh(x)
 
 def arccosh(x):
     x = _validate(x, 'arccosh()')
 
     if isinstance(x, DualNumber):
-        # Cases involve dual part creation
+        # Derivative defined (1, inf)
         if x.real > 1:
             return DualNumber(arccosh(x.real), x.dual / (sqrt(x.real - 1) * sqrt(x.real + 1)))
         
@@ -288,7 +289,7 @@ def arctanh(x):
     x = _validate(x, 'arctanh()')
 
     if isinstance(x, DualNumber):
-        # Cases involve dual part creation
+        # Derivative defined (-inf, -1) U (-1, 1) U (1, inf)
         if x.real is not [-1, 1]:
             return DualNumber(arctanh(x.real), x.dual / (1 - x.real **2))
         
@@ -307,7 +308,7 @@ def sqrt(x):
     x = _validate(x, 'sqrt()')
 
     if isinstance(x, DualNumber):
-        # Domain for reals mut be positive, or divide by 0 error or negative square-root
+        # Derivative defined (0, inf)
         if x.real > 0:
             return DualNumber(sqrt(x.real), (x.dual / 2) * (1 / sqrt(x.real)))
         
