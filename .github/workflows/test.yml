@@ -1,4 +1,26 @@
 name: test
 
 on:
+  push:
+    branches:
+      - milestone2
+
+jobs:
+  test_dual_number:
+    name: Test implementation of dual numbers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: python -m pip install build pytest numpy
+
+      - name: Build and install in the container
+        run: (python -m build --wheel && python -m pip install --force-reinstall dist/*)
+
+      - name: Run dual numbers and elementary functions test suite
+        run: (cd tests && ./run_tests.sh CI)
+
 
