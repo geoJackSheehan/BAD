@@ -3,7 +3,7 @@ name: test
 on:
   push:
     branches:
-      - milestone2
+      - main
 
 jobs:
   test_dual_number:
