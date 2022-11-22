@@ -14,21 +14,18 @@
     git clone https://code.harvard.edu/CS107/team23.git
     cd team23
     ```
-<br>
-    
+
 2. Install virtualenv on your machine if not already installed. 
 
     ```
     pip install virtualenv
     ```
-<br>  
     
 3. Create virtual environment
 
     ```
     virtualenv cs107
-    ```
-<br>  
+    ``` 
   
 4. Activate the new virutal environment
 
@@ -37,21 +34,18 @@
     ```python
     source cs107/bin/activate
     ```
-<br>
-     
+    
     Windows:
     
     ```python
     cs107\Scripts\activate    
     ```
-<br>
 
 5. Install package and its requirements 
 
     ```python
     pip install ./
     ```    
-<br>
 
 6. To deactivate virtual environment
 
