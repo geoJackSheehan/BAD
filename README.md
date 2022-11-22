@@ -6,12 +6,12 @@
 
 ## Installation via GitHub
   
-1. Clone the package repository to folder 
+1. Clone the package repository to folder. Make sure to set up a SSH key beforehand.  
 
     ```
     mkdir bad_package
     cd bad_package
-    git clone https://code.harvard.edu/CS107/team23.git
+    git clone git@code.harvard.edu:CS107/team23.git
     cd team23
     ```
 
