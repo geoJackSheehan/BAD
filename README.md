@@ -60,7 +60,7 @@
 ```python
 >>> from bad_package.ad_interface import *
 >>> from bad_package.elementary_functions import *
->>> from bad_pacakge.fad import *
+>>> from bad_package.fad import *
 >>> import numpy as np
 ```
 
