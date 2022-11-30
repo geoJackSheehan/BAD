@@ -4,7 +4,7 @@ import numpy as np
 
 from bad_package.elementary_functions import *
 from bad_package.fad import DualNumber
-from bad_package.ad_interface import AutoDiff
+from bad_package.interface import AutoDiff
 
 class TestADInterface():
 
