@@ -89,10 +89,10 @@ class TestReverseMode:
         res2 = rm - 2.718
         assert len(rm.child) == 2
         res3 = rm2 - 10
-        assert len(rm.child) == 3
+        assert len(rm2.child) == 1
         res4 = rm - rm2
         assert len(rm.child) == 4
-        assert len(rm2.child) == 1
+        assert len(rm2.child) == 2
         
         # Int subtract test 
         assert isinstance(res1, ReverseMode)
