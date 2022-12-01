@@ -1,5 +1,6 @@
 import pytest
 from bad_package.rad import ReverseMode
+from bad_package.fad import DualNumber
 import numpy as np
 
 class TestReverseMode:
@@ -11,6 +12,25 @@ class TestReverseMode:
         assert len(rm.child) == 0
         assert rm.grad == None
 
+        with pytest.raises(TypeError):
+            ReverseMode('a')
+            ReverseMode([1,2,3])
+            ReverseMode((6, 7))
+            ReverseMode(DualNumber(1))
+            ReverseMode([])
+
+    def test_child(self):
+        # Testing the self.child container
+        rm = ReverseMode(3)
+        rm2 = ReverseMode(1)
+
+        res1 = rm * 3 + 1 - rm2
+        assert len(rm.child) == 3
+        assert len(rm2.child) == 1
+
+        res2 = 1 / rm + 6
+        assert len(rm.child) == 5
+
 
     def test_add(self):
         rm = ReverseMode(49)
@@ -18,9 +38,7 @@ class TestReverseMode:
 
         # Supports int, floats, RM objects
         res1 = rm + 6
-        assert len(rm.child) == 1
         res2 = rm + 3.14
-        assert len(rm.child) == 2
         res3 = rm + rm2
         assert len(rm.child) == 3
         assert len(rm2.child) == 1
@@ -52,9 +70,7 @@ class TestReverseMode:
         rm2 = ReverseMode(1)
 
         res1 = 1 + rm
-        assert len(rm.child) == 1
         res2 = -4 + rm
-        assert len(rm.child) == 2
         res3 = 9.99 + rm2
 
         # Int radd test
@@ -85,11 +101,8 @@ class TestReverseMode:
         rm2 = ReverseMode(-10)
 
         res1 = rm - 10
-        assert len(rm.child) == 1
         res2 = rm - 2.718
-        assert len(rm.child) == 2
         res3 = rm2 - 10
-        assert len(rm2.child) == 1
         res4 = rm - rm2
         assert len(rm.child) == 3
         assert len(rm2.child) == 2
@@ -127,16 +140,13 @@ class TestReverseMode:
         rm2 = ReverseMode(-5)
 
         res1 = 10 - rm
-        assert len(rm.child) == 1
         res2 = 2.718 - rm
-        assert len(rm.child) == 2
         res3 = -10 - rm2
-        assert len(rm2.child) == 1
         
         # Int reverse subtract test
         assert isinstance(res1, ReverseMode)
         assert res1.real == 10 - rm.real
-        assert res1.real ==  -rm.real + 10
+        assert res1.real == (-1 * rm.real) + 10
 
         # Float reverse subtract test
         assert isinstance(res2, ReverseMode)
@@ -154,3 +164,100 @@ class TestReverseMode:
             4 - ReverseMode([1, 2, 3])
             -10 - ReverseMode(np.Inf)
             1 - ReverseMode((1, 2))
+
+    def test_mul(self):
+        rm = ReverseMode(1)
+        rm2 = ReverseMode(-2)
+
+        res1 = rm * rm2
+        res2 = rm * 4
+        res3 = rm * -1
+
+        assert res1.real == rm.real * rm2.real
+        assert res1.real == rm2.real * rm.real
+
+        assert res2.real == rm.real * 4
+        assert res2.real == 4 * rm.real
+
+        assert res3.real == rm.real * -1
+        assert res3.real == 0 - rm.real
+
+        # Validating type inputs
+        with pytest.raises(TypeError):
+            ReverseMode('2') * 3
+            ReverseMode((1,2)) * 4
+            rm * '4'
+            DualNumber(1) * rm
+
+    def test_rmul(self):
+        rm = ReverseMode(3)
+
+        res1 = -3 * rm
+        res2 = 3.14159 * rm
+        res3 = -1 * rm * 2
+
+        assert res1.real == rm.real * -3
+        assert res1.real == -3 * rm.real
+
+        assert res2.real == rm.real * 3.14159
+        assert res2.real == 3.14159 * rm.real
+
+        assert res3.real == -2 * rm.real
+        assert res3.real == rm.real * -2
+
+        # Validating type inputs
+        with pytest.raises(TypeError):
+            3 * ReverseMode('2')
+            4 * ReverseMode([1,2])
+            '4' * rm
+            rm * DualNumber(1)
+
+    def test_truediv(self):
+        rm = ReverseMode(2)
+        rm2 = ReverseMode(3)
+        res1 = rm/2
+        res2 = rm/-1
+        res3 = rm/9.18
+        res4 = rm/rm2
+
+        assert res1.real == rm.real / 2
+        assert res2.real == -1 * rm.real
+        assert res3.real == rm.real / 9.18
+        assert res4.real == rm.real / rm2.real
+
+        with pytest.raises(TypeError):
+            rm / '2'
+            rm / [1, 2, 3]
+            rm / (2, 3)
+            rm / DualNumber(1)
+
+        with pytest.raises(ArithmeticError):
+            rm / ReverseMode(0)
+
+    def test_rtruediv(self):
+        rm = ReverseMode(2)
+        rm2 = ReverseMode(3)
+        res1 = 2/rm
+        res2 = -1/rm
+        res3 = 9.18/rm
+        res4 = 0/rm
+
+        assert res1.real == 2 / rm.real
+        assert res2.real == -1 / rm.real
+        assert res3.real == 9.18 / rm.real
+        assert res4.real == 0
+
+        with pytest.raises(TypeError):
+            '2' / rm2
+            [1, 2, 3] / rm
+            (2, 3) / rm2
+            DualNumber(1) / rm
+
+
+    def test_neg(self):
+        rm = ReverseMode(3)
+        assert -1 * rm == -rm
+        assert rm.real * -1 == -rm.real
+
+    def test_pow(self):
+        pass
