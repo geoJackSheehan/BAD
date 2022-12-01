@@ -191,7 +191,7 @@ class TestElementaryFunctions():
 
         with pytest.raises(ArithmeticError):
             arccosh(DualNumber(0.5))
-            arcccosh(0.5)
+            arccosh(0.5)
 
     def test_arctanh(self):
         assert isinstance(arctanh(DualNumber(.1, .3)), DualNumber)
