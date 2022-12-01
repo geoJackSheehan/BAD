@@ -8,6 +8,12 @@ class TestDualNumber:
         assert DualNumber(1, 1).real == 1
         assert DualNumber(1, 1).dual == 1
 
+        with pytest.raises(TypeError):
+            DualNumber('a')
+            DualNumber(1, [1, 2, 3])
+            DualNumber((1,2))
+            DualNumber(np.NaN)
+
     def test_add(self):
         assert isinstance(DualNumber(1, 1) + 1, DualNumber)
         assert isinstance(1.0 + DualNumber(1, 1), DualNumber)

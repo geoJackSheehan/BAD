@@ -39,9 +39,12 @@ class DualNumber:
         ------------------------------------
         At this stage, DualNumber only supports scalar functions
         '''
-        
-        self.real = real
-        self.dual = dual
+
+        if isinstance(real, *self._supported_scalars) and isinstance(dual, *self._supported_scalars):
+            self.real = real
+            self.dual = dual
+        else:
+            raise TypeError('DualNumber real and dual parts may only be initialized as integers or floats')
 
         
     def __add__(self, other):
