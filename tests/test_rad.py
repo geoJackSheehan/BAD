@@ -31,6 +31,13 @@ class TestReverseMode:
         res2 = 1 / rm + 6
         assert len(rm.child) == 5
 
+    def test_return(self):
+        rm = ReverseMode(2)
+        rm2 = ReverseMode(-5)
+
+        res1 = rm + 4 - rm2 * 3
+        assert isinstance(res1, ReverseMode)
+
 
     def test_add(self):
         rm = ReverseMode(49)
@@ -40,21 +47,16 @@ class TestReverseMode:
         res1 = rm + 6
         res2 = rm + 3.14
         res3 = rm + rm2
-        assert len(rm.child) == 3
-        assert len(rm2.child) == 1
 
         # Int add test
-        assert isinstance(res1, ReverseMode)
         assert res1.real == rm.real + 6
         assert res1.real == 6 + rm.real
         
         # Float add test
-        assert isinstance(res2, ReverseMode)
         assert res2.real == rm.real + 3.14
         assert res2.real == 3.14 + rm.real
 
         # Adding two RM objects
-        assert isinstance(res3, ReverseMode)
         assert res3.real == rm.real + rm2.real
         assert res3.real == rm2.real + rm.real
 
@@ -74,17 +76,14 @@ class TestReverseMode:
         res3 = 9.99 + rm2
 
         # Int radd test
-        assert isinstance(res1, ReverseMode)
         assert res1.real == 1 + rm.real
         assert res1.real == rm.real + 1
 
         # Negative int test radd 
-        assert isinstance(res2, ReverseMode)
         assert res2.real == rm.real - 4
         assert res2.real == -4 + rm.real
 
         # Float radd test
-        assert isinstance(res3, ReverseMode)
         assert res3.real == rm2.real +9.99
         assert res3.real == 9.99 + rm2.real
 
@@ -104,26 +103,20 @@ class TestReverseMode:
         res2 = rm - 2.718
         res3 = rm2 - 10
         res4 = rm - rm2
-        assert len(rm.child) == 3
-        assert len(rm2.child) == 2
         
         # Int subtract test 
-        assert isinstance(res1, ReverseMode)
         assert res1.real == rm.real - 10
         assert res1.real == -10 + rm.real
 
         # Float subtract test 
-        assert isinstance(res2, ReverseMode)
         assert res2.real == rm.real - 2.718
         assert res2.real == -2.718 + rm.real
  
         # Negative reverse mode subtract test 
-        assert isinstance(res3, ReverseMode)
         assert res3.real == rm2.real - 10
         assert res3.real == -10 + rm2.real
 
         # Both ReverseMode subtract test
-        assert isinstance(res4, ReverseMode)
         assert res4.real == rm.real - rm2.real
         assert res4.real == -rm2.real + rm.real
         
@@ -144,17 +137,14 @@ class TestReverseMode:
         res3 = -10 - rm2
         
         # Int reverse subtract test
-        assert isinstance(res1, ReverseMode)
         assert res1.real == 10 - rm.real
         assert res1.real == (-1 * rm.real) + 10
 
         # Float reverse subtract test
-        assert isinstance(res2, ReverseMode)
         assert res2.real == 2.718 - rm.real
         assert res2.real == -rm.real + 2.718
 
         # Negative int reverse subtraction
-        assert isinstance(res3, ReverseMode)
         assert res3.real == -10 + -rm2.real
         assert res3.real == rm2.real - 10
         
@@ -165,6 +155,7 @@ class TestReverseMode:
             -10 - ReverseMode(np.Inf)
             1 - ReverseMode((1, 2))
 
+
     def test_mul(self):
         rm = ReverseMode(1)
         rm2 = ReverseMode(-2)
@@ -173,12 +164,15 @@ class TestReverseMode:
         res2 = rm * 4
         res3 = rm * -1
 
+        # Checking RM object mul is commutative
         assert res1.real == rm.real * rm2.real
         assert res1.real == rm2.real * rm.real
 
+        # Checking int mul commutative
         assert res2.real == rm.real * 4
         assert res2.real == 4 * rm.real
 
+        # Checking neg int mul commutative
         assert res3.real == rm.real * -1
         assert res3.real == 0 - rm.real
 
@@ -187,7 +181,8 @@ class TestReverseMode:
             ReverseMode('2') * 3
             ReverseMode((1,2)) * 4
             rm * '4'
-            DualNumber(1) * rm
+            rm * DualNumber(1)
+
 
     def test_rmul(self):
         rm = ReverseMode(3)
@@ -196,12 +191,15 @@ class TestReverseMode:
         res2 = 3.14159 * rm
         res3 = -1 * rm * 2
 
+        # Checking neg int mul commutative
         assert res1.real == rm.real * -3
         assert res1.real == -3 * rm.real
 
+        # Checking float mul commutative
         assert res2.real == rm.real * 3.14159
         assert res2.real == 3.14159 * rm.real
 
+        # Checking neg int (multiple ops) commutative
         assert res3.real == -2 * rm.real
         assert res3.real == rm.real * -2
 
@@ -210,43 +208,52 @@ class TestReverseMode:
             3 * ReverseMode('2')
             4 * ReverseMode([1,2])
             '4' * rm
-            rm * DualNumber(1)
+            DualNumber(1) * rm
+
 
     def test_truediv(self):
         rm = ReverseMode(2)
         rm2 = ReverseMode(3)
+
         res1 = rm/2
         res2 = rm/-1
         res3 = rm/9.18
         res4 = rm/rm2
 
+        # Non-commutative, checking ints, neg ints, floats, and both RM objects
         assert res1.real == rm.real / 2
         assert res2.real == -1 * rm.real
         assert res3.real == rm.real / 9.18
         assert res4.real == rm.real / rm2.real
 
+        # Validation input
         with pytest.raises(TypeError):
             rm / '2'
             rm / [1, 2, 3]
             rm / (2, 3)
             rm / DualNumber(1)
 
+        # Making sure can't div by 0 with a 0 RM object
         with pytest.raises(ArithmeticError):
             rm / ReverseMode(0)
+
 
     def test_rtruediv(self):
         rm = ReverseMode(2)
         rm2 = ReverseMode(3)
+
         res1 = 2/rm
         res2 = -1/rm
         res3 = 9.18/rm
         res4 = 0/rm
 
+        # Non-commutative, checking ints, neg ints, floats, and 0 numerator
         assert res1.real == 2 / rm.real
         assert res2.real == -1 / rm.real
         assert res3.real == 9.18 / rm.real
         assert res4.real == 0
 
+        # Validating input types
         with pytest.raises(TypeError):
             '2' / rm2
             [1, 2, 3] / rm
@@ -256,8 +263,10 @@ class TestReverseMode:
 
     def test_neg(self):
         rm = ReverseMode(3)
+
         assert -1 * rm == -rm
         assert rm.real * -1 == -rm.real
+
 
     def test_pow(self):
         pass
