@@ -9,6 +9,7 @@ class TestReverseMode:
         
         assert rm.real == 3
         assert len(rm.child) == 0
+        assert rm.grad == None
 
 
     def test_add(self):
@@ -24,20 +25,20 @@ class TestReverseMode:
         assert len(rm.child) == 3
         assert len(rm2.child) == 1
 
-        # Int add test and trace tracking
+        # Int add test
+        assert isinstance(res1, ReverseMode)
         assert res1.real == rm.real + 6
         assert res1.real == 6 + rm.real
-        assert len(res1.child) == 1
         
-        # Float add test and trace tracking
+        # Float add test
+        assert isinstance(res2, ReverseMode)
         assert res2.real == rm.real + 3.14
         assert res2.real == 3.14 + rm.real
-        assert len(res2.child) == 1
 
         # Adding two RM objects
+        assert isinstance(res3, ReverseMode)
         assert res3.real == rm.real + rm2.real
         assert res3.real == rm2.real + rm.real
-        assert len(res3.child) == 1
 
         # Throws errors
         with pytest.raises(TypeError):
@@ -56,20 +57,20 @@ class TestReverseMode:
         assert len(rm.child) == 2
         res3 = 9.99 + rm2
 
-        # Int radd test and trace check
+        # Int radd test
+        assert isinstance(res1, ReverseMode)
         assert res1.real == 1 + rm.real
         assert res1.real == rm.real + 1
-        assert len(res1.child) == 1
 
-        # Negative int test radd and trace check 
+        # Negative int test radd 
+        assert isinstance(res2, ReverseMode)
         assert res2.real == rm.real - 4
         assert res2.real == -4 + rm.real
-        assert len(res2.child) == 1
 
-        # Float radd test and trace check
+        # Float radd test
+        assert isinstance(res3, ReverseMode)
         assert res3.real == rm2.real +9.99
         assert res3.real == 9.99 + rm2.real
-        assert len(res3.child) == 1
 
         # Throws errors
         with pytest.raises(TypeError):
@@ -93,25 +94,25 @@ class TestReverseMode:
         assert len(rm.child) == 4
         assert len(rm2.child) == 1
         
-        # Int subtract test and trace check
+        # Int subtract test 
+        assert isinstance(res1, ReverseMode)
         assert res1.real == rm.real - 10
         assert res1.real == -10 + rm.real
-        assert len(res1.child) == 1
 
-        # Float subtract test and trace check
+        # Float subtract test 
+        assert isinstance(res2, ReverseMode)
         assert res2.real == rm.real - 2.718
         assert res2.real == -2.718 + rm.real
-        assert len(res2.child) == 1
-
-        # Negative reverse mode subtract test and trace check
+ 
+        # Negative reverse mode subtract test 
+        assert isinstance(res3, ReverseMode)
         assert res3.real == rm2.real - 10
         assert res3.real == -10 + rm2.real
-        assert len(res3.child) == 1
 
-        # Both ReverseMode subtract test and trace check
+        # Both ReverseMode subtract test
+        assert isinstance(res4, ReverseMode)
         assert res4.real == rm.real - rm2.real
         assert res4.real == -rm2.real + rm.real
-        assert len(res4.child) == 1
         
         # Throws errors
         with pytest.raises(TypeError):
@@ -126,18 +127,24 @@ class TestReverseMode:
         rm2 = ReverseMode(-5)
 
         res1 = 10 - rm
+        assert len(rm.child) == 1
         res2 = 2.718 - rm
+        assert len(rm.child) == 2
         res3 = -10 - rm2
+        assert len(rm2.child) == 1
         
         # Int reverse subtract test
+        assert isinstance(res1, ReverseMode)
         assert res1.real == 10 - rm.real
         assert res1.real ==  -rm.real + 10
 
         # Float reverse subtract test
+        assert isinstance(res2, ReverseMode)
         assert res2.real == 2.718 - rm.real
         assert res2.real == -rm.real + 2.718
 
         # Negative int reverse subtraction
+        assert isinstance(res3, ReverseMode)
         assert res3.real == -10 + -rm2.real
         assert res3.real == rm2.real - 10
         
