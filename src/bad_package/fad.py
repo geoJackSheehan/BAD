@@ -40,7 +40,7 @@ class DualNumber:
         At this stage, DualNumber only supports scalar functions
         '''
 
-        if isinstance(real, self._supported_scalars) and isinstance(dual, self._supported_scalars):
+        if isinstance(self.real, self._supported_scalars) and isinstance(self.dual, self._supported_scalars):
             self.real = real
             self.dual = dual
         else:
