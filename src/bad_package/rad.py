@@ -44,12 +44,12 @@ class ReverseMode():
         if isinstance(other, self._supported_scalars):
             f = ReverseMode(self.real * other)
             self.child.append((other, f))
-            other.child.append((self.real, f))
         else:
             f = ReverseMode(self.real * other.real)
+            other.child.append((self.real, f))
             self.child.append((other.real, f))
         return f
-    
+
     def __rmul__(self, other):
         return self.__mul__(other)
 
@@ -57,32 +57,41 @@ class ReverseMode():
         if not isinstance(other, (*self._supported_scalars, ReverseMode)):
             raise TypeError('Type not supported: must be int or float')
         if isinstance(other, self._supported_scalars):
-            new_other = ReverseMode(1 / other.real)
-            other.child.append((-other.real ** -2, new_other))
-            return self * new_other
-        else:
             f = ReverseMode(self.real / other)
-            grad = 1 / other
-            self.child.append((grad, f))
-    
+            self.child.append((1.0 / other, f))
+        else:
+            f = ReverseMode(self.real / other.real)
+            other.child.append((-self.real / (other.real)**2, f))
+            self.child.append((1.0 / other.value, f))
+        return f
+
+
     def __rtruediv__(self, other):
         f = ReverseMode(other / self.real)
-        grad = other * (-self.real ** (-2))
-        self.child.append((grad, f))
+        self.child.append((other * (-self.real ** (-2)), f))
         return f
 
     def __neg__(self):
-        f = ReverseMode(-self.real)
-        self.child.append((-1, f))
+        if not isinstance(other, (*self._supported_scalars, ReverseMode)):
+            raise TypeError('Type not supported: must be int or float')
+        else:
+            f = ReverseMode(-self.real)
+            self.child.append((-1, f))
         return f
 
-    def __pow__(self, exponent):
-        # TODO
-        pass
-
     def __pow__(self, other):
-        # TODO
-        pass
+        if not isinstance(other, (*self._supported_scalars, ReverseMode)):
+            raise TypeError('Type not supported: must be int or float')
+        if isinstance(other, self._supported_scalars):
+            f = Reverse_Mode(self.real ** other)
+            self.child.append((other * (self.real ** (other - 1.0)), f))
+        else:
+            f = Rnode(self.real ** other.real)
+            other.child.append((self.real ** other.real * np.log(self.real), f))
+            self.child.append((other.real * self.real ** (other.real - 1.0), f))
+        return f
 
-
-
+    def __rpow__(self, other):
+        f = Reverse_Mode(other ** self.real)
+        self.child.append(((other ** self.real) * np.log(other) , f))
+        return f
