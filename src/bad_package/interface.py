@@ -88,7 +88,7 @@ class AutoDiff:
         
         trace = []
         for variable in var_list:
-            trace.append(DualNumber(variable, 1))
+            trace.append(DualNumber(float(variable), 1))
         self.trace = trace
 
     def __str__(self):
