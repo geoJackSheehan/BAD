@@ -8,6 +8,12 @@ class ReverseMode():
         self.child = []
         self.grad = None
 
+    def gradient(self):
+        if self.grad is None:
+            for dvj_dvi, df_dvj in self.child:
+                self.grad += dvj_dvi * df_dvj.gradient()
+        return self.grad
+
     def __add__(self, other):
         if not isinstance(other, (*self._supported_scalars, ReverseMode)):
             raise TypeError("Type not supported: must be int or float")
