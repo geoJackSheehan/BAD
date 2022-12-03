@@ -78,7 +78,7 @@ class ReverseMode():
         return f
 
     def __neg__(self):
-        if not isinstance(other, (*self._supported_scalars, ReverseMode)):
+        if not isinstance(self, (*self._supported_scalars, ReverseMode)):
             raise TypeError('Type not supported: must be int or float')
         else:
             f = ReverseMode(-self.real)
@@ -89,7 +89,7 @@ class ReverseMode():
         if not isinstance(other, (*self._supported_scalars, ReverseMode)):
             raise TypeError('Type not supported: must be int or float')
         if isinstance(other, self._supported_scalars):
-            f = Reverse_Mode(self.real ** other)
+            f = ReverseMode(self.real ** other)
             self.child.append((other * (self.real ** (other - 1.0)), f))
         else:
             f = Rnode(self.real ** other.real)
@@ -98,6 +98,6 @@ class ReverseMode():
         return f
 
     def __rpow__(self, other):
-        f = Reverse_Mode(other ** self.real)
+        f = ReverseMode(other ** self.real)
         self.child.append(((other ** self.real) * np.log(other) , f))
         return f
