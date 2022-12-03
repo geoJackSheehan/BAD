@@ -68,7 +68,7 @@ class ReverseMode():
         else:
             f = ReverseMode(self.real / other.real)
             other.child.append((-self.real / (other.real)**2, f))
-            self.child.append((1.0 / other.value, f))
+            self.child.append((1.0 / other.real, f))
         return f
 
 
