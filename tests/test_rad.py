@@ -24,11 +24,11 @@ class TestReverseMode:
         rm = ReverseMode(3)
         rm2 = ReverseMode(1)
 
-        res1 = rm * 3 + 1 - rm2
+        res1 = ((rm * 3) + 1) - rm2
         assert len(rm.child) == 3
         assert len(rm2.child) == 1
 
-        res2 = 1 / rm + 6
+        res2 = (1 / rm) + 6
         assert len(rm.child) == 5
 
     def test_return(self):
@@ -134,7 +134,7 @@ class TestReverseMode:
 
         res1 = 10 - rm
         res2 = 2.718 - rm
-        res3 = -10 - rm2
+        res3 = -10 + rm2
         
         # Int reverse subtract test
         assert res1.real == 10 - rm.real
@@ -263,10 +263,10 @@ class TestReverseMode:
 
     def test_neg(self):
         rm = ReverseMode(3)
+        res1 = -rm
 
-        assert -1 * rm == -rm
-        assert rm.real * -1 == -rm.real
-
+        assert res1.real == -1 * rm.real
+        assert res1.real == -rm.real
 
     def test_pow(self):
         rm = ReverseMode(6)
