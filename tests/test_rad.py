@@ -269,4 +269,35 @@ class TestReverseMode:
 
 
     def test_pow(self):
-        pass
+        rm = ReverseMode(6)
+
+        res1 = rm ** 2
+        res2 = rm ** 3.2
+
+        assert res1.real == rm.real ** 2
+        assert res1.real == rm.real * rm.real
+        assert res2.real == rm.real ** 3.2
+
+        with pytest.raises(TypeError):
+            rm ** 'a'
+            rm ** [1,2,3]
+            rm ** (1,2)
+            rm ** DualNumber(2)
+
+
+    def test_rpow(self):
+        rm = ReverseMode(4)
+
+        res1 = 2 ** rm
+        res2 = 1.08 ** rm
+
+        assert res1.real == 2 ** rm.real
+        assert res1.real == 2 * 2 * 2 * 2
+        assert res2.real == 1.08 ** rm.real
+        assert res2.real == 1.08 * 1.08 * 1.08 * 1.08
+
+        with pytest.raises(TypeError):
+            'a' ** rm
+            [1,2,3] ** rm
+            (1,2) ** rm
+            DualNumber(2) ** rm
