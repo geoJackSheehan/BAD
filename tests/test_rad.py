@@ -10,7 +10,7 @@ class TestReverseMode:
         
         assert rm.real == 3
         assert len(rm.child) == 0
-        assert rm.grad == None
+        assert rm.grad_value == None
 
         with pytest.raises(TypeError):
             ReverseMode('a')
