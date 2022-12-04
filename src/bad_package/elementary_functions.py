@@ -15,12 +15,33 @@ zero = np.sin(pi)
 
 # Helper functions
 def _validate(x, fun):
+    '''
+    Explanation
+    ------------------------------------
+    Private method for validating user input
+    
+    Inputs
+    ------------------------------------
+    x: the object that's about to have an elementary function applied to it
+    fun: (str) the elementary function calling this one
+    
+    Outputs
+    ------------------------------------
+    if x is an integer, return float
+    if x is a float, return float
+    if x is a DualNumber, return DualNumber
+    if x is a ReverseMode, return ReverseMode
+
+    Raises
+    ------------------------------------
+    TypeError: invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
     # So we avoid any kind of truncation errors and things, better to do so explicitly
     if isinstance(x, int):
         return float(x)
 
     # Check if the element is something we can do the computation with (would have casted int to float already)
-    elif isinstance(x, (DualNumber, float)):
+    elif isinstance(x, (DualNumber, ReverseMode, float)):
         return x
 
     else:
@@ -28,6 +49,25 @@ def _validate(x, fun):
 
 # OVERLOADING FUNCTIONS
 def exp(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy exp function
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to raise e to
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(exp(x.real), exp(x) derivative)
+    if x is a ReverseMode, return ReverseMode(exp(x.real))
+    if x is a float, return exp(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
     # Ensure the input is as expected, otherwise make minor data cleaning changes
     x = _validate(x, 'exp()')
 
@@ -46,6 +86,26 @@ def exp(x):
         return np.exp(x)
 
 def ln(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy log function
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to natural log
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(ln(x.real), ln(x) derivative)
+    if x is a ReverseMode, return ReverseMode(ln(x.real))
+    if x is a float, return ln(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: functional domain error (asymptotes / generally undefined)
+    '''
     x = _validate(x, 'ln()')
 
     if isinstance(x, DualNumber):
