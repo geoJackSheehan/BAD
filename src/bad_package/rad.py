@@ -42,8 +42,18 @@ class ReverseMode():
         return f
 
     def __rsub__(self, other):
-        return self.__sub__(other)
-
+        if not isinstance(other, (*self._supported_scalars, ReverseMode)):
+            raise TypeError("Type not supported: must be int or float")
+            
+        if isinstance(other, self._supported_scalars):
+            f = ReverseMode(other - self.real)
+            self.child.append((1.0, f))
+        else:
+            f = ReverseMode(-self.real + other.real)
+            other.child.append((1.0, f))
+            self.child.append((-1.0, f))
+        return f
+    
     def __mul__(self, other):
         if not isinstance(other, (*self._supported_scalars, ReverseMode)):
             raise TypeError('Type not supported: must be int or float')
