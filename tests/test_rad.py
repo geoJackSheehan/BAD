@@ -152,7 +152,7 @@ class TestReverseMode:
         assert res2.real == -rm.real + 2.718
 
         # Negative int reverse subtraction
-        assert res3.real == -10 + -rm2.real
+        assert res3.real == -10 + rm2.real
         assert res3.real == rm2.real - 10
         
         # Throws errors
