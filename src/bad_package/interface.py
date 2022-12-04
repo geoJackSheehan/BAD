@@ -5,6 +5,7 @@ Implements AutoDiff class in order to execute auto differentiation
 
 import numpy as np
 from bad_package.fad import DualNumber
+from bad_package.rad import ReverseMode
 
 class AutoDiff:
     '''
@@ -92,7 +93,10 @@ class AutoDiff:
         self.trace = trace
 
     def __str__(self):
-        raise NotImplementedError
+        '''
+        Pretty print of AutoDiff instantiation with passed values
+        '''
+        return f'AutoDiff(f: {self.f}, var_list: {self.var_list})'
 
     def compute(self):
         '''
@@ -124,7 +128,31 @@ class AutoDiff:
         return [variable.dual for variable in self.trace]
 
     def get_var_list(self):
+        '''
+        Return var_list passed by user for forward mode
+        '''
         return self.var_list
 
     def get_f(self):
+        '''
+        Return function f passed by user for forward mode
+        '''
         return self.f
+
+class ReverseAD(AutoDiff):
+    # I don't know if we're actually doing this or not, just wanted to add a skeleton
+
+    def __init__(self, f, var_list):
+        # Super or don't need this at all for inheritance?
+        pass
+
+    def __str__(self):
+        '''
+        Pretty print of ReverseAD instantiation with passed values
+        '''
+        return f'ReverseAD(f: {self.f}, var_list: {self.var_list})'
+
+    def compute(self):
+        # If we go inheritance, we'll probably have to overload this with ReverseMode child
+        raise NotImplementedError
+
