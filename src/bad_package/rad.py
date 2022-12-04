@@ -92,7 +92,7 @@ class ReverseMode():
             f = ReverseMode(self.real ** other)
             self.child.append((other * (self.real ** (other - 1.0)), f))
         else:
-            f = Rnode(self.real ** other.real)
+            f = ReverseMode(self.real ** other.real)
             other.child.append((self.real ** other.real * np.log(self.real), f))
             self.child.append((other.real * self.real ** (other.real - 1.0), f))
         return f

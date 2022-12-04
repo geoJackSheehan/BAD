@@ -2,6 +2,7 @@
 
 import numpy as np
 from bad_package.fad import DualNumber
+from bad_package.rad import ReverseMode
 
 __all__ = ['e', 'pi', 'zero', 'exp', 'ln', 'logBase', 'sin', 'cos', 'tan', 'csc', 'sec', 'cot', 'sinh', 'cosh', 'tanh', 'arcsin', 'arccos', 'arctan', 'arcsinh', 'arccosh', 'arctanh', 'sqrt']
 
@@ -34,6 +35,12 @@ def exp(x):
         # Derivative defined (-inf, inf)
         return DualNumber(exp(x.real), x.dual * exp(x.real))
 
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(exp(x.real))
+        x.child.append(f)
+        return f
+
     elif isinstance(x, float):
         # Defined (-inf, inf)
         return np.exp(x)
@@ -48,6 +55,12 @@ def ln(x):
 
         else:
             raise ArithmeticError('ln() -- Natural log is defined only for values greater than or equal to 1.')
+
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+            f = ReverseMode(ln(x.real))
+            x.child.append(f)
+            return f
 
     elif isinstance(x, float):
         # Defined [1, inf)
@@ -68,6 +81,12 @@ def logBase(x, base):
         # Derivative bounding is the same as the float version, which is delegated below
         return DualNumber(logBase(x.real, base), x.dual / (x.real * ln(base)))
 
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(logBase(x.real, base))
+        x.child.append(f)
+        return f
+
     elif isinstance(x, float):
         # Defined everywhere that x and base are non-negative
         if x > 0 and base > 0:
@@ -84,6 +103,12 @@ def sin(x):
         # Derivative defined (-inf, inf)
         return DualNumber(sin(x.real), x.dual * cos(x.real))
 
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(sin(x.real))
+        x.child.append(f)
+        return f
+
     elif isinstance(x, float):
         # Defined for (-inf, inf)
         return np.sin(x)
@@ -95,6 +120,12 @@ def cos(x):
         # Derivative defined (-inf, inf)
         return DualNumber(cos(x.real), -1 * sin(x.real) * x.dual)
 
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(cos(x.real))
+        x.child.append(f)
+        return f
+
     elif isinstance(x, float):
         # Defined for (-inf, inf)
         return np.cos(x)
@@ -105,6 +136,12 @@ def tan(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, 0) U (0, inf), but tan has the same bounding which is handled below before div 0 occurs
         return DualNumber(tan(x.real), x.dual / cos(x.real)**2)
+
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(tan(x.real))
+        x.child.append(f)
+        return f
 
     elif isinstance(x, float):
         # Defined everywhere expect where cosine = 0
@@ -121,6 +158,12 @@ def csc(x):
         # Derivative defined (-inf, inf)
         return DualNumber(csc(x.real), -1 * x.dual * csc(x.real) * cot(x.real))
 
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(csc(x.real))
+        x.child.append(f)
+        return f
+
     elif isinstance(x, float):
         # Defined everywhere expect where sine = 0
         if abs(np.sin(x)) > zero:
@@ -135,6 +178,12 @@ def sec(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, inf)
         return DualNumber(sec(x.real), sec(x.real) * tan(x.real) * x.dual)
+
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(sec(x.real))
+        x.child.append(f)
+        return f
 
     elif isinstance(x, float):
         # Defined everywhere expect where cosine = 0
@@ -151,6 +200,12 @@ def cot(x):
         # Derivative defined (-inf, inf)
         return DualNumber(cot(x.real), -1 * csc(x.real) * csc(x.real) * x.dual)
 
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(cot(x.real))
+        x.child.append(f)
+        return f
+
     elif isinstance(x, float):
         # Defined everywhere expect where tan = 0 (or sine = 0)
         if abs(np.tan(x)) > zero:
@@ -166,6 +221,12 @@ def sinh(x):
         # Derivative defined (-inf, inf)
         return DualNumber(sinh(x.real), cosh(x.real) * x.dual)
 
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(sinh(x.real))
+        x.child.append(f)
+        return f
+
     elif isinstance(x, float):
         # Defined for (-infinity, infinity)
         return np.sinh(x)
@@ -177,6 +238,12 @@ def cosh(x):
         # Derivative defined (-inf, inf)
         return DualNumber(cosh(x.real), sinh(x.real) * x.dual)
 
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(cosh(x.real))
+        x.child.append(f)
+        return f
+
     elif isinstance(x, float):
         # Defined (-inf, inf)
         return np.cosh(x)
@@ -187,6 +254,12 @@ def tanh(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, inf), Cosh is never 0
         return DualNumber(tanh(x.real), x.dual / cosh(x.real) ** 2)
+
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(tanh(x.real))
+        x.child.append(f)
+        return f
 
     elif isinstance(x, float):
         # Defined for (-inf, inf)
@@ -202,6 +275,12 @@ def arcsin(x):
 
         else:
             raise ArithmeticError('arcsin() -- Tried to square-root a negative number during dual part creation. Ensure real part is within (-1, 1).')
+
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(arcsin(x.real))
+        x.child.append(f)
+        return f
 
     elif isinstance(x, float):
         # Defined for [-1, 1]
@@ -222,6 +301,12 @@ def arccos(x):
         else:
             raise ArithmeticError('arccos() -- DualNumber real part must be within defined domain (-1, 1) for dual part creation.')
 
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(arccos(x.real))
+        x.child.append(f)
+        return f
+
     elif isinstance(x, float):
         # Defined for [-1, 1]
         if x >= -1 and x <= 1:
@@ -237,6 +322,12 @@ def arctan(x):
         # Derivative defined (-inf, inf)
         return DualNumber(arctan(x.real), x.dual / (1 + x.real ** 2))
 
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(arctan(x.real))
+        x.child.append(f)
+        return f
+
     elif isinstance(x, float):
         # Defined for (-inf, inf)
         return np.arctan(x)
@@ -247,6 +338,12 @@ def arcsinh(x):
     if isinstance(x, DualNumber):
         # Derivative defined (-inf, inf)
         return DualNumber(arcsinh(x.real), x.dual / sqrt(1 + x.real ** 2))
+
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(arcsinh(x.real))
+        x.child.append(f)
+        return f
 
     elif isinstance(x, float):
         # Defined for (-inf, inf)
@@ -262,6 +359,12 @@ def arccosh(x):
 
         else:
             raise ArithmeticError('arccosh() -- DualNumber real part must be greater than 1 for dual part creation involving square-roots.')
+
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(arccosh(x.real))
+        x.child.append(f)
+        return f
 
     elif isinstance(x, float):
         # Defined for [1, infinity)
@@ -282,6 +385,12 @@ def arctanh(x):
         else:
             raise ArithmeticError('arctanh() -- DualNumber dual part creation produces divide by 0 if real part is -1 or 1.')
 
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(arctanh(x.real))
+        x.child.append(f)
+        return f
+
     elif isinstance(x, float):
         # Defined for (-1, 1)
         if x > -1 and x < 1:
@@ -300,6 +409,12 @@ def sqrt(x):
 
         else:
             raise ArithmeticError('sqrt() -- Cannot take the square root of a negative number and cannot divide by 0 for dual part creation.')
+
+    elif isinstance(x, ReverseMode):
+        # Same domain as float, no local checking
+        f = ReverseMode(sqrt(x.real))
+        x.child.append(f)
+        return f
 
     elif isinstance(x, float,):
         # Defined for [0, infinity)
