@@ -6,13 +6,12 @@ class ReverseMode():
     def __init__(self, real):
         self.real = real
         self.child = []
-        self.grad_value = None
-
+        self.gradient = None
+        
     def grad(self):
-        if self.grad_value is None:
-            # calculate derivative using chain rule
-            self.grad_value = sum(weight * var.grad() for weight, var in self.child)
-        return self.grad_value
+        if self.gradient is None:
+            self.gradient = sum(dvj_dvi * df_dvj.grad() for dvj_dvi, df_dvj in self.child)
+        return self.gradient
 
     def __add__(self, other):
         if not isinstance(other, (*self._supported_scalars, ReverseMode)):
