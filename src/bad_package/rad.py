@@ -9,7 +9,7 @@ class ReverseMode():
     
     _supported_scalars = (int, float)
 
-    def __init__(self, real, gradient=1.0):
+    def __init__(self, real):
         '''
         Explanation
         ------------------------------------
@@ -43,7 +43,7 @@ class ReverseMode():
         
         self.real = real
         self.child = []
-        self.gradient = gradient
+        self.gradient = None
         
     def grad(self):
         '''
