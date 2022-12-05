@@ -40,17 +40,30 @@ class TestReverseMode:
         assert rm.grad() == sum(dvj_dvi * df_dvj.grad() for dvj_dvi, df_dvj in rm.child)
         assert rm.grad() == 6
     
+    
     def test_child(self):
         # Testing the self.child container
         rm = ReverseMode(3)
         rm2 = ReverseMode(1)
 
-        res1 = ((rm * 3) + 1) - rm2
-        assert len(rm.child) == 3
-        assert len(rm2.child) == 1
+        # Equivalent to ((rm * 3) + 1) - rm2
+        res1 = rm * 3
+        res2 = res1 + 1
+        res3 = res2 - rm2
 
-        res2 = (1 / rm) + 6
-        assert len(rm.child) == 5
+        # Recursive child store
+        assert len(rm.child) == 1
+        assert len(res1.child) == 1
+        assert len(res2.child) == 1
+        assert len (rm2.child) == 1
+
+        # Direct adjustment of the original rm object
+        res4 = rm2 ** 3
+        res5 = rm2 / 2
+
+        # Child nodes for rm2 (not binary)
+        assert len(rm2.child) == 3
+
 
     def test_return(self):
         rm = ReverseMode(2)
