@@ -26,6 +26,13 @@ class TestReverseMode:
 #         assert rm.grad() == sum(weight * var.grad() for weight, var in rm.child)
 #         assert rm.grad() == 6
         
+#     def test_grad(self):
+#         rm = ReverseMode(3)
+#         res1 = rm**2
+#         res1.gradient = 1.0
+#         assert rm.grad() == sum(dvj_dvi * df_dvj.grad() for dvj_dvi, df_dvj in rm.child)
+#         assert rm.grad() == 6
+
     def test_grad(self):
         rm = ReverseMode(3)
         res1 = rm**2
