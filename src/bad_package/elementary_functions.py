@@ -19,12 +19,12 @@ def _validate(x, fun):
     Explanation
     ------------------------------------
     Private method for validating user input
-    
+
     Inputs
     ------------------------------------
     x: the object that's about to have an elementary function applied to it
     fun: (str) the elementary function calling this one
-    
+
     Outputs
     ------------------------------------
     if x is an integer, return float
@@ -36,7 +36,7 @@ def _validate(x, fun):
     ------------------------------------
     TypeError: invalid x type, must be int, float, DualNumber, or ReverseMode
     '''
-    
+
     # So we avoid any kind of truncation errors and things, better to do so explicitly
     if isinstance(x, int):
         return float(x)
@@ -54,11 +54,11 @@ def exp(x):
     Explanation
     ------------------------------------
     Overloading numpy exp function
-    
+
     Inputs
     ------------------------------------
     x: the object we want to raise e to
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(exp(x.real), exp(x) derivative)
@@ -69,7 +69,7 @@ def exp(x):
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
     '''
-    
+
     # Ensure the input is as expected, otherwise make minor data cleaning changes
     x = _validate(x, 'exp()')
 
@@ -92,11 +92,11 @@ def ln(x):
     Explanation
     ------------------------------------
     Overloading numpy log function
-    
+
     Inputs
     ------------------------------------
     x: the object we want to natural log
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(ln(x.real), ln(x) derivative)
@@ -108,7 +108,7 @@ def ln(x):
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
     ArithmeticError: functional domain error (asymptotes / generally undefined)
     '''
-    
+
     x = _validate(x, 'ln()')
 
     if isinstance(x, DualNumber):
@@ -138,12 +138,12 @@ def logBase(x, base):
     Explanation
     ------------------------------------
     Overloading change of base for numpy log
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the log of
     base: the base of log we want
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(logBase(x.real, base), logBase(x, base) derivative)
@@ -155,7 +155,7 @@ def logBase(x, base):
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
     ArithmeticError: functional domain error (undefined log values and the denominator cannot be 0)
     '''
-    
+
     x = _validate(x, 'logBase()')
 
     # Taking two arguments requires another check not included in basic validation
@@ -186,11 +186,11 @@ def sin(x):
     Explanation
     ------------------------------------
     Overloading numpy sin function
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the sin function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(sin(x.real), sin(x) derivative)
@@ -201,7 +201,7 @@ def sin(x):
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
     '''
-    
+
     x = _validate(x, 'sin()')
 
     if isinstance(x, DualNumber):
@@ -223,11 +223,11 @@ def cos(x):
     Explanation
     ------------------------------------
     Overloading numpy cosine function
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the cosine function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(cos(x.real), cos(x) derivative)
@@ -259,11 +259,11 @@ def tan(x):
     Explanation
     ------------------------------------
     Overloading numpy tangent function
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the tangent function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(tan(x.real), tan(x) derivative)
@@ -301,11 +301,11 @@ def csc(x):
     ------------------------------------
     Method to calculate the cosecant.
     Note that: csc(x) = 1/sin(x).
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the csc function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(csc(x.real), csc(x) derivative)
@@ -343,11 +343,11 @@ def sec(x):
     ------------------------------------
     Method to calculate the secant.
     Note that: sec(x) = 1/cos(x).
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the sec function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(sec(x.real), sec(x) derivative)
@@ -385,11 +385,11 @@ def cot(x):
     ------------------------------------
     Method to calculate the cotangent.
     Note that: cot(x) = 1/tan(x) = cos(x)/sin(x).
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the cot function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(cot(x.real), cot(x) derivative)
@@ -426,11 +426,11 @@ def sinh(x):
     Explanation
     ------------------------------------
     Overloading numpy sinh function
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the sinh function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(sinh(x.real), sinh(x) derivative)
@@ -462,11 +462,11 @@ def cosh(x):
     Explanation
     ------------------------------------
     Overloading numpy cosh function
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the cosh function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(cosh(x.real), cosh(x) derivative)
@@ -498,11 +498,11 @@ def tanh(x):
     Explanation
     ------------------------------------
     Overloading numpy tanh function
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the tanh function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(tanh(x.real), tanh(x) derivative)
@@ -534,11 +534,11 @@ def arcsin(x):
     Explanation
     ------------------------------------
     Overloading numpy arcsin function
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the arcsin function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(arcsin(x.real), arcsin(x) derivative)
@@ -579,11 +579,11 @@ def arccos(x):
     Explanation
     ------------------------------------
     Overloading numpy arccos function
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the arccos function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(arccos(x.real), arccos(x) derivative)
@@ -624,11 +624,11 @@ def arctan(x):
     Explanation
     ------------------------------------
     Overloading numpy arctan function
-    
+
     Inputs
     ------------------------------------
     x: the object we want to take the arctan function of
-    
+
     Outputs
     ------------------------------------
     if x is a DualNumber, return DualNumber(arctan(x.real), arctan(x) derivative)
@@ -656,6 +656,25 @@ def arctan(x):
         return np.arctan(x)
 
 def arcsinh(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy arcsinh function
+
+    Inputs
+    ------------------------------------
+    x: the object we want to take the arcsinh function of
+
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(arcsinh(x.real), arcsinh(x) derivative)
+    if x is a ReverseMode, return ReverseMode(arcsinh(x.real))
+    if x is a float, return arcsinh(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
     x = _validate(x, 'arcsinh()')
 
     if isinstance(x, DualNumber):
@@ -673,6 +692,25 @@ def arcsinh(x):
         return np.arcsinh(x)
 
 def arccosh(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy arccosh function
+
+    Inputs
+    ------------------------------------
+    x: the object we want to take the arccosh function of
+
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(arccosh(x.real), arccosh(x) derivative)
+    if x is a ReverseMode, return ReverseMode(arccosh(x.real))
+    if x is a float, return arccosh(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
     x = _validate(x, 'arccosh()')
 
     if isinstance(x, DualNumber):
@@ -698,6 +736,25 @@ def arccosh(x):
             raise ArithmeticError('arccosh() -- Function is only defined for domain [1, infinity)')
 
 def arctanh(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy arctanh function
+
+    Inputs
+    ------------------------------------
+    x: the object we want to take the arctanh function of
+
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(arctanh(x.real), arctanh(x) derivative)
+    if x is a ReverseMode, return ReverseMode(arctanh(x.real))
+    if x is a float, return arctanh(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
     x = _validate(x, 'arctanh()')
 
     if isinstance(x, DualNumber):
@@ -723,6 +780,25 @@ def arctanh(x):
             raise ArithmeticError('arctanh() -- Function is only defined for domain (-1, 1).')
 
 def sqrt(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy sqrt function
+
+    Inputs
+    ------------------------------------
+    x: the object we want to take the square root function of
+
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(sqrt(x.real), sqrt(x) derivative)
+    if x is a ReverseMode, return ReverseMode(sqrt(x.real))
+    if x is a float, return sqrt(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
     x = _validate(x, 'sqrt()')
 
     if isinstance(x, DualNumber):
