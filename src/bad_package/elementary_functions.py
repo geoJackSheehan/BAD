@@ -36,6 +36,7 @@ def _validate(x, fun):
     ------------------------------------
     TypeError: invalid x type, must be int, float, DualNumber, or ReverseMode
     '''
+    
     # So we avoid any kind of truncation errors and things, better to do so explicitly
     if isinstance(x, int):
         return float(x)
@@ -68,6 +69,7 @@ def exp(x):
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
     '''
+    
     # Ensure the input is as expected, otherwise make minor data cleaning changes
     x = _validate(x, 'exp()')
 
@@ -106,6 +108,7 @@ def ln(x):
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
     ArithmeticError: functional domain error (asymptotes / generally undefined)
     '''
+    
     x = _validate(x, 'ln()')
 
     if isinstance(x, DualNumber):
@@ -131,6 +134,28 @@ def ln(x):
             raise ArithmeticError('ln() -- Natural log is defined only for values greater than or equal to 1.')
 
 def logBase(x, base):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading change of base for numpy log
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the log of
+    base: the base of log we want
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(logBase(x.real, base), logBase(x, base) derivative)
+    if x is a ReverseMode, return ReverseMode(logBase(x.real, base))
+    if x is a float, return ln(x)/ln(base) = log_{base}(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: functional domain error (undefined log values and the denominator cannot be 0)
+    '''
+    
     x = _validate(x, 'logBase()')
 
     # Taking two arguments requires another check not included in basic validation
@@ -157,6 +182,26 @@ def logBase(x, base):
             raise ArithmeticError('logBase() -- Ensure base is greater than or equal to 1 and DualNumber real part is greater than 0.')
 
 def sin(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy sin function
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the sin function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(sin(x.real), sin(x) derivative)
+    if x is a ReverseMode, return ReverseMode(sin(x.real))
+    if x is a float, return sin(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
+    
     x = _validate(x, 'sin()')
 
     if isinstance(x, DualNumber):
