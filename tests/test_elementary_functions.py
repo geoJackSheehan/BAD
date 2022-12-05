@@ -230,7 +230,7 @@ class TestElementaryFunctions():
         assert pytest.approx(1.5*np.cosh(-0.25)) == result.dual
 
         # ReverseMode
-        assert isinstance(sinh(ReverseMode(1, 1)), ReverseMode)
+        assert isinstance(sinh(ReverseMode(1)), ReverseMode)
         x = ReverseMode(-0.25)
         result = sinh(x)
         assert np.sinh(-0.25) == result.real
@@ -276,7 +276,7 @@ class TestElementaryFunctions():
         assert pytest.approx(5/np.sqrt(1 - 0.25**2)) ==  result.dual
 
         # ReverseMode
-        assert isinstance(arcsin(ReverseMode(0.9, 1)), ReverseMode)
+        assert isinstance(arcsin(ReverseMode(0.9)), ReverseMode)
         x = ReverseMode(0.25)
         result = arcsin(x)
         assert np.arcsin(0.25) == result.real    
