@@ -40,10 +40,12 @@ class ReverseMode():
         ------------------------------------
         At this stage, ReverseMode only supports scalar functions.
         '''
-        
-        self.real = real
-        self.child = []
-        self.gradient = None
+        if isinstance(real, self._supported_scalars):
+            self.real = real
+            self.child = []
+            self.gradient = None
+        else:
+            raise TypeError('ReverseMode may only be initialized as integers or floats')
         
     def grad(self):
         '''
