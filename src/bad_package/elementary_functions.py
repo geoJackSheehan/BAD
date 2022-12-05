@@ -219,6 +219,25 @@ def sin(x):
         return np.sin(x)
 
 def cos(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy cosine function
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the cosine function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(cos(x.real), cos(x) derivative)
+    if x is a ReverseMode, return ReverseMode(cos(x.real))
+    if x is a float, return cos(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
     x = _validate(x, 'cos()')
 
     if isinstance(x, DualNumber):
@@ -236,6 +255,26 @@ def cos(x):
         return np.cos(x)
 
 def tan(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy tangent function
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the tangent function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(tan(x.real), tan(x) derivative)
+    if x is a ReverseMode, return ReverseMode(tan(x.real))
+    if x is a float, return tan(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid x, cos(x) cannot be 0.
+    '''
     x = _validate(x, 'tan()')
 
     if isinstance(x, DualNumber):
@@ -257,6 +296,27 @@ def tan(x):
             raise ArithmeticError('tan() -- Ensure the input does not cause cosine to be 0.')
 
 def csc(x):
+    '''
+    Explanation
+    ------------------------------------
+    Method to calculate the cosecant.
+    Note that: csc(x) = 1/sin(x).
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the csc function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(csc(x.real), csc(x) derivative)
+    if x is a ReverseMode, return ReverseMode(csc(x.real))
+    if x is a float, return csc(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid x, sin(x) cannot be 0
+    '''
     x = _validate(x, 'csc()')
 
     if isinstance(x, DualNumber):
@@ -278,6 +338,27 @@ def csc(x):
             raise ArithmeticError('csc() -- The sine of the input cannot be 0 due to division.')
 
 def sec(x):
+    '''
+    Explanation
+    ------------------------------------
+    Method to calculate the secant.
+    Note that: sec(x) = 1/cos(x).
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the sec function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(sec(x.real), sec(x) derivative)
+    if x is a ReverseMode, return ReverseMode(sec(x.real))
+    if x is a float, return sec(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid x, cos(x) cannot be 0
+    '''
     x = _validate(x, 'sec()')
 
     if isinstance(x, DualNumber):
@@ -299,6 +380,27 @@ def sec(x):
             raise ArithmeticError('sec() -- The cosine of the input cannot be 0 due to division.')
 
 def cot(x):
+    '''
+    Explanation
+    ------------------------------------
+    Method to calculate the cotangent.
+    Note that: cot(x) = 1/tan(x) = cos(x)/sin(x).
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the cot function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(cot(x.real), cot(x) derivative)
+    if x is a ReverseMode, return ReverseMode(cot(x.real))
+    if x is a float, return cot(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid x, tan(x) cannot be 0
+    '''
     x = _validate(x, 'cot()')
 
     if isinstance(x, DualNumber):
@@ -320,6 +422,25 @@ def cot(x):
             raise ArithmeticError('cot() -- The tangent of the input cannot be 0 due to division.')
 
 def sinh(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy sinh function
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the sinh function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(sinh(x.real), sinh(x) derivative)
+    if x is a ReverseMode, return ReverseMode(sinh(x.real))
+    if x is a float, return sinh(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
     x = _validate(x, 'sinh()')
 
     if isinstance(x, DualNumber):
@@ -337,6 +458,25 @@ def sinh(x):
         return np.sinh(x)
 
 def cosh(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy cosh function
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the cosh function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(cosh(x.real), cosh(x) derivative)
+    if x is a ReverseMode, return ReverseMode(cosh(x.real))
+    if x is a float, return cosh(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
     x = _validate(x, 'cosh()')
 
     if isinstance(x, DualNumber):
@@ -354,6 +494,25 @@ def cosh(x):
         return np.cosh(x)
 
 def tanh(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy tanh function
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the tanh function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(tanh(x.real), tanh(x) derivative)
+    if x is a ReverseMode, return ReverseMode(tanh(x.real))
+    if x is a float, return tanh(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
     x = _validate(x, 'tanh()')
 
     if isinstance(x, DualNumber):
@@ -371,6 +530,26 @@ def tanh(x):
         return np.tanh(x)
 
 def arcsin(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy arcsin function
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the arcsin function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(arcsin(x.real), arcsin(x) derivative)
+    if x is a ReverseMode, return ReverseMode(arcsin(x.real))
+    if x is a float, return arcsin(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid x, arcsin() is only defined for the domain [-1, 1]
+    '''
     x = _validate(x, 'arcsin()')
 
     if isinstance(x, DualNumber):
@@ -396,6 +575,26 @@ def arcsin(x):
             raise ArithmeticError('arcsin() -- Arcsine is only defined in the domain [-1, 1]')
 
 def arccos(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy arccos function
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the arccos function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(arccos(x.real), arccos(x) derivative)
+    if x is a ReverseMode, return ReverseMode(arccos(x.real))
+    if x is a float, return arccos(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid x, arccos() is only defined for the domain [-1, 1]
+    '''
     x = _validate(x, 'arccos()')
 
     if isinstance(x, DualNumber):
@@ -421,6 +620,25 @@ def arccos(x):
             raise ValueError('arccos() -- Function is only defined in the domain [-1, 1]')
 
 def arctan(x):
+    '''
+    Explanation
+    ------------------------------------
+    Overloading numpy arctan function
+    
+    Inputs
+    ------------------------------------
+    x: the object we want to take the arctan function of
+    
+    Outputs
+    ------------------------------------
+    if x is a DualNumber, return DualNumber(arctan(x.real), arctan(x) derivative)
+    if x is a ReverseMode, return ReverseMode(arctan(x.real))
+    if x is a float, return arctan(x)
+
+    Raises
+    ------------------------------------
+    TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    '''
     x = _validate(x, 'arctan()')
 
     if isinstance(x, DualNumber):
