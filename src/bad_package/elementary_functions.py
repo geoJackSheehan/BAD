@@ -593,7 +593,8 @@ def arccos(x):
     Raises
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
-    ArithmeticError: invalid x, arccos() is only defined for the domain [-1, 1]
+    ArithmeticError: real part of DualNumber is only defined for the domain (-1, 1)
+    ValueError: invalid x, arccos() is only defined for the domain [-1, 1]
     '''
     x = _validate(x, 'arccos()')
 
@@ -710,6 +711,7 @@ def arccosh(x):
     Raises
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid x, only defined for the domain [1, inf)
     '''
     x = _validate(x, 'arccosh()')
 
@@ -754,6 +756,7 @@ def arctanh(x):
     Raises
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid x, only defined for domain (-1, 1)
     '''
     x = _validate(x, 'arctanh()')
 
@@ -798,6 +801,7 @@ def sqrt(x):
     Raises
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid x, cannot be negative
     '''
     x = _validate(x, 'sqrt()')
 
