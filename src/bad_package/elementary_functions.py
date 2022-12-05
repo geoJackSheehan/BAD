@@ -153,6 +153,7 @@ def logBase(x, base):
     Raises
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    TypeError: invalid base type, must be int or float
     ArithmeticError: functional domain error (undefined log values and the denominator cannot be 0)
     '''
 
@@ -548,6 +549,7 @@ def arcsin(x):
     Raises
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid real part of DualNumber, must be within (-1, 1)
     ArithmeticError: invalid x, arcsin() is only defined for the domain [-1, 1]
     '''
     x = _validate(x, 'arcsin()')
@@ -711,6 +713,7 @@ def arccosh(x):
     Raises
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid real part for DualNumber, must be greater than 1
     ArithmeticError: invalid x, only defined for the domain [1, inf)
     '''
     x = _validate(x, 'arccosh()')
@@ -756,6 +759,7 @@ def arctanh(x):
     Raises
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: invalid real part for DualNumber, must not be -1 or 1
     ArithmeticError: invalid x, only defined for domain (-1, 1)
     '''
     x = _validate(x, 'arctanh()')
@@ -801,6 +805,7 @@ def sqrt(x):
     Raises
     ------------------------------------
     TypeError: (outsourced) invalid x type, must be int, float, DualNumber, or ReverseMode
+    ArithmeticError: real part of DualNumber must be greater than 0
     ArithmeticError: invalid x, cannot be negative
     '''
     x = _validate(x, 'sqrt()')
