@@ -175,9 +175,6 @@ class ReverseAD(AutoDiff):
 
 
     def get_jacobian(self):
-        for var in self.trace:
-            var.gradient = 1.0
-
         return [variable.grad() for variable in self.trace]
 
         

@@ -18,7 +18,7 @@ class TestReverseMode:
             ReverseMode((6, 7))
             ReverseMode(DualNumber(1))
             ReverseMode([])
-            
+
 
     def test_grad(self):
         rm = ReverseMode(3)

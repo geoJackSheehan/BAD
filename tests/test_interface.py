@@ -47,7 +47,7 @@ class TestADInterface():
 
     def test_scalar_get_jacobian_RM(self):
         def func(x):
-            return 4*x + 3
+            return 4*x
         x = np.array([2])
         rm = ReverseAD(func, x)
         rm.compute()

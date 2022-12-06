@@ -278,6 +278,7 @@ class ReverseMode():
             self.child.append((other, f))
         else:
             f = ReverseMode(self.real * other.real)
+            f.gradient = 1.0
             other.child.append((self.real, f))
             self.child.append((other.real, f))
         return f
