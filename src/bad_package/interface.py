@@ -94,14 +94,26 @@ class AutoDiff:
 
     def __repr__(self):
         '''
-        Base print of AutoDiff instantiation with passed values
-        '''
-        return f'AutoDiff(f: {self.f}, var_list: {self.var_list})'
+        Explanation
+        ------------------------------------
+        Base print of AutoDiff instantiation with passed values and memory location
+
+        Inputs
+        ------------------------------------
+        None
+        ''' 
+        return f'AutoDiff({self.f}, {self.var_list}, id: {id(self)})'
 
     def __str__(self):
         '''
+        Explanation
+        ------------------------------------
         Pretty print of AutoDiff instantiation with more information
-        '''
+
+        Inputs
+        ------------------------------------
+        None
+        ''' 
         return f'f: {self.f}, var_list: {self.var_list}, number of variables: {self.len_var_list}'
 
     def compute(self):

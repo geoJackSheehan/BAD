@@ -49,13 +49,25 @@ class ReverseMode():
 
     def __repr__(self):
         '''
-        Base print of ReverseMode instantiation with passed value and gradient
+        Explanation
+        ------------------------------------
+        Base print of ReverseMode instantiation with passed value, gradient, and memory location
+
+        Inputs
+        ------------------------------------
+        None
         '''  
-        return f'ReverseMode(real: {self.real}, gradient: {self.gradient})'
+        return f'ReverseMode({self.real}, {self.gradient}, id: {id(self)})'
 
     def __str__(self):
         '''
+        Explanation
+        ------------------------------------
         Pretty print of ReverseMode instantiation with child length information
+
+        Inputs
+        ------------------------------------
+        None
         '''  
         return f'real: {self.real}, gradient: {self.gradient}, child length: {len(self.child)}'
         

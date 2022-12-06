@@ -48,13 +48,25 @@ class DualNumber:
 
     def __repr__(self):
         '''
-        Base print of DualNumber instantiation with real and dual parts
+        Explanation
+        ------------------------------------
+        Base print of DualNumber instantiation with real, dual, and memory location
+
+        Inputs
+        ------------------------------------
+        None
         '''  
-        return f'DualNumber(real: {self.real}, dual: {self.dual})'
+        return f'DualNumber({self.real}, {self.dual}, id: {id(self)})'
 
     def __str__(self):
         '''
+        Explanation
+        ------------------------------------
         Pretty print of DualNumber instantiation
+
+        Inputs
+        ------------------------------------
+        None
         '''  
         return f'real: {self.real}, dual (derivative): {self.dual}'
         
