@@ -140,7 +140,7 @@ class AutoDiff:
         return self.f
 
 class ReverseAD(AutoDiff):
-    # I don't know if we're actually doing this or not, just wanted to add a skeleton
+
 
     def __init__(self, f, var_list):
         if not isinstance(var_list, np.ndarray):
@@ -149,7 +149,10 @@ class ReverseAD(AutoDiff):
         self.var_list = var_list
         self.len_var_list = len(var_list)  
         
-        self.result = self.f(self.var_list)
+        trace = []
+        for variable in var_list:
+            trace.append(ReverseMode(float(variable)))
+        self.trace = trace
 
     def __str__(self):
         '''
@@ -157,10 +160,11 @@ class ReverseAD(AutoDiff):
         '''
         return f'ReverseAD(f: {self.f}, var_list: {self.var_list})'
 
+
     def get_jacobian(self):
         container = []
 
-        for variable in self.var_list:
+        for variable in self.trace:
             while len(variable.child) > 0:
                 variable = variable.child[0]
 
