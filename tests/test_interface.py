@@ -49,7 +49,6 @@ class TestADInterface():
         def func(x):
             return 4*x + 3
         x = np.array([2])
-        ad = ReverseAD(func, x)
-        ad.compute()
-        result = ad.get_jacobian()
+        rm = ReverseAD(func, x)
+        result = rm.get_jacobian()
         assert pytest.approx([4]) == result
