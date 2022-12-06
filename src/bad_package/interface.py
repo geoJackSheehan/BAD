@@ -92,11 +92,17 @@ class AutoDiff:
             trace.append(DualNumber(float(variable), 1))
         self.trace = trace
 
-    def __str__(self):
+    def __repr__(self):
         '''
-        Pretty print of AutoDiff instantiation with passed values
+        Base print of AutoDiff instantiation with passed values
         '''
         return f'AutoDiff(f: {self.f}, var_list: {self.var_list})'
+
+    def __str__(self):
+        '''
+        Pretty print of AutoDiff instantiation with more information
+        '''
+        return f'f: {self.f}, var_list: {self.var_list}, number of variables: {self.len_var_list}'
 
     def compute(self):
         '''
@@ -176,10 +182,3 @@ class ReverseAD(AutoDiff):
 
     def get_jacobian(self):
         return [variable.grad() for variable in self.trace]
-
-        
-
-
-
-
-

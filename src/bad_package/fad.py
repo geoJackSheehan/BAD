@@ -46,6 +46,17 @@ class DualNumber:
         else:
             raise TypeError('DualNumber real and dual parts may only be initialized as integers or floats')
 
+    def __repr__(self):
+        '''
+        Base print of DualNumber instantiation with real and dual parts
+        '''  
+        return f'DualNumber(real: {self.real}, dual: {self.dual})'
+
+    def __str__(self):
+        '''
+        Pretty print of DualNumber instantiation
+        '''  
+        return f'real: {self.real}, dual (derivative): {self.dual}'
         
     def __add__(self, other):
         '''

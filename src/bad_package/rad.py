@@ -46,6 +46,18 @@ class ReverseMode():
             self.gradient = None
         else:
             raise TypeError('ReverseMode may only be initialized as integers or floats')
+
+    def __repr__(self):
+        '''
+        Base print of ReverseMode instantiation with passed value and gradient
+        '''  
+        return f'ReverseMode(real: {self.real}, gradient: {self.gradient})'
+
+    def __str__(self):
+        '''
+        Pretty print of ReverseMode instantiation with child length information
+        '''  
+        return f'real: {self.real}, gradient: {self.gradient}, child length: {len(self.child)}'
         
     def grad(self):
         '''
