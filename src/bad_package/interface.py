@@ -168,7 +168,7 @@ class ReverseAD(AutoDiff):
             while len(variable.child) > 0:
                 variable = variable.child[0]
 
-            container.append(variable)
+            container.append(variable.real)
 
         return container
 
