@@ -143,8 +143,13 @@ class ReverseAD(AutoDiff):
     # I don't know if we're actually doing this or not, just wanted to add a skeleton
 
     def __init__(self, f, var_list):
-        # Super or don't need this at all for inheritance?
-        pass
+        if not isinstance(var_list, np.ndarray):
+            raise TypeError("Second argument must be numpy.ndarray")
+        self.f = f
+        self.var_list = var_list
+        self.len_var_list = len(var_list)  
+        
+        self.result = self.f(self.var_list)
 
     def __str__(self):
         '''
@@ -152,7 +157,20 @@ class ReverseAD(AutoDiff):
         '''
         return f'ReverseAD(f: {self.f}, var_list: {self.var_list})'
 
-    def compute(self):
-        # If we go inheritance, we'll probably have to overload this with ReverseMode child
-        raise NotImplementedError
+    def get_jacobian(self):
+        container = []
+
+        for variable in self.var_list:
+            while len(variable.child) > 0:
+                variable = variable.child[0]
+
+            container.append(variable)
+
+        return container
+
+        
+
+
+
+
 

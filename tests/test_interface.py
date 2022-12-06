@@ -5,6 +5,7 @@ import numpy as np
 from bad_package.elementary_functions import *
 from bad_package.fad import DualNumber
 from bad_package.interface import AutoDiff
+from bad_package.interface import ReverseAD
 
 class TestADInterface():
 
@@ -43,3 +44,12 @@ class TestADInterface():
         ad.compute()
         result = ad.get_jacobian()
         assert pytest.approx([2,3]) == result
+
+    def test_scalar_get_jacobian_RM(self):
+        def func(x):
+            return 4*x + 3
+        x = np.array([2])
+        ad = ReverseAD(func, x)
+        ad.compute()
+        result = ad.get_jacobian()
+        assert pytest.approx([4]) == result
