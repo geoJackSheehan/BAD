@@ -160,6 +160,19 @@ class ReverseAD(AutoDiff):
         '''
         return f'ReverseAD(f: {self.f}, var_list: {self.var_list})'
 
+    def compute(self):
+        if self.len_var_list == 1:
+            self.trace[0] = self.f(self.trace[0])
+        else:
+            value = self.f(self.trace).real
+            trace = []
+            for i in range(self.len_var_list):
+                x = self.trace[i]
+                y = [ReverseMode(0)]*self.len_var_list
+                y[i] = x
+                trace.append(ReverseMode(value))
+            self.trace = trace
+
 
     def get_jacobian(self):
         container = []
