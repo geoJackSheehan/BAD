@@ -154,27 +154,27 @@ class AutoDiff:
         ------------------------------------
         None
         '''
-        if self.len_var_list == 1:
-            self.trace[0] = self.f(self.trace[0])
-            self.jacobian.append(self.trace[0].dual)
-        else:
-            value = self.f(self.trace).real
-            # Primal and tangent trace
-            trace, tangent = [], []
-            for i in range(self.len_var_list):
-                x = self.trace[i]
-                y = [DualNumber(0, 0)]*self.len_var_list
-                y[i] = x
-                dp = self.f(y).dual
+        # Iterate through all passed functions (same shape)
+        for f in self.f:
+            if self.len_var_list == 1:
+                # If it's scalar functions, just replace the value at the trace with resulting DualNumber from computation
+                self.trace[0] = f(self.trace[0])
+                self.jacobian.append(self.trace[0].dual)
+            else:
+                value = f(self.trace).real
+                # Primal trace and tangent trace
+                trace, tangent = [], []
+                for i in range(self.len_var_list):
+                    x = self.trace[i]
+                    y = [DualNumber(0, 0)]*self.len_var_list
+                    y[i] = x
+                    dp = f(y).dual
 
-                updatedDual = DualNumber(value, dp)
-                trace.append(updatedDual.real)
-                tangent.append(updatedDual.dual)
+                    updatedDual = DualNumber(value, dp)
+                    trace.append(updatedDual)
+                    tangent.append(updatedDual.dual)
 
-            self.jacobian.append(tangent)
-            self.trace = trace
-
-        self.jacobian = np.ndarray(self.jacobian)
+                self.jacobian.append(tangent)
 
     def get_primal(self):
         '''
