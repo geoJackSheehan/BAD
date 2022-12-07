@@ -1,6 +1,3 @@
-'''
-This module defines dunder methods to overload Python built-in operators in the Dual class.
-'''
 # Imports
 import numpy as np
 
@@ -13,7 +10,7 @@ class DualNumber:
         '''
         Explanation
         ------------------------------------
-        Constructor for the DualNumber class
+        Constructor for the DualNumber class to store numerical evaluation of functional and derived values.
         
         Inputs
         ------------------------------------
@@ -21,7 +18,26 @@ class DualNumber:
               int or float
         dual: [optional] the derivative of the object for the user's function
               int or float or None
-        
+
+
+        Outputs
+        ------------------------------------
+        self: DualNumber object
+            self.real: functional evaluation given a function and point of evaluation
+            self.dual: chain-rule derivative evaluation given a function and point of evaluation
+
+        Methods
+        ------------------------------------
+        __repr__(self)
+            Easy-to-read object instantiation with memory location
+
+        __str__(self)
+            Pretty print of the passed real and dual parts
+
+        Mathematical dunder methods: Add, subtract, multiply, divide, power, negation
+
+        Reverse mathematical dunder methods: Add, subtract, multiply, divide, and power
+
         Examples
         ------------------------------------
         >>> x = DualNumber(2)
@@ -86,7 +102,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = a + b
-        a DualNumber object with the value and derivative of the self + other operation
+            DualNumber object with the value and derivative of the self + other operation
         
         Examples
         ------------------------------------
@@ -134,7 +150,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = b + a
-        a DualNumber object with the value and derivative of the other + self operation
+            DualNumber object with the value and derivative of the other + self operation
         
         Examples
         ------------------------------------
@@ -178,7 +194,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = a - b
-        a DualNumber object with the value and derivative of the self - other operation
+            DualNumber object with the value and derivative of the self - other operation
         
         Examples
         ------------------------------------
@@ -227,7 +243,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = b - a
-        a DualNumber object with the value and derivative of the other - self operation
+            DualNumber object with the value and derivative of the other - self operation
         
         Examples
         ------------------------------------
@@ -276,7 +292,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = a*b
-        a DualNumber object with the value and derivative of the self*other operation
+            DualNumber object with the value and derivative of the self*other operation
         
         Examples
         ------------------------------------
@@ -325,7 +341,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = b*a
-        a DualNumber object with the value and derivative of the other*self operation
+            DualNumber object with the value and derivative of the other*self operation
         
         Examples
         ------------------------------------
@@ -369,7 +385,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = a/b
-        a DualNumber object with the value and derivative of the self/other operation
+            DualNumber object with the value and derivative of the self/other operation
         
         Examples
         ------------------------------------
@@ -422,7 +438,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = b/a
-        a DualNumber object with the value and derivative of the other/self operation
+            DualNumber object with the value and derivative of the other/self operation
         
         Examples
         ------------------------------------
@@ -473,7 +489,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = -a
-        a DualNumber object with the value and derivative of the -self operation
+            DualNumber object with the value and derivative of the -self operation
         
         Examples
         ------------------------------------
@@ -512,7 +528,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = a**b
-        a DualNumber object with the value and derivative of the self**other operation
+            DualNumber object with the value and derivative of the self**other operation
         
         Examples
         ------------------------------------
@@ -563,7 +579,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = b**a
-        a DualNumber object with the value and derivative of the other**self operation
+            DualNumber object with the value and derivative of the other**self operation
         
         Examples
         ------------------------------------

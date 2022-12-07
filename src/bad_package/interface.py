@@ -1,6 +1,16 @@
 """
-Auto differentiation module
-Implements AutoDiff class in order to execute auto differentiation
+Explanation
+------------------------------------
+Forward and backward auto-differentiation user interface
+
+Items
+------------------------------------
+AutoDiff: 
+    Forward-mode implementation. 
+    Internally uses DualNumber objects to track accumulated function value and derivative value. 
+    Supports any combination of scalar or vector variables and functions. 
+
+
 """
 
 import numpy as np
@@ -11,19 +21,19 @@ class AutoDiff:
     '''
     Explanation
     ------------------------------------
-    Class used to implement the forward mode of automatic differentation
-    Currently supports scalar and vector instances
+    Class used to implement the forward mode of automatic differentiation. 
+    Currently supports scalar and vector instances. 
 
     Attributes
     ------------------------------------
     f:
-        Array of functions to implement
+        List, ndarray, or single function to implement
 
     var_list:
-        List of numbers (arguments) to calculate forward mode
+        List, ndarray, or single number (argument(s)) to evaluate the function at in forward mode
 
     len_var_list:
-        Number of arguments to calculate
+        Number of arguments to calculate (dimensionality)
 
     trace:
         List of DualNumbers to keep track of the current trace of forward mode
@@ -33,10 +43,13 @@ class AutoDiff:
     __init__(self, f, var_list)
         Instantiate AutoDiff object
 
-    __str__(self)
-        Print computational graph -- TODO
+    __repr__(self)
+        Easy-to-read object instantiation with memory location
 
-    compute(self)
+    __str__(self)
+        Pretty print of the passed function(s) and variable(s)
+
+    _compute(self)
         Calculate forward mode and get primal and tangent trace
 
     get_primal(self)
@@ -87,7 +100,7 @@ class AutoDiff:
         else:
             raise TypeError(f"Second argument in {print(self)} must be a list or ndarray of integers or float or single integers or floats.")
 
-        if isinstance(f, (list, np.ndarray, function)):
+        if isinstance(f, (list, np.ndarray)) or callable(f):
             f = np.array(f)
         else:
             raise TypeError(f"First argument in {print(self)} must be a list of ndarray of functions or a single function.")
@@ -103,7 +116,7 @@ class AutoDiff:
         self.trace = trace
 
         # Automatically starts computation, less steps for the user
-        self.compute()
+        self._compute()
 
     def __repr__(self):
         '''
@@ -127,11 +140,17 @@ class AutoDiff:
         ------------------------------------
         None
         ''' 
-        return f'f: {self.f}, var_list: {self.var_list}, variables: {self.var_list}'
+        return f'f: {self.f}, var_list: {self.var_list}'
 
-    def compute(self):
+    def _compute(self):
         '''
+        Explanation
+        ------------------------------------
         Calculating primal trace and forward tangent trace to store in self.trace
+
+        Inputs
+        ------------------------------------
+        None
         '''
         if self.len_var_list == 1:
             self.trace[0] = self.f(self.trace[0])
@@ -149,9 +168,11 @@ class AutoDiff:
                 updatedDual = DualNumber(value, dp)
                 trace.append(updatedDual.real)
                 tangent.append(updatedDual.dual)
-            self.jacobian.append(tangent)
 
+            self.jacobian.append(tangent)
             self.trace = trace
+
+        self.jacobian = np.ndarray(self.jacobian)
 
     def get_primal(self):
         '''
@@ -181,8 +202,17 @@ class ReverseAD(AutoDiff):
 
 
     def __init__(self, f, var_list):
-        if not isinstance(var_list, np.ndarray):
-            raise TypeError("Second argument must be numpy.ndarray")
+        # Flexibility: allow the user to input lists, np.arrays, or single values
+        if isinstance(var_list, (list, np.ndarray, int, float)):
+            var_list = np.array(var_list)
+        else:
+            raise TypeError(f"Second argument in {print(self)} must be a list or ndarray of integers or float or single integers or floats.")
+
+        if isinstance(f, (list, np.ndarray)) or callable(f):
+            f = np.array(f)
+        else:
+            raise TypeError(f"First argument in {print(self)} must be a list of ndarray of functions or a single function.")
+        
         self.f = f
         self.var_list = var_list
         self.len_var_list = len(var_list)  
@@ -192,13 +222,34 @@ class ReverseAD(AutoDiff):
             trace.append(ReverseMode(float(variable)))
         self.trace = trace
 
-    def __str__(self):
+        self._compute()
+
+    def __repr__(self):
         '''
-        Pretty print of ReverseAD instantiation with passed values
-        '''
+        Explanation
+        ------------------------------------
+        Base print of ReverseAD instantiation with passed values and memory location
+
+        Inputs
+        ------------------------------------
+        None
+        ''' 
         return f'ReverseAD(f: {self.f}, var_list: {self.var_list})'
 
-    def compute(self):
+    def __str__(self):
+        '''
+        Explanation
+        ------------------------------------
+        Pretty print of ReverseAD instantiation with more information
+
+        Inputs
+        ------------------------------------
+        None
+        ''' 
+        return f'f: {self.f}, var_list: {self.var_list}, variables: {self.var_list}'
+        
+
+    def _compute(self):
         if self.len_var_list == 1:
             self.trace[0] = self.f(self.trace[0])
         else:
@@ -209,8 +260,20 @@ class ReverseAD(AutoDiff):
                 y = [ReverseMode(0)]*self.len_var_list
                 y[i] = x
                 trace.append(ReverseMode(value))
+
             self.trace = trace
 
+    def get_primal(self):
+        raise NotImplementedError('Reverse AutoDiff does not track primal trace.')
 
     def get_jacobian(self):
+        '''
+        Explanation
+        ------------------------------------
+        Return back-propagated chain rule after forward and backwards pass
+
+        Inputs
+        ------------------------------------
+        None
+        '''
         return [variable.grad() for variable in self.trace]

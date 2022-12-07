@@ -1,6 +1,3 @@
-'''
-This module defines dunder methods to overload Python built-in operators for Reverse Mode.
-'''
 # Imports
 import numpy as np
 
@@ -13,7 +10,7 @@ class ReverseMode():
         '''
         Explanation
         ------------------------------------
-        Constructor for the ReverseMode class
+        Constructor for the ReverseMode class to store numerical evaluation of functional, non-chain rule derivatives, and relationship between operators.
         
         Inputs
         ------------------------------------
@@ -24,8 +21,23 @@ class ReverseMode():
         ------------------------------------
         self: ReverseMode object
             self.real: value of the object
-            self.child: stores derivatives and relationship to object for children of ojbect
+            self.child: stores derivatives and relationship to object for children of object
             self.gradient: derivative calculation in reverse mode
+
+        Methods
+        ------------------------------------
+        __repr__(self)
+            Easy-to-read object instantiation with memory location
+
+        __str__(self)
+            Pretty print of the passed real and dual parts
+
+        grad(self)
+            Propagates evaluated derivative for passed variables
+
+        Mathematical dunder methods: Add, subtract, multiply, divide, power, negation
+
+        Reverse mathematical dunder methods: Add, subtract, multiply, divide, and power
         
         Examples
         ------------------------------------
@@ -120,7 +132,7 @@ class ReverseMode():
         Outputs
         ------------------------------------
         x = a + b
-        a ReverseMode object with the value of the self + other operation
+            ReverseMode object with the value of the self + other operation
         
         Examples
         ------------------------------------
@@ -162,7 +174,7 @@ class ReverseMode():
         Outputs
         ------------------------------------
         x = b + a
-        a ReverseMode object with the value of the other + self operation
+            ReverseMode object with the value of the other + self operation
         
         Examples
         ------------------------------------
@@ -195,7 +207,7 @@ class ReverseMode():
         Outputs
         ------------------------------------
         x = a - b
-        a ReverseMode object with the value of the self - other operation
+            ReverseMode object with the value of the self - other operation
         
         Examples
         ------------------------------------
@@ -237,7 +249,7 @@ class ReverseMode():
         Outputs
         ------------------------------------
         x = b - a
-        a ReverseMode object with the value of the other - self operation
+            ReverseMode object with the value of the other - self operation
         
         Examples
         ------------------------------------
@@ -280,7 +292,7 @@ class ReverseMode():
         Outputs
         ------------------------------------
         x = a*b
-        a ReverseMode object with the value of the self*other operation
+            ReverseMode object with the value of the self*other operation
         
         Examples
         ------------------------------------
@@ -323,7 +335,7 @@ class ReverseMode():
         Outputs
         ------------------------------------
         x = b*a
-        a ReverseMode object with the value of the other*self operation
+            ReverseMode object with the value of the other*self operation
         
         Examples
         ------------------------------------
@@ -356,7 +368,7 @@ class ReverseMode():
         Outputs
         ------------------------------------
         x = a/b
-        a ReverseMode object with the value of the self/other operation
+            ReverseMode object with the value of the self/other operation
         
         Examples
         ------------------------------------
@@ -403,7 +415,7 @@ class ReverseMode():
         Outputs
         ------------------------------------
         x = b/a
-        a ReverseMode object with the value of the other/self operation
+            ReverseMode object with the value of the other/self operation
         
         Examples
         ------------------------------------
@@ -440,7 +452,7 @@ class ReverseMode():
         Outputs
         ------------------------------------
         x = -a
-        a ReverseMode object with the value of the -self operation
+            ReverseMode object with the value of the -self operation
         
         Examples
         ------------------------------------
@@ -473,7 +485,7 @@ class ReverseMode():
         Outputs
         ------------------------------------
         x = a**b
-        a ReverseMode object with the value of the self**other operation
+            ReverseMode object with the value of the self**other operation
         
         Examples
         ------------------------------------
@@ -515,7 +527,7 @@ class ReverseMode():
         Outputs
         ------------------------------------
         x = b**a
-        a ReverseMode object with the value of the other**self operation
+            ReverseMode object with the value of the other**self operation
         
         Examples
         ------------------------------------

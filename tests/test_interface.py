@@ -18,6 +18,14 @@ class TestADInterface():
         result = ad.get_primal()
         assert pytest.approx(11) == result
 
+        # Scalar function without putting into array
+        def func(x):
+            return 4*x + 3
+        x = 2
+        ad = AutoDiff(func, x)
+        result = ad.get_primal()
+        assert pytest.approx(11) == result        
+
         # Vector function
 
     def test_scalar_get_jacobian(self):
