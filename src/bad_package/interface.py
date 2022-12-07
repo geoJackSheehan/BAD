@@ -95,15 +95,17 @@ class AutoDiff:
 
     def __init__(self, f, var_list):
         # Flexibility: allow the user to input lists, np.arrays, or single values
-        if isinstance(var_list, (list, np.ndarray, int, float)):
+        if isinstance(var_list, (list, np.ndarray)):
             var_list = np.array(var_list)
+        elif isinstance(var_list, (int, float)):
+            var_list = np.array([var_list])
         else:
             raise TypeError(f"Second argument in {print(self)} must be a list or ndarray of integers or float or single integers or floats.")
 
         if isinstance(f, (list, np.ndarray)):
             f = np.array(f)
         elif callable(f):
-            f = np.array(f)
+            f = np.array([f])
         else:
             raise TypeError(f"First argument in {print(self)} must be a list of ndarray of functions or a single function.")
         
