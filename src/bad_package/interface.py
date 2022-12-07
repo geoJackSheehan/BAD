@@ -100,7 +100,9 @@ class AutoDiff:
         else:
             raise TypeError(f"Second argument in {print(self)} must be a list or ndarray of integers or float or single integers or floats.")
 
-        if isinstance(f, (list, np.ndarray)) or callable(f):
+        if isinstance(f, (list, np.ndarray)):
+            f = np.array(f)
+        elif callable(f):
             f = np.array(f)
         else:
             raise TypeError(f"First argument in {print(self)} must be a list of ndarray of functions or a single function.")
@@ -208,7 +210,9 @@ class ReverseAD(AutoDiff):
         else:
             raise TypeError(f"Second argument in {print(self)} must be a list or ndarray of integers or float or single integers or floats.")
 
-        if isinstance(f, (list, np.ndarray)) or callable(f):
+        if isinstance(f, (list, np.ndarray)):
+            f = np.array(f)
+        elif callable(f):
             f = np.array(f)
         else:
             raise TypeError(f"First argument in {print(self)} must be a list of ndarray of functions or a single function.")
