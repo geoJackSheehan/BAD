@@ -81,16 +81,29 @@ class AutoDiff:
     '''
 
     def __init__(self, f, var_list):
-        if not isinstance(var_list, np.ndarray):
-            raise TypeError("Second argument must be numpy.ndarray")
+        # Flexibility: allow the user to input lists, np.arrays, or single values
+        if isinstance(var_list, (list, np.ndarray, int, float)):
+            var_list = np.array(var_list)
+        else:
+            raise TypeError(f"Second argument in {print(self)} must be a list or ndarray of integers or float or single integers or floats.")
+
+        if isinstance(f, (list, np.ndarray, function)):
+            f = np.array(f)
+        else:
+            raise TypeError(f"First argument in {print(self)} must be a list of ndarray of functions or a single function.")
+        
         self.f = f
         self.var_list = var_list
         self.len_var_list = len(var_list)
+        self.jacobian = []
         
         trace = []
         for variable in var_list:
             trace.append(DualNumber(float(variable), 1))
         self.trace = trace
+
+        # Automatically starts computation, less steps for the user
+        self.compute()
 
     def __repr__(self):
         '''
@@ -114,7 +127,7 @@ class AutoDiff:
         ------------------------------------
         None
         ''' 
-        return f'f: {self.f}, var_list: {self.var_list}, number of variables: {self.len_var_list}'
+        return f'f: {self.f}, var_list: {self.var_list}, variables: {self.var_list}'
 
     def compute(self):
         '''
@@ -122,15 +135,22 @@ class AutoDiff:
         '''
         if self.len_var_list == 1:
             self.trace[0] = self.f(self.trace[0])
+            self.jacobian.append(self.trace[0].dual)
         else:
             value = self.f(self.trace).real
-            trace = []
+            # Primal and tangent trace
+            trace, tangent = [], []
             for i in range(self.len_var_list):
                 x = self.trace[i]
                 y = [DualNumber(0, 0)]*self.len_var_list
                 y[i] = x
                 dp = self.f(y).dual
-                trace.append(DualNumber(value, dp))
+
+                updatedDual = DualNumber(value, dp)
+                trace.append(updatedDual.real)
+                tangent.append(updatedDual.dual)
+            self.jacobian.append(tangent)
+
             self.trace = trace
 
     def get_primal(self):
@@ -143,7 +163,7 @@ class AutoDiff:
         '''
         Return tangent trace of forward mode
         '''
-        return [variable.dual for variable in self.trace]
+        return self.jacobian
 
     def get_var_list(self):
         '''
