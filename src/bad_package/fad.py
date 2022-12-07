@@ -85,6 +85,11 @@ class DualNumber:
         None
         '''  
         return f'real: {self.real}, dual (derivative): {self.dual}'
+
+    def _validate(self, variable):
+        if not isinstance(variable, (*self._supported_scalars, DualNumber)):
+            raise TypeError("Type not supported: must be int or float")
+
         
     def __add__(self, other):
         '''
@@ -126,9 +131,8 @@ class DualNumber:
         5
         6
         '''
-        
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(other+self.real, self.dual)
         else:
@@ -174,9 +178,7 @@ class DualNumber:
         5
         18
         '''
-        
         return self.__add__(other)
-
     
     def __sub__(self, other):
         '''
@@ -218,9 +220,8 @@ class DualNumber:
         0
         2
         '''
-        
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(self.real-other, self.dual)
         else:
@@ -267,9 +268,8 @@ class DualNumber:
         0
         2
         '''
-        
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(other-self.real, -self.dual)
         else:
@@ -316,9 +316,8 @@ class DualNumber:
         6
         19
         '''
-            
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(self.real*other.real, self.dual*other.real)
         else:
@@ -413,9 +412,8 @@ class DualNumber:
         ------------------------------------
         Only truediv is implemented here (as opposed to truediv and floordiv). Therefore, using the '/' operator will return a floating-point approximation, not the truncated down result of '//'
         '''
-        
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(self.real/other.real, self.dual/other.real)
         else:
@@ -466,9 +464,8 @@ class DualNumber:
         ------------------------------------
         Only rtruediv is implemented here (as opposed to rtruediv and rfloordiv). Therefore, using the '/' operator will return a floating-point approximation, not the truncated down result of '//'
         '''
-        
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(other.real/self.real, (-other.real*self.dual)/(self.real*self.real))
         else:
@@ -503,9 +500,8 @@ class DualNumber:
         -5
         -3
         '''
-        
-        if not isinstance(self, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(self)
+
         if isinstance(self, self._supported_scalars):
             return DualNumber(self.real*(-1), self.dual*(-1))
         else:
@@ -552,16 +548,13 @@ class DualNumber:
         25
         311.6516346759676
         '''
-        
-        if not isinstance(self, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+        self._validate(self)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(self.real**other.real, self.dual*other.real*self.real**(other.real-1))
-        elif isinstance(other, str):
-            raise TypeError("Type not supported: must be int or float")
         else:
             return DualNumber(self.real**other.real, self.real**other.real*(self.dual*(other.real/self.real) + other.dual*np.log(self.real)))
-
         
     def __rpow__(self, other):
         '''
@@ -603,9 +596,8 @@ class DualNumber:
         25
         311.6516346759676
         '''
-        
-        if not isinstance(self, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(other.real**self.real, (other.real**self.real)*self.dual*np.log(other.real))
         else:
