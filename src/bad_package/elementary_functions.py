@@ -80,7 +80,7 @@ def exp(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(exp(x.real))
-        x.child.append(f)
+        x.child.append((exp(x.real), f))
         return f
 
     elif isinstance(x, float):
@@ -122,7 +122,7 @@ def ln(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
             f = ReverseMode(ln(x.real))
-            x.child.append(f)
+            x.child.append(((1/x.real), f))
             return f
 
     elif isinstance(x, float):
@@ -170,7 +170,7 @@ def logBase(x, base):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(logBase(x.real, base))
-        x.child.append(f)
+        x.child.append((1/(x.real*ln(base)), f))
         return f
 
     elif isinstance(x, float):
@@ -451,7 +451,7 @@ def sinh(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(sinh(x.real))
-        x.child.append(f)
+        x.child.append((np.cosh(x.real), f))
         return f
 
     elif isinstance(x, float):
@@ -487,7 +487,7 @@ def cosh(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(cosh(x.real))
-        x.child.append(f)
+        x.child.append((np.sinh(x.real), f))
         return f
 
     elif isinstance(x, float):
@@ -523,7 +523,7 @@ def tanh(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(tanh(x.real))
-        x.child.append(f)
+        x.child.append(((1/np.cosh(x.real))**2 ,f))
         return f
 
     elif isinstance(x, float):
@@ -565,7 +565,7 @@ def arcsin(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(arcsin(x.real))
-        x.child.append(f)
+        x.child.append((1/sqrt(1 - (x.real)**2), f))
         return f
 
     elif isinstance(x, float):
@@ -611,7 +611,7 @@ def arccos(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(arccos(x.real))
-        x.child.append(f)
+        x.child.append((-1/sqrt(1-(x.real)**2), f))
         return f
 
     elif isinstance(x, float):
@@ -651,7 +651,7 @@ def arctan(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(arctan(x.real))
-        x.child.append(f)
+        x.child.append((1/(1 + x.real**2), f))
         return f
 
     elif isinstance(x, float):

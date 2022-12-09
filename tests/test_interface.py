@@ -98,7 +98,7 @@ class TestADInterface():
         def func2(x):
             return 10 + 2*x[1]
             # return sin(x)
-        f = np.array([func1,func2])
+        f = np.array([func1, func2])
         x = np.array([1, 2])
         rm = ReverseAD(f,x)
         result = rm.get_jacobian()
@@ -165,3 +165,58 @@ class TestADInterface():
         rm = ReverseAD(f, x)
         result = rm.get_jacobian()
         assert pytest.approx([((-1/sin(2.5)))**2]) == result
+
+    def test_vector_1arg_sinh_jacobian_RM(self):
+        def ef1(x):
+            return sinh(x)
+
+        f = np.array([ef1])
+        x = np.array([0.7])
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([np.cosh(0.7)]) == result
+
+    def test_vector_1arg_cosh_jacobian_RM(self):
+        def ef1(x):
+            return cosh(x)
+
+        f = np.array([ef1])
+        x = np.array([0.25])
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([np.sinh(0.25)]) == result
+    
+    def test_vector_1arg_tanh_jacobian_RM(self):
+        def ef1(x):
+            return 3*tanh(x)
+        
+        f = np.array([ef1])
+        x = np.array([1.25])
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([3/(np.cosh(1.25)**2)]) == result
+
+
+    def test_vector_exp_jacobian_RM(self):
+        def ef(x):
+            return 5*exp(x[0]) + 2*exp(x[1]) + 3*exp(x[2])
+
+        f = np.array([ef])
+        x = np.array([0, 1, 2])
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([5, 2*np.exp(1), 3*np.exp(2)]) == result
+
+    
+    def test_vector_logs_jacobian_RM(self):
+        def ef(x):
+            return 3*x[0] + logBase(x[1], 3) + ln(x[2])
+        
+        f = np.array([ef])
+        x = np.array([2, 4, 27])
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([3, 1/(np.log(3)*4), 1/27]) == result
+
+
+    
