@@ -48,6 +48,11 @@ class AutoDiff:
         Getter method of self.var_list
     get_f(self)
         Getter method of self.f
+    Raises
+    ------------------------------------
+    TypeError if f is not callable (a function), list, or ndarray
+    TypeError if var_list is not a list, ndarray, int, or float
+
     Example Driver Script to utilize forward interface
     --------------------------------------------------
     Scalar:
@@ -58,22 +63,20 @@ class AutoDiff:
     >>>     return 4*x + 3
     >>> x = np.array([2])
     >>> ad = AutoDiff(scalar, x)
-    >>> ad.compute()
     >>> print(f'Primal: {ad.get_primal()}')
-    Primal: 11
+    Primal: [11]
     >>> print(f'Tangent: {ad.get_jacobian()}')
-    Tangent: [4]
+    Tangent: [[4]]
     Vector:
     
     def vector(x):
         return x[0]**2 + 3*x[1] + 5
     x = np.array([1, 2])
     ad = AutoDiff(vector, x)
-    ad.compute()
     print(f'Primal: {ad.get_primal()}')
-    >>> 12
+    >>> [12]
     print(f'Tangent: {ad.get_jacobian()}')
-    >>> [2, 3]
+    >>> [[2, 3]]
     '''
 
     def __init__(self, f, var_list):
@@ -164,26 +167,110 @@ class AutoDiff:
 
     def get_primal(self):
         '''
-        Returns a 1-D list of primal trace(s) of forward mode, corresponding to number of passed functions.
+        Explanation
+        ------------------------------------
+        Passed function(s) evaluated at provided coordinates of a given function (primal trace).
+
+        Inputs
+        ------------------------------------
+        None
+
+        Outputs
+        ------------------------------------
+        1-D list of shape (# functions, 1)
+
+        Example
+        ------------------------------------
+        Scalar (1 function passed):
+
+        def scalar(x):
+            return x[0]**2 + 3*x[1] + 5
+        x = np.array([1, 2])
+        ad = AutoDiff(scalar, x)
+        print(f'Primal: {ad.get_primal()}')
+        >>> [12]
+
+        Vector (2 functions passed):
+
+        def func(x):
+            return 4*x + 3
+        def func2(x):
+            return logBase(x, 2) + exp(x) - e
+        x = [2]
+        ad = AutoDiff([func, func2])
+        print(f'Primal: {ad.get_primal()}')
+        >>> [11, 5.67]
         '''
         return self.primal
 
     def get_jacobian(self):
         '''
-        Return 2-D list of tangent trace(s) of forward mode. Nested lists correspond to passed function order.
-        Values inside the nested lists correspond to the partial derivatives corresponding to passed variable order.
+        Explanation
+        ------------------------------------
+        Return  of tangent trace(s) of forward mode. Nested lists correspond to passed function order.
+        Values inside the nested lists correspond to the partial derivatives corresponding to passed variable order
+
+        Inputs
+        ------------------------------------
+        None
+
+        Outputs
+        ------------------------------------
+        2-D list of shape (# functions, # variables)
+
+        Example
+        ------------------------------------
+        Scalar (1 function passed):
+
+        def func(x):
+            return x[0]**2 + 3*x[1] + 5
+        x = np.array([1, 2])
+        ad = AutoDiff(func, x)
+        print(f'Tangent: {ad.get_jacobian()}')
+        >>> [[2,3]]
+
+        Vector (2 functions passed):
+        def func(x):
+            return x[0]**2 + 3*x[1] + 5
+        def func2(x):
+            return sin(x[0]) + cos(x[1])
+        x = np.array([1, 2])
+        f = [func, func2]
+        ad = AutoDiff(f, x)
+        print(f'Tangent: {ad.get_jacobian()}')
+        >>> [[2, 3], [0.54030, -0.90929]]
         '''
         return self.jacobian
 
     def get_var_list(self):
         '''
+        Explanation
+        ------------------------------------
         Return var_list passed by user for forward mode
+
+        Inputs
+        ------------------------------------
+        None
+
+        Outputs
+        ------------------------------------
+        1-D list of originally passed variables
         '''
         return self.var_list
 
     def get_f(self):
         '''
+        Explanation
+        ------------------------------------
         Return function f passed by user for forward mode
+
+        Inputs
+        ------------------------------------
+        None
+
+        Outputs
+        ------------------------------------
+        1-D list of originally passed functions
         '''
         return self.f
 

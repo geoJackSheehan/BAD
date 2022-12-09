@@ -27,6 +27,12 @@ class TestADInterface():
         assert pytest.approx([11]) == result   
 
         # Vector function
+        def func2(x):
+            return logBase(x, 2) + exp(x) - e
+        x = [2]
+        ad = AutoDiff([func, func2])
+        result = ad.get_primal()
+        assert pytest.approx([11, 5.67]) == result
 
     def test_scalar_get_jacobian(self):
         # Scalar function
