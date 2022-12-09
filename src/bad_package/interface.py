@@ -294,13 +294,14 @@ class ReverseAD:
         self._compute()
 
     def _compute(self):
+        # i want to add in a if len = 1 thing, then use this for scalar and another one that appends jacobian list for vector and also i need one for vector variables
         for i in range(len(self.f)):
             x = ReverseMode(self.var)
             z = self.f[i](x)
             z.gradient = 1.0
             print(z.real)
             print(x.grad())
-            self.jacobian = x.grad()
+            self.jacobian.append(x.grad())
     
     def get_primal(self):
         raise NotImplementedError('Reverse AutoDiff does not track primal trace.')

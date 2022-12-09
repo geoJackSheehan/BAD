@@ -97,4 +97,4 @@ class TestADInterface():
         rm = ReverseAD(f,x)
         result = rm.get_jacobian()
         # need to actually get both values in here, but for now just using the second one to show it can take two functions
-        assert pytest.approx([2]) == result
+        assert pytest.approx([-0.5, 2]) == result
