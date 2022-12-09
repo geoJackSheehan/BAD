@@ -32,7 +32,7 @@ class TestADInterface():
         x = [2]
         ad = AutoDiff([func, func2], x)
         result = ad.get_primal()
-        assert pytest.approx([11, 5.6]) == result
+        assert pytest.approx([11, 5.6707742704]) == result
 
     def test_scalar_get_jacobian(self):
         # Scalar function
