@@ -202,84 +202,108 @@ class AutoDiff:
         '''
         return self.f
 
-class ReverseAD(AutoDiff):
+# class ReverseAD(AutoDiff):
 
 
-    def __init__(self, f, var_list):
-        # Flexibility: allow the user to input lists, np.arrays, or single values
-        if isinstance(var_list, (list, np.ndarray, int, float)):
-            var_list = np.array(var_list)
-        else:
-            raise TypeError(f"Second argument in {print(self)} must be a list or ndarray of integers or float or single integers or floats.")
+#     def __init__(self, f, var_list):
+#         # Flexibility: allow the user to input lists, np.arrays, or single values
+#         if isinstance(var_list, (list, np.ndarray, int, float)):
+#             var_list = np.array(var_list)
+#         else:
+#             raise TypeError(f"Second argument in {print(self)} must be a list or ndarray of integers or float or single integers or floats.")
 
-        if isinstance(f, (list, np.ndarray)):
-            f = np.array(f)
-        elif callable(f):
-            f = np.array(f)
-        else:
-            raise TypeError(f"First argument in {print(self)} must be a list of ndarray of functions or a single function.")
+#         if isinstance(f, (list, np.ndarray)):
+#             f = np.array(f)
+#         elif callable(f):
+#             f = np.array(f)
+#         else:
+#             raise TypeError(f"First argument in {print(self)} must be a list of ndarray of functions or a single function.")
         
+#         self.f = f
+#         self.var_list = var_list
+#         self.len_var_list = len(var_list)  
+        
+#         trace = []
+#         for variable in var_list:
+#             trace.append(ReverseMode(float(variable)))
+#         self.trace = trace
+
+#         self._compute()
+
+#     def __repr__(self):
+#         '''
+#         Explanation
+#         ------------------------------------
+#         Base print of ReverseAD instantiation with passed values and memory location
+
+#         Inputs
+#         ------------------------------------
+#         None
+#         ''' 
+#         return f'ReverseAD(f: {self.f}, var_list: {self.var_list})'
+
+#     def __str__(self):
+#         '''
+#         Explanation
+#         ------------------------------------
+#         Pretty print of ReverseAD instantiation with more information
+
+#         Inputs
+#         ------------------------------------
+#         None
+#         ''' 
+#         return f'f: {self.f}, var_list: {self.var_list}, variables: {self.var_list}'
+        
+
+#     def _compute(self):
+#         if self.len_var_list == 1:
+#             self.trace[0] = self.f(self.trace[0])
+#         else:
+#             value = self.f(self.trace).real
+#             trace = []
+#             for i in range(self.len_var_list):
+#                 x = self.trace[i]
+#                 y = [ReverseMode(0)]*self.len_var_list
+#                 y[i] = x
+#                 trace.append(ReverseMode(value))
+
+#             self.trace = trace
+
+#     def get_primal(self):
+#         raise NotImplementedError('Reverse AutoDiff does not track primal trace.')
+
+#     def get_jacobian(self):
+#         '''
+#         Explanation
+#         ------------------------------------
+#         Return back-propagated chain rule after forward and backwards pass
+
+#         Inputs
+#         ------------------------------------
+#         None
+#         '''
+#         return [variable.grad() for variable in self.trace]
+
+
+class ReverseAD:
+
+    def __init__(self, f, var):
         self.f = f
-        self.var_list = var_list
-        self.len_var_list = len(var_list)  
-        
-        trace = []
-        for variable in var_list:
-            trace.append(ReverseMode(float(variable)))
-        self.trace = trace
-
+        self.var = var
+        self.jacobian = []
         self._compute()
 
-    def __repr__(self):
-        '''
-        Explanation
-        ------------------------------------
-        Base print of ReverseAD instantiation with passed values and memory location
-
-        Inputs
-        ------------------------------------
-        None
-        ''' 
-        return f'ReverseAD(f: {self.f}, var_list: {self.var_list})'
-
-    def __str__(self):
-        '''
-        Explanation
-        ------------------------------------
-        Pretty print of ReverseAD instantiation with more information
-
-        Inputs
-        ------------------------------------
-        None
-        ''' 
-        return f'f: {self.f}, var_list: {self.var_list}, variables: {self.var_list}'
-        
-
     def _compute(self):
-        if self.len_var_list == 1:
-            self.trace[0] = self.f(self.trace[0])
-        else:
-            value = self.f(self.trace).real
-            trace = []
-            for i in range(self.len_var_list):
-                x = self.trace[i]
-                y = [ReverseMode(0)]*self.len_var_list
-                y[i] = x
-                trace.append(ReverseMode(value))
-
-            self.trace = trace
-
+        for i in range(len(f)):
+            x = ReverseMode(self.var)
+            z = f[i](x)
+            z.gradient = 1.0
+            print(z.real)
+            print(x.grad())
+            self.jacobian = x.grad()
+    
     def get_primal(self):
         raise NotImplementedError('Reverse AutoDiff does not track primal trace.')
-
+        
     def get_jacobian(self):
-        '''
-        Explanation
-        ------------------------------------
-        Return back-propagated chain rule after forward and backwards pass
-
-        Inputs
-        ------------------------------------
-        None
-        '''
-        return [variable.grad() for variable in self.trace]
+        return self.jacobian
