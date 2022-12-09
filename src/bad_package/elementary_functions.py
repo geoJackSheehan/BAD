@@ -687,7 +687,7 @@ def arcsinh(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(arcsinh(x.real))
-        x.child.append(f)
+        x.child.append((1 / sqrt(1 + x.real ** 2), f))
         return f
 
     elif isinstance(x, float):
@@ -729,7 +729,7 @@ def arccosh(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(arccosh(x.real))
-        x.child.append(f)
+        x.child.append((1 / sqrt(x.real ** 2 - 1), f))
         return f
 
     elif isinstance(x, float):
@@ -775,7 +775,7 @@ def arctanh(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(arctanh(x.real))
-        x.child.append(f)
+        x.child.append((1 / (1 - x.real ** 2), f))
         return f
 
     elif isinstance(x, float):
@@ -821,7 +821,7 @@ def sqrt(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(sqrt(x.real))
-        x.child.append(f)
+        x.child.append((0.5* x.real ** (-0.5), f))
         return f
 
     elif isinstance(x, float,):
