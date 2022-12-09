@@ -30,7 +30,7 @@ class TestADInterface():
         def func2(x):
             return logBase(x, 2) + exp(x) - e
         x = [2]
-        ad = AutoDiff([func, func2])
+        ad = AutoDiff([func, func2], x)
         result = ad.get_primal()
         assert pytest.approx([11, 5.67]) == result
 
