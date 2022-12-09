@@ -248,7 +248,7 @@ def cos(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(cos(x.real))
-        x.child.append(f)
+        x.child.append((-np.sin(x.real), f))
         return f
 
     elif isinstance(x, float):
@@ -285,7 +285,7 @@ def tan(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(tan(x.real))
-        x.child.append(f)
+        x.child.append((1/(np.cos(x.real)**2), f))
         return f
 
     elif isinstance(x, float):
@@ -327,7 +327,7 @@ def csc(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(csc(x.real))
-        x.child.append(f)
+        x.child.append((-csc(x.real)*(1/np.tan(x.real)), f))
         return f
 
     elif isinstance(x, float):
@@ -369,7 +369,7 @@ def sec(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(sec(x.real))
-        x.child.append(f)
+        x.child.append((sec(x.real)*np.tan(x.real), f))
         return f
 
     elif isinstance(x, float):
@@ -411,7 +411,7 @@ def cot(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(cot(x.real))
-        x.child.append(f)
+        x.child.append(((-csc(x.real))**2, f))
         return f
 
     elif isinstance(x, float):
