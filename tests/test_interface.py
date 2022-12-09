@@ -16,7 +16,7 @@ class TestADInterface():
         x = np.array([2])
         ad = AutoDiff(func, x)
         result = ad.get_primal()
-        assert pytest.approx(11) == result
+        assert pytest.approx([11]) == result
 
         # Scalar function without putting into array
         def func(x):
@@ -24,7 +24,7 @@ class TestADInterface():
         x = 2
         ad = AutoDiff(func, x)
         result = ad.get_primal()
-        assert pytest.approx(11) == result        
+        assert pytest.approx([11]) == result   
 
         # Vector function
 
@@ -46,7 +46,7 @@ class TestADInterface():
         x = np.array([1, 2])
         ad = AutoDiff(func, x)
         result = ad.get_primal()
-        assert pytest.approx(12) == result
+        assert pytest.approx([12]) == result
         
     def test_vector_get_jacobian(self):
         # Scalar function
@@ -55,7 +55,7 @@ class TestADInterface():
         x = np.array([1, 2])
         ad = AutoDiff(func, x)
         result = ad.get_jacobian()
-        assert pytest.approx([2,3]) == result
+        assert pytest.approx([2,3]) == result[0]
 
         # Vector function
         def func2(x):
@@ -65,7 +65,7 @@ class TestADInterface():
         ad = AutoDiff(f, x)
         result = ad.get_jacobian()
         assert pytest.approx([2,3]) == result[0]
-        assert pytest.approx([np.cos(1), -np,sin(2)]) == result[1]
+        assert pytest.approx([np.cos(1), -np.sin(2)]) == result[1]
 
 #     def test_scalar_get_jacobian_RM(self):
 #         def func(x):
@@ -81,7 +81,7 @@ class TestADInterface():
         def func(x):
             return (5*x + 50)/(2*x**2)
         f = np.array([func])
-        x = 5
+        x = np.array([5])
         rm = ReverseAD(f, x)
         result = rm.get_jacobian()
         assert pytest.approx([-0.5]) == result
@@ -97,16 +97,14 @@ class TestADInterface():
         rm = ReverseAD(f,x)
         result = rm.get_jacobian()
         # need to actually get both values in here, but for now just using the second one to show it can take two functions
-        assert pytest.approx([0.625, -4.875]) == result
+        assert pytest.approx([0.625, -6.875, 0, 2]) == result
 
-    # def test_vector_EF_jacobian_RM(self):
-    #     def ef1(x):
-    #         return sin(x[0]) + ln(x[1])
-    #     def ef2(x):
-    #         return cosh(x[0])
+    def test_vector_EF_jacobian_RM(self):
+        def ef1(x):
+            return sin(x)
 
-    #     f = np.array([ef1, ef2])
-    #     x = np.array([2.5, 1.1])
-    #     rm = ReverseAD(f, x)
-    #     result = rm.get_jacobian()
-    #     assert pytest.approx([np.cos(2.5) + np.ln(1.1), np.sin(2.5) + 10/11]) == result
+        f = np.array([ef1])
+        x = np.array([2.5])
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([np.cos(2.5)]) == result

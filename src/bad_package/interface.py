@@ -2,15 +2,12 @@
 Explanation
 ------------------------------------
 Forward and backward auto-differentiation user interface
-
 Items
 ------------------------------------
 AutoDiff: 
     Forward-mode implementation. 
     Internally uses DualNumber objects to track accumulated function value and derivative value. 
     Supports any combination of scalar or vector variables and functions. 
-
-
 """
 
 import numpy as np
@@ -23,47 +20,34 @@ class AutoDiff:
     ------------------------------------
     Class used to implement the forward mode of automatic differentiation. 
     Currently supports scalar and vector instances. 
-
     Attributes
     ------------------------------------
     f:
         List, ndarray, or single function to implement
-
     var_list:
         List, ndarray, or single number (argument(s)) to evaluate the function at in forward mode
-
     len_var_list:
         Number of arguments to calculate (dimensionality)
-
     trace:
         List of DualNumbers to keep track of the current trace of forward mode
-
     Methods
     ------------------------------------
     __init__(self, f, var_list)
         Instantiate AutoDiff object
-
     __repr__(self)
         Easy-to-read object instantiation with memory location
-
     __str__(self)
         Pretty print of the passed function(s) and variable(s)
-
     _compute(self)
         Calculate forward mode and get primal and tangent trace
-
     get_primal(self)
         Return primal trace of forward mode
-
     get_jacobian(self)
         Return tangent trace of forward mode
-
     get_var_list(self)
         Getter method of self.var_list
-
     get_f(self)
         Getter method of self.f
-
     Example Driver Script to utilize forward interface
     --------------------------------------------------
     Scalar:
@@ -79,7 +63,6 @@ class AutoDiff:
     Primal: 11
     >>> print(f'Tangent: {ad.get_jacobian()}')
     Tangent: [4]
-
     Vector:
     
     def vector(x):
@@ -113,6 +96,7 @@ class AutoDiff:
         self.var_list = var_list
         self.len_var_list = len(var_list)
         self.jacobian = []
+        self.primal = []
         
         trace = []
         for variable in var_list:
@@ -156,11 +140,11 @@ class AutoDiff:
         # Iterate through all passed functions (same shape)
         for f in self.f:
             if self.len_var_list == 1:
-                # If it's scalar functions, just replace the value at the trace with resulting DualNumber from computation
-                self.trace[0] = f(self.trace[0])
-                self.jacobian.append(self.trace[0].dual)
+                value = f(self.trace[0])
+                self.primal.append(value.real)
+                self.jacobian.append(value.dual)
             else:
-                value = f(self.trace).real
+                value = f(self.trace)
                 # Primal trace and tangent trace
                 trace, tangent = [], []
                 for i in range(self.len_var_list):
@@ -169,21 +153,25 @@ class AutoDiff:
                     y[i] = x
                     dp = f(y).dual
 
-                    updatedDual = DualNumber(value, dp)
+                    updatedDual = DualNumber(value.real, dp)
                     trace.append(updatedDual)
                     tangent.append(updatedDual.dual)
 
+                # Primal is the function evaluated at the provided point (var_list)
+                self.primal.append(value.real)
+                # The list of partials for this function added to matrix container
                 self.jacobian.append(tangent)
 
     def get_primal(self):
         '''
-        Return primal trace of forward mode
+        Returns a 1-D list of primal trace(s) of forward mode, corresponding to number of passed functions.
         '''
-        return self.trace[0].real
+        return self.primal
 
     def get_jacobian(self):
         '''
-        Return tangent trace of forward mode
+        Return 2-D list of tangent trace(s) of forward mode. Nested lists correspond to passed function order.
+        Values inside the nested lists correspond to the partial derivatives corresponding to passed variable order.
         '''
         return self.jacobian
 
@@ -221,7 +209,7 @@ class ReverseAD:
     def _compute(self):
         if self.len_var_list == 1:
             for i in range(len(self.f)):
-                x = ReverseMode(self.var_list)
+                x = ReverseMode(float(self.var_list[0]))
                 z = self.f[i](x)
                 z.gradient = 1.0
                 self.jacobian.append(x.grad())
@@ -230,14 +218,18 @@ class ReverseAD:
             for i in range(len(self.f)):
                 z = self.f[i](self.trace)
                 z.gradient = 1.0
-            for trace in self.trace:
-                self.jacobian.append(trace.grad())
+                self.jacobian.append([trace.grad() for trace in self.trace])
+                for trace in self.trace:
+                    trace.child = []
+                    trace.gradient = None
+                
         else:
             raise TypeError('Variable list cannot be empty!')
 
-        
     def get_primal(self):
         raise NotImplementedError('Reverse AutoDiff does not track primal trace.')
         
     def get_jacobian(self):
+        temp = np.array(self.jacobian)
+        self.jacobian = temp.flatten().tolist()
         return self.jacobian

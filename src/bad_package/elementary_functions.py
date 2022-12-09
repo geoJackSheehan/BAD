@@ -212,7 +212,7 @@ def sin(x):
     elif isinstance(x, ReverseMode):
         # Same domain as float, no local checking
         f = ReverseMode(sin(x.real))
-        x.child.append(f)
+        x.child.append((np.cos(x.real), f))
         return f
 
     elif isinstance(x, float):
