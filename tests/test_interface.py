@@ -67,11 +67,21 @@ class TestADInterface():
         assert pytest.approx([2,3]) == result[0]
         assert pytest.approx([np.cos(1), -np,sin(2)]) == result[1]
 
+#     def test_scalar_get_jacobian_RM(self):
+#         def func(x):
+#             return 4*x
+#         x = np.array([2])
+#         rm = ReverseAD(func, x)
+#         rm.compute()
+#         result = rm.get_jacobian()
+#         assert pytest.approx([4]) == result
+        
+        
     def test_scalar_get_jacobian_RM(self):
         def func(x):
-            return 4*x
-        x = np.array([2])
-        rm = ReverseAD(func, x)
-        rm.compute()
+            return (5*x + 50)/(2*x**2)
+        f = np.array([func])
+        x = 5
+        rm = ReverseAD(f, x)
         result = rm.get_jacobian()
-        assert pytest.approx([4]) == result
+        assert pytest.approx([-0.5]) == result
