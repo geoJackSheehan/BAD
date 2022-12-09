@@ -102,10 +102,11 @@ class TestADInterface():
         x = np.array([1, 2])
         rm = ReverseAD(f,x)
         result = rm.get_jacobian()
-        # need to actually get both values in here, but for now just using the second one to show it can take two functions
         assert pytest.approx([0.625, -6.875, 0, 2]) == result
 
-    def test_vector_EF_jacobian_RM(self):
+# Testing Elementary Functions for ReverseMode as I fix them
+        
+    def test_vector_sin_jacobian_RM(self):
         def ef1(x):
             return sin(x)
 
@@ -114,3 +115,53 @@ class TestADInterface():
         rm = ReverseAD(f, x)
         result = rm.get_jacobian()
         assert pytest.approx([np.cos(2.5)]) == result
+        
+    def test_vector_cos_jacobian_RM(self):
+        def ef1(x):
+            return cos(x)
+
+        f = np.array([ef1])
+        x = np.array([2.5])
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([-np.sin(2.5)]) == result
+        
+    def test_vector_tan_jacobian_RM(self):
+        def ef1(x):
+            return tan(x)
+
+        f = np.array([ef1])
+        x = np.array([2.5])
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([1/(np.cos(2.5)**2)]) == result
+        
+    def test_vector_csc_jacobian_RM(self):
+        def ef1(x):
+            return csc(x)
+
+        f = np.array([ef1])
+        x = np.array([2.5])
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([(-1/np.sin(2.5))*(1/np.tan(2.5))]) == result
+        
+    def test_vector_sec_jacobian_RM(self):
+        def ef1(x):
+            return sec(x)
+
+        f = np.array([ef1])
+        x = np.array([2.5])
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([(1/np.cos(2.5))*np.tan(2.5)]) == result
+        
+    def test_vector_cot_jacobian_RM(self):
+        def ef1(x):
+            return cot(x)
+
+        f = np.array([ef1])
+        x = np.array([2.5])
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([((-1/sin(2.5)))**2]) == result
