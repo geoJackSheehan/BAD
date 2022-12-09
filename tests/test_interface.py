@@ -103,6 +103,26 @@ class TestADInterface():
         rm = ReverseAD(f,x)
         result = rm.get_jacobian()
         assert pytest.approx([0.625, -6.875, 0, 2]) == result
+      
+    def test_scalar_get_jacobian_scalar_RM(self):
+        def func(x):
+            return (5*x + 50)/(2*x**2)
+        f = np.array([func])
+        x = 5
+        rm = ReverseAD(f, x)
+        result = rm.get_jacobian()
+        assert pytest.approx(-0.5) == result
+
+    def test_vector_of_funcs_get_jacobian_scalar_RM(self):
+        def func1(x):
+            return (5*x + 50)/(2*x**2)
+        def func2(x):
+            return 10 + 2*x
+        f = np.array([func1,func2])
+        x = 5
+        with pytest.raises(TypeError):
+            ReverseAD(f, x)
+        
 
 # Testing Elementary Functions for ReverseMode as I fix them
         

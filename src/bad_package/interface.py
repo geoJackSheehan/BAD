@@ -14,6 +14,7 @@ import numpy as np
 from bad_package.fad import DualNumber
 from bad_package.rad import ReverseMode
 
+
 class AutoDiff:
     '''
     Explanation
@@ -78,6 +79,8 @@ class AutoDiff:
     print(f'Tangent: {ad.get_jacobian()}')
     >>> [[2, 3]]
     '''
+    
+
 
     def __init__(self, f, var_list):
         # Flexibility: allow the user to input lists, np.arrays, or single values
@@ -275,11 +278,12 @@ class AutoDiff:
         return self.f
 
 class ReverseAD:
-
+    
     def __init__(self, f, var_list):
         self.f = f
         self.var_list = var_list
         self.jacobian = []
+        self.jacobian_single = 0.0
 
         try:
             self.len_var_list = len(var_list)
@@ -294,7 +298,19 @@ class ReverseAD:
         self._compute()
 
     def _compute(self):
-        if self.len_var_list == 1:
+        
+        #added this
+        if isinstance(self.var_list, (int, float)):
+            if len(self.f) == 1:
+                x = ReverseMode(float(self.var_list))
+                z = self.f[0](x)
+                z.gradient = 1.0
+                self.jacobian_single = x.grad()
+                
+            else:
+                raise TypeError('For multiple functions, variable(s) must be input as numpy array')
+                
+        elif self.len_var_list == 1:
             for i in range(len(self.f)):
                 x = ReverseMode(float(self.var_list[0]))
                 z = self.f[i](x)
@@ -317,6 +333,15 @@ class ReverseAD:
         raise NotImplementedError('Reverse AutoDiff does not track primal trace.')
         
     def get_jacobian(self):
-        temp = np.array(self.jacobian)
-        self.jacobian = temp.flatten().tolist()
-        return self.jacobian
+        if isinstance(self.var_list, (int, float)):
+            return self.jacobian_single
+        else:
+            temp = np.array(self.jacobian)
+            self.jacobian = temp.flatten().tolist()
+            return self.jacobian
+    
+    
+    
+    
+    
+    
