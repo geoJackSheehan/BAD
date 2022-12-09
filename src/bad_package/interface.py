@@ -15,12 +15,13 @@ from bad_package.fad import DualNumber
 from bad_package.rad import ReverseMode
 
 
-class AutoDiff:
+class AutoDiff():
     '''
     Explanation
     ------------------------------------
     Class used to implement the forward mode of automatic differentiation. 
     Currently supports scalar and vector instances. 
+
     Attributes
     ------------------------------------
     f:
@@ -57,19 +58,18 @@ class AutoDiff:
     Example Driver Script to utilize forward interface
     --------------------------------------------------
     Scalar:
-    
-    >>> import numpy as np
-    >>> from ad_interface import AutoDiff
-    >>> def scalar(x):
-    >>>     return 4*x + 3
-    >>> x = np.array([2])
-    >>> ad = AutoDiff(scalar, x)
-    >>> print(f'Primal: {ad.get_primal()}')
-    Primal: [11]
-    >>> print(f'Tangent: {ad.get_jacobian()}')
-    Tangent: [[4]]
+    import numpy as np
+    from interface import AutoDiff
+    def scalar(x):
+        return 4*x + 3
+    x = np.array([2])
+    ad = AutoDiff(scalar, x)
+    print(f'Primal: {ad.get_primal()}')
+    >>> Primal: [11]
+    print(f'Tangent: {ad.get_jacobian()}')
+    >>> Tangent: [[4]]
+
     Vector:
-    
     def vector(x):
         return x[0]**2 + 3*x[1] + 5
     x = np.array([1, 2])
@@ -79,8 +79,6 @@ class AutoDiff:
     print(f'Tangent: {ad.get_jacobian()}')
     >>> [[2, 3]]
     '''
-    
-
 
     def __init__(self, f, var_list):
         # Flexibility: allow the user to input lists, np.arrays, or single values
@@ -210,7 +208,7 @@ class AutoDiff:
         '''
         Explanation
         ------------------------------------
-        Return  of tangent trace(s) of forward mode. Nested lists correspond to passed function order.
+        Return tangent trace(s) of forward mode. Nested lists correspond to passed function order.
         Values inside the nested lists correspond to the partial derivatives corresponding to passed variable order
 
         Inputs
@@ -277,7 +275,71 @@ class AutoDiff:
         '''
         return self.f
 
-class ReverseAD:
+class ReverseAD():
+    '''
+    Explanation
+    ------------------------------------
+    Class used to implement the reverse mode of automatic differentiation. 
+    Currently supports scalar and vector instances. 
+
+    Attributes
+    ------------------------------------
+    f:
+        List, ndarray, or single function to implement
+    var_list:
+        List, ndarray, or single number (argument(s)) to evaluate the function at in reverse mode
+    len_var_list:
+        Number of arguments to calculate (dimensionality)
+    trace:
+        List of ReverseMode objects to keep track of the current trace of reverse mode
+    jacobian:
+        List of int/floats representing the Jacobian of a given function(s) and argument(s)
+    jacobian_single:
+        Int/float used when user inputs single argument as an int/float
+
+    Methods
+    ------------------------------------
+    __init__(self, f, var_list)
+        Instantiate ReverseAD object
+    __repr__(self)
+        Easy-to-read object instantiation with memory location
+    __str__(self)
+        Pretty print of the passed function(s) and variable(s)
+    _compute(self)
+        Calculate reverse mode and get jacobian
+    get_jacobian(self)
+        Return tangent trace of reverse mode
+    get_var_list(self)
+        Getter method of self.var_list
+    get_f(self)
+        Getter method of self.f
+    Raises
+    ------------------------------------
+    TypeError if f is not callable (a function), list, or ndarray
+    TypeError if var_list is not a list, ndarray, int, or float
+
+    Example Driver Script to utilize forward interface
+    --------------------------------------------------
+    Scalar:
+    import numpy as np
+    from interface import ReverseAD
+    def scalar(x):
+        return 4*x + 3
+    f = np.array([scalar])
+    x = np.array([2])
+    rm = ReverseAD(f, x)
+    print(f'Jacobian: {rm.get_jacobian()}')
+    >>> Tangent: [4]
+
+    Vector:
+    def vector(x):
+        return x[0]**2 + 3*x[1] + 5
+    f = np.array([vector])
+    x = np.array([1, 2])
+    rm = ReverseAD(f, x)
+    print(f'Jacobian: {rm.get_jacobian()}')
+    >>> [2, 3]
+    '''
     
     def __init__(self, f, var_list):
         self.f = f
@@ -297,9 +359,39 @@ class ReverseAD:
             self.trace = trace
         self._compute()
 
+    def __repr__(self):
+        '''
+        Explanation
+        ------------------------------------
+        Base print of ReverseAD instantiation with passed values and memory location
+        Inputs
+        ------------------------------------
+        None
+        ''' 
+        return f'ReverseAD({self.f}, {self.var_list},id: {id(self)})'
+
+    def __str__(self):
+        '''
+        Explanation
+        ------------------------------------
+        Pretty print of ReverseAD instantiation with more information
+        Inputs
+        ------------------------------------
+        None
+        ''' 
+        return f'f: {self.f}, var_list: {self.var_list}'
+
     def _compute(self):
-        
-        #added this
+        '''
+        Explanation
+        ------------------------------------
+        Calculating Jacobian depending on the user given functions and arguments
+
+        Inputs
+        ------------------------------------
+        None
+        '''
+
         if isinstance(self.var_list, (int, float)):
             if len(self.f) == 1:
                 x = ReverseMode(float(self.var_list))
@@ -328,11 +420,21 @@ class ReverseAD:
                 
         else:
             raise TypeError('Variable list cannot be empty!')
-
-    def get_primal(self):
-        raise NotImplementedError('Reverse AutoDiff does not track primal trace.')
         
     def get_jacobian(self):
+        '''
+        Explanation
+        ------------------------------------
+        Return Jacobian of reverse mode.
+        Values correspond to the order of user given functions and arguments
+
+        Inputs
+        ------------------------------------
+        None
+
+        Outputs
+        ------------------------------------
+        '''
         if isinstance(self.var_list, (int, float)):
             return self.jacobian_single
         else:

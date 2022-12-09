@@ -238,5 +238,19 @@ class TestADInterface():
         result = rm.get_jacobian()
         assert pytest.approx([3, 1/(np.log(3)*4), 1/27]) == result
 
+    def test_scalar_jacobian_RM_driver(self):
+        def scalar(x):
+            return 4*x + 3
+        f = np.array([scalar])
+        x = np.array([2])
+        rm_scalar = ReverseAD(f, x)
+        assert pytest.approx([4]) == rm_scalar.get_jacobian()
+
+        def vector(x):
+            return x[0]**2 + 3*x[1] + 5
+        f = np.array([vector])
+        x = np.array([1, 2])
+        rm_vector = ReverseAD(f, x)
+        assert pytest.approx([2, 3]) == rm_vector.get_jacobian()
 
     
