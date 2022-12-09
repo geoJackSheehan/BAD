@@ -127,7 +127,6 @@ class AutoDiff:
         Explanation
         ------------------------------------
         Base print of AutoDiff instantiation with passed values and memory location
-
         Inputs
         ------------------------------------
         None
@@ -139,7 +138,6 @@ class AutoDiff:
         Explanation
         ------------------------------------
         Pretty print of AutoDiff instantiation with more information
-
         Inputs
         ------------------------------------
         None
@@ -151,7 +149,6 @@ class AutoDiff:
         Explanation
         ------------------------------------
         Calculating primal trace and forward tangent trace to store in self.trace
-
         Inputs
         ------------------------------------
         None
@@ -285,24 +282,88 @@ class AutoDiff:
 #         return [variable.grad() for variable in self.trace]
 
 
+# class ReverseAD:
+
+#     def __init__(self, f, var_list):
+#         self.f = f
+#         self.var_list = var_list
+#         self.jacobian = []
+
+#         try:
+#             self.len_var_list = len(var_list)
+#         except TypeError:
+#             self.len_var_list = 1
+
+#         trace = []
+#         if self.len_var_list > 1:
+#             for variable in var_list:
+#                 trace.append(ReverseMode(float(variable)))
+#             self.trace = trace
+#         self._compute()
+
+#     def _compute(self):
+#         # i want to add in a if len = 1 thing, then use this for scalar and another one that appends jacobian list for vector and also i need one for vector variables
+#         if self.len_var_list == 1:
+#             for i in range(len(self.f)):
+#                 x = ReverseMode(self.var_list)
+#                 z = self.f[i](x)
+#                 z.gradient = 1.0
+#                 self.jacobian.append(x.grad())
+                
+#         elif self.len_var_list > 1:
+#             for trace in self.trace:
+#                 for i in range(len(self.f)):
+#                     z = self.f[i](trace)
+#                     z.gradient = 1.0
+#                     self.jacobian.append(trace.grad())
+#         else:
+#             raise TypeError('Variable list cannot be empty!')
+
+        
+#     def get_primal(self):
+#         raise NotImplementedError('Reverse AutoDiff does not track primal trace.')
+        
+#     def get_jacobian(self):
+#         return self.jacobian
+
 class ReverseAD:
 
-    def __init__(self, f, var):
+    def __init__(self, f, var_list):
         self.f = f
-        self.var = var
+        self.var_list = var_list
         self.jacobian = []
+
+        try:
+            self.len_var_list = len(var_list)
+        except TypeError:
+            self.len_var_list = 1
+
+        trace = []
+        if self.len_var_list > 1:
+            for variable in var_list:
+                trace.append(ReverseMode(float(variable)))
+            self.trace = trace
         self._compute()
 
     def _compute(self):
         # i want to add in a if len = 1 thing, then use this for scalar and another one that appends jacobian list for vector and also i need one for vector variables
-        for i in range(len(self.f)):
-            x = ReverseMode(self.var)
-            z = self.f[i](x)
-            z.gradient = 1.0
-            print(z.real)
-            print(x.grad())
-            self.jacobian.append(x.grad())
-    
+        if self.len_var_list == 1:
+            for i in range(len(self.f)):
+                x = ReverseMode(self.var_list)
+                z = self.f[i](x)
+                z.gradient = 1.0
+                self.jacobian.append(x.grad())
+                
+        elif self.len_var_list > 1:
+            for i in range(len(self.f)):
+                z = self.f[i](self.trace)
+                z.gradient = 1.0
+            for trace in self.trace:
+                self.jacobian.append(trace.grad())
+        else:
+            raise TypeError('Variable list cannot be empty!')
+
+        
     def get_primal(self):
         raise NotImplementedError('Reverse AutoDiff does not track primal trace.')
         

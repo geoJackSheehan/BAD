@@ -88,13 +88,25 @@ class TestADInterface():
         
     def test_vector_get_jacobian_RM(self):
         def func1(x):
-            return (5*x + 50)/(2*x**2)
+            return (5*x[0] + 50)/(2*x[1]**2)
         def func2(x):
-            return 10 + 2*x
+            return 10 + 2*x[1]
             # return sin(x)
         f = np.array([func1,func2])
-        x = 5
+        x = np.array([1, 2])
         rm = ReverseAD(f,x)
         result = rm.get_jacobian()
         # need to actually get both values in here, but for now just using the second one to show it can take two functions
-        assert pytest.approx([-0.5, 2]) == result
+        assert pytest.approx([0.625, -4.875]) == result
+
+    # def test_vector_EF_jacobian_RM(self):
+    #     def ef1(x):
+    #         return sin(x[0]) + ln(x[1])
+    #     def ef2(x):
+    #         return cosh(x[0])
+
+    #     f = np.array([ef1, ef2])
+    #     x = np.array([2.5, 1.1])
+    #     rm = ReverseAD(f, x)
+    #     result = rm.get_jacobian()
+    #     assert pytest.approx([np.cos(2.5) + np.ln(1.1), np.sin(2.5) + 10/11]) == result
