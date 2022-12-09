@@ -1,7 +1,30 @@
 [![.github/workflows/coverage.yml](https://code.harvard.edu/CS107/team23/actions/workflows/coverage.yml/badge.svg?branch=final_milestone)](https://code.harvard.edu/CS107/team23/actions/workflows/coverage.yml)
 [![.github/workflows/test.yml](https://code.harvard.edu/CS107/team23/actions/workflows/test.yml/badge.svg?branch=final_milestone)](https://code.harvard.edu/CS107/team23/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Getting Started
+
+## Installation via PyPi
+
+1. Ensure your Python version is 3.9 or greater.
+
+2. Ensure `pip` and `setuptools` are installed and up to date.
+
+    ```
+    # Linux (Ubuntu), MacOS
+    python -m ensurepip --upgrade
+    python -m pip install --upgrade pip
+
+    python -m pip install setuptools
+    ```
+
+3. This package depends on `numpy` version 1.21.0 and greater. This should be handled during installation, but can be installed using the following command.
+
+    ```
+    # Linux (Ubuntu), MacOS
+    python -m pip install numpy
+    python -m pip install --upgrade numpy
+    ```
 
 ## Installation via GitHub
   
