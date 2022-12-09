@@ -294,9 +294,9 @@ class ReverseAD:
         self._compute()
 
     def _compute(self):
-        for i in range(len(f)):
+        for i in range(len(self.f)):
             x = ReverseMode(self.var)
-            z = f[i](x)
+            z = self.f[i](x)
             z.gradient = 1.0
             print(z.real)
             print(x.grad())
