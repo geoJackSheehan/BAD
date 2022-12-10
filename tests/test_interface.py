@@ -34,7 +34,7 @@ class TestADInterface():
         x = np.array([1, 2])
         rm = ReverseAD(f,x)
 
-        assert pytest.approx(f) == rm.get_f()
+        assert f == np.array(rm.get_f())
 
     def test_reverse_get_var_list(self):
         def func1(x):
