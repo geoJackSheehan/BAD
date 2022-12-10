@@ -22,7 +22,7 @@ class TestADInterface():
         x = np.array([1, 2])
         ad = AutoDiff(func, x)
 
-        assert x == ad.get_var_list()
+        assert pytest.approx(x) == ad.get_var_list()
 
     def test_reverse_get_f(self):
         def func1(x):
@@ -34,7 +34,7 @@ class TestADInterface():
         x = np.array([1, 2])
         rm = ReverseAD(f,x)
 
-        assert f == rm.get_f()
+        assert pytest.approx(f) == rm.get_f()
 
     def test_reverse_get_var_list(self):
         def func1(x):
@@ -46,7 +46,7 @@ class TestADInterface():
         x = np.array([1, 2])
         rm = ReverseAD(f,x)
 
-        assert x == rm.get_var_list()
+        assert pytest.approx(x) == rm.get_var_list()
 
     def test_scalar_get_primal(self):
         # Scalar function
