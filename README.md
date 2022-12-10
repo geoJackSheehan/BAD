@@ -127,7 +127,6 @@ Documentation for this package can be found [here](docs/documentation.ipynb)
 >>> ad = AutoDiff(scalar, x)
 
 # User can call the primal trace and jacobian matrix
->>> ad.compute()
 >>> print(f'Primal: {ad.get_primal()}')
 Primal: 11
 >>> print(f'Tangent: {ad.get_jacobian()}')
@@ -148,7 +147,6 @@ Tangent: [4]
 >>> ad = AutoDiff(vector, x)
 
 # User can call the primal trace and jacobian matrix
->>> ad.compute()
 >>> print(f'Primal: {ad.get_primal()}')
 Primal: 12
 >>> print(f'Tangent: {ad.get_jacobian()}')
