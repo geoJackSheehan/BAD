@@ -15,6 +15,7 @@ from bad_package.fad import DualNumber
 from bad_package.rad import ReverseMode
 
 
+
 class AutoDiff():
     '''
     Explanation
@@ -391,35 +392,127 @@ class ReverseAD():
         ------------------------------------
         None
         '''
-
-        if isinstance(self.var_list, (int, float)):
-            if len(self.f) == 1:
-                x = ReverseMode(float(self.var_list))
-                z = self.f[0](x)
-                z.gradient = 1.0
-                self.jacobian_single = x.grad()
+        # OPTION 1: function term is not an array
+        if not isinstance(self.f, np.ndarray):
+            
+            # OPTION 1A: function term is callable
+            if callable(self.f):
                 
+                # OPTION 1A1: variable term is an array
+                if isinstance(self.var_list, np.ndarray):
+                    
+                    # OPTION 1A1A: variable term is an array with multiple terms
+                    if self.len_var_list > 1:
+                        z = self.f(self.trace)
+                        z.gradient = 1.0
+                        self.jacobian.append([trace.grad() for trace in self.trace])
+                        for trace in self.trace:
+                            trace.child = []
+                            trace.gradient = None
+                            
+                    # OPTION 1A1B: variable term is an array with one term        
+                    elif self.len_var_list == 1:
+                        x = ReverseMode(float(self.var_list[0]))
+                        z = self.f(x)
+                        z.gradient = 1.0
+                        self.jacobian.append(x.grad())
+                       
+                    # OPTION 1A1C: variable term is an empty array [INVALID]
+                    else:
+                        raise TypeError('Your np.array variable list must have at least one value!')
+                
+                # OPTION 1A2: variable term is a scalar
+                elif isinstance(self.var_list, (int,float)):
+                    x = ReverseMode(float(self.var_list))
+                    z = self.f(x)
+                    z.gradient = 1.0
+                    self.jacobian_single = x.grad()
+                 
+                # OPTION 1A3: variable term is neither array nor scalar [INVALID]
+                else:
+                    raise TypeError('Your variable must be either an np.array of length >=1, or a single int or float!')    
+                    
+            # OPTION 1B: function term is not callable [INVALID]
             else:
-                raise TypeError('For multiple functions, variable(s) must be input as numpy array')
+                raise TypeError('Function must be callable')
+         
+        # OPTION 2: function term is an array
+        elif isinstance(self.f, np.ndarray): 
+            
+            # OPTION 2A: variable term is an array
+            if isinstance(self.var_list, np.ndarray):
                 
-        elif self.len_var_list == 1:
-            for i in range(len(self.f)):
-                x = ReverseMode(float(self.var_list[0]))
-                z = self.f[i](x)
-                z.gradient = 1.0
-                self.jacobian.append(x.grad())
+                # OPTION 2A1: variable term is an array with multiple terms
+                if self.len_var_list > 1:
+                    for i in range(len(self.f)):
+                        z = self.f[i](self.trace)
+                        z.gradient = 1.0
+                        self.jacobian.append([trace.grad() for trace in self.trace])
+                        for trace in self.trace:
+                            trace.child = []
+                            trace.gradient = None
+                            
+                # OPTION 2A2: variable term is an array with one term
+                elif self.len_var_list == 1:
+                    for i in range(len(self.f)):             
+                        x = ReverseMode(float(self.var_list[0]))
+                        z = self.f[i](x)
+                        z.gradient = 1.0
+                        self.jacobian.append(x.grad())
+                        
+                # OPTION 2A3: variable term is an empty array [INVALID]
+                else:
+                    raise TypeError('Your np.array variable list must have at least one value!')
+                   
+            # OPTION 2B: variable term is a scalar
+            elif isinstance(self.var_list, (int,float)):
+                self.var_list = np.array([self.var_list])
+                for i in range(len(self.f)):             
+                    x = ReverseMode(float(self.var_list[0]))
+                    z = self.f[i](x)
+                    z.gradient = 1.0
+                    self.jacobian.append(x.grad())
+                    
+            # OPTION 2C: variable term is neither array nor scalar [INVALID]
+            else:
+                raise TypeError('Your variable must be either a np.array of length >=1, or a single int or float!')
                 
-        elif self.len_var_list > 1:
-            for i in range(len(self.f)):
-                z = self.f[i](self.trace)
-                z.gradient = 1.0
-                self.jacobian.append([trace.grad() for trace in self.trace])
-                for trace in self.trace:
-                    trace.child = []
-                    trace.gradient = None
-                
+        # OPTION 3: function term is somehow some third option [INVALID]
         else:
-            raise TypeError('Variable list cannot be empty!')
+            raise TypeError('Your function must be either an np.array with one or more functions, or a single callable function.')
+            
+            
+            
+#             if isinstance(self.var_list, (int, float)):
+#                 if len(self.f) == 1:
+#                     x = ReverseMode(float(self.var_list))
+#                     z = self.f[0](x)
+#                     z.gradient = 1.0
+#                     self.jacobian_single = x.grad()
+                
+#                 else:
+#                     raise TypeError('For multiple functions, variable(s) must be input as numpy array')
+                
+#             elif self.len_var_list == 1:
+#                 for i in range(len(self.f)):
+#                     x = ReverseMode(float(self.var_list[0]))
+#                     z = self.f[i](x)
+#                     z.gradient = 1.0
+#                     self.jacobian.append(x.grad())
+
+#             elif self.len_var_list > 1:
+#                 for i in range(len(self.f)):
+#                     z = self.f[i](self.trace)
+#                     z.gradient = 1.0
+#                     self.jacobian.append([trace.grad() for trace in self.trace])
+#                     for trace in self.trace:
+#                         trace.child = []
+#                         trace.gradient = None
+
+#             else:
+#                 raise TypeError('Variable list cannot be empty!')
+#         else:
+#             raise TypeError('Function must be either numpy array (for scalar or vector), or callable function (for scalar)')
         
     def get_jacobian(self):
         '''
@@ -441,8 +534,7 @@ class ReverseAD():
             temp = np.array(self.jacobian)
             self.jacobian = temp.flatten().tolist()
             return self.jacobian
-    
-    
+      
     
     
     
