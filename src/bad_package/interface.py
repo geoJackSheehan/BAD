@@ -76,7 +76,7 @@ class AutoDiff():
     print(f'Primal: {ad.get_primal()}')
     >>> Primal: [11]
     print(f'Tangent: {ad.get_jacobian()}')
-    >>> Tangent: [[4]]
+    >>> Tangent: [4]
 
     Vector:
     def vector(x):
@@ -86,22 +86,28 @@ class AutoDiff():
     print(f'Primal: {ad.get_primal()}')
     >>> [12]
     print(f'Tangent: {ad.get_jacobian()}')
-    >>> [[2, 3]]
+    >>> [2, 3]
     '''
 
     def __init__(self, f, var_list):
         # Flexibility: allow the user to input lists, np.arrays, or single values
+        self.var_is_scalar = False
         if isinstance(var_list, (list, np.ndarray)):
+            print(f'bool: {self.var_is_scalar}')
             var_list = np.array(var_list)
         elif isinstance(var_list, (int, float)):
+            self.var_is_scalar = True
             var_list = np.array([var_list])
         else:
             raise TypeError(f"Second argument in {print(self)} must be a list or ndarray of integers or float or single integers or floats.")
 
+        self.func_is_callable = False
         if isinstance(f, (list, np.ndarray)):
-            f = np.array(f)
+            pass
+            # f = np.array(f)
         elif callable(f):
-            f = np.array([f])
+            self.func_is_callable = True
+            # f = np.array([f])
         else:
             raise TypeError(f"First argument in {print(self)} must be a list of ndarray of functions or a single function.")
         
@@ -153,6 +159,73 @@ class AutoDiff():
         ------------------------------------
         None
         '''
+        # # case 1: function term is not an array
+        # if not isinstance(self.f, np.ndarray):
+
+        #     # case 1a1: variable term is an array
+        #     if (self.func_is_callable and not self.var_is_scalar):
+        #         if self.len_var_list > 1:
+        #             value = self.f(self.trace)
+        #             trace, tangent = [], []
+        #             for i in range(self.len_var_list):
+        #                 x = self.trace[i]
+        #                 y = [DualNumber(0, 0)] * self.len_var_list
+        #                 y[i] = x
+        #                 dp = self.f(y).dual
+        #                 updated_dual = DualNumber(value.real, dp)
+        #                 trace.append(updated_dual)
+        #                 tangent.append(updated_dual.dual)
+        #             self.primal.append(value.real)
+        #             self.jacobian.append(tangent)
+        #             # value = self.f(self.trace)
+        #             # self.primal.append(value.real)
+        #             # for trace in self.trace:
+        #             #     self.jacobian.append(trace.dual)
+        #             # self.jacobian.append(value.dual)
+        #         elif self.len_var_list == 1:
+        #             value = self.f(self.trace[0])
+        #             self.primal.append(value.real)
+        #             self.jacobian.append(value.dual)
+        #         # value = self.f(self.trace)
+        #         # self.primal.append(value.real)
+        #         # self.jacobian.append(value.dual)
+            
+        #     # case 1a1a: variable term is scalar
+        #     if (self.func_is_callable and self.var_is_scalar):
+        #         # if self.len_var_list > 1:
+        #         #     value = self.f(self.trace)
+        #         #     self.primal.append(value.real)
+        #         #     self.jacobian.append(value.dual)
+        #         # elif self.len_var_list == 1:
+        #         value = self.f(self.trace[0])
+        #         self.primal = value.real
+        #         self.jacobian = value.dual
+
+        # elif isinstance(self.f, np.ndarray):
+        #     # case 2a1: functions in array, arguments in array
+        #     if (not self.func_is_callable and not self.var_is_scalar):
+        #         for f in self.f:
+        #             if self.len_var_list == 1:
+        #                 value = f(self.trace[0])
+        #                 self.primal.append(value.real)
+        #                 self.jacobian.append(value.dual)
+        #             else:
+        #                 value = f(self.trace)
+        #                 trace, tangent = [], []
+        #                 for i in range(self.len_var_list):
+        #                     x = self.trace[i]
+        #                     y = [DualNumber(0, 0)] * self.len_var_list
+        #                     y[i] = x
+        #                     dp = f(y).dual
+
+        #                     updated_dual = DualNumber(value.real, dp)
+        #                     trace.append(updated_dual)
+        #                     tangent.append(updated_dual.dual)
+
+        #                 self.primal.append(value.real)
+        #                 self.jacobian.append(tangent)
+
+
         # Iterate through all passed functions (same shape)
         for f in self.f:
             if self.len_var_list == 1:
@@ -253,6 +326,8 @@ class AutoDiff():
         print(f'Tangent: {ad.get_jacobian()}')
         >>> [[2, 3], [0.54030, -0.90929]]
         '''
+        temp = np.array(self.jacobian)
+        self.jacobian = temp.flatten().tolist()
         return self.jacobian
 
     def get_var_list(self):
@@ -560,6 +635,4 @@ class ReverseAD():
         if isinstance(self.var_list, (int, float)):
             return self.jacobian_single
         else:
-            temp = np.array(self.jacobian)
-            self.jacobian = temp.flatten().tolist()
             return self.jacobian

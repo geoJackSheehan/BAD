@@ -18,19 +18,19 @@ class TestADInterface():
         result = ad.get_primal()
         assert pytest.approx([11]) == result
 
-        # Scalar function without putting into array
+        # Scalar function without putting into array THIS SHOULD RETURN A SCALAR
         def func(x):
             return 4*x + 3
         x = 2
         ad = AutoDiff(func, x)
         result = ad.get_primal()
-        assert pytest.approx([11]) == result   
+        assert pytest.approx(11) == result   
 
         # Vector function
         def func2(x):
             return logBase(x, 2) + exp(x) - e
-        x = [2]
-        ad = AutoDiff([func, func2], x)
+        x = np.array([2])
+        ad = AutoDiff(np.array([func, func2]), x)
         result = ad.get_primal()
         assert pytest.approx([11, 5.6707742704]) == result
 
@@ -61,7 +61,7 @@ class TestADInterface():
         x = np.array([1, 2])
         ad = AutoDiff(func, x)
         result = ad.get_jacobian()
-        assert pytest.approx([2,3]) == result[0]
+        assert pytest.approx([2, 3]) == result
 
         # Vector function
         def func2(x):
@@ -70,7 +70,7 @@ class TestADInterface():
         f = [func, func2]
         ad = AutoDiff(f, x)
         result = ad.get_jacobian()
-        assert pytest.approx([2,3]) == result[0]
+        assert pytest.approx([2, 3]) == result[0]
         assert pytest.approx([np.cos(1), -np.sin(2)]) == result[1]
 
 #     def test_scalar_get_jacobian_RM(self):
@@ -102,7 +102,8 @@ class TestADInterface():
         x = np.array([1, 2])
         rm = ReverseAD(f,x)
         result = rm.get_jacobian()
-        assert pytest.approx([0.625, -6.875, 0, 2]) == result
+        assert pytest.approx([0.625, -6.875]) == result[0]
+        assert pytest.approx([0, 2]) == result[1]
       
     def test_scalar_get_jacobian_scalar_RM(self):
         def func(x):
@@ -214,7 +215,7 @@ class TestADInterface():
         x = np.array([0, 1, 2])
         rm = ReverseAD(f, x)
         result = rm.get_jacobian()
-        assert pytest.approx([5, 2*np.exp(1), 3*np.exp(2)]) == result
+        assert pytest.approx([5, 2*np.exp(1), 3*np.exp(2)]) == result[0]
 
     
     def test_vector_logs_jacobian_RM(self):
@@ -225,7 +226,7 @@ class TestADInterface():
         x = np.array([2, 4, 27])
         rm = ReverseAD(f, x)
         result = rm.get_jacobian()
-        assert pytest.approx([3, 1/(np.log(3)*4), 1/27]) == result
+        assert pytest.approx([3, 1/(np.log(3)*4), 1/27]) == result[0]
 
     def test_scalar_jacobian_RM_driver(self):
         def scalar(x):
@@ -233,7 +234,8 @@ class TestADInterface():
         f = np.array([scalar])
         x = np.array([2])
         rm_scalar = ReverseAD(f, x)
-        assert pytest.approx([4]) == rm_scalar.get_jacobian()
+        result = rm_scalar.get_jacobian()
+        assert pytest.approx([4]) == result[0]
 
         def vector(x):
             return x[0]**2 + 3*x[1] + 5
