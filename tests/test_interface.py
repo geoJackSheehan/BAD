@@ -16,12 +16,16 @@ class TestADInterface():
 
         def func2(x):
             return 6*x + 2
+        def func3(x): 
+            return sin(x)**2
 
         with pytest.raises(TypeError):
             AutoDiff(func, x)
             AutoDiff(func2, x2)
             ReverseAD(func, x)
             ReverseAD(func2, x2)
+            AutoDiff(func2, [])
+            AutoDiff([func2, func3], [])
 
     def test_forward_get_f(self):
         def func(x):

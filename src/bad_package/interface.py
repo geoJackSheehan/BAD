@@ -568,7 +568,8 @@ class ReverseAD():
 
         Outputs
         ------------------------------------
-        self.jacobian: flattened 1D array
+        self.jacobian: 2D list of shape (# functions, # variables)
+        self.jacobian_single: float
         '''
         if isinstance(self.var_list, (int, float)):
             return self.jacobian_single
