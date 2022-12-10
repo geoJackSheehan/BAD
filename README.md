@@ -2,6 +2,40 @@
 [![.github/workflows/test.yml](https://code.harvard.edu/CS107/team23/actions/workflows/test.yml/badge.svg?branch=final_milestone)](https://code.harvard.edu/CS107/team23/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+# CS107 Final Project - Team 23
+
+## Team Members:
+
+Feel free to contact the team via email for any further questions:
+
+Annabel Yim ([annabelyim@g.harvard.edu](mailto:user@example.com))
+
+Hope Neveux ([hopeneveux@g.harvard.edu](mailto:user@example.com))
+
+Jack Sheehan ([jacksheehan@g.harvard.edu](mailto:user@example.com))
+
+Danhee Kim ([sharonkim@g.harvard.edu](mailto:user@example.com))
+
+# Documentation
+
+Documentation for this package can be found here (TODO after merging to branch)
+
+# Broader Impact and Inclusivity Statement
+
+## Broader Impact 
+
+As developers of an open-sourced Auto Differentiation package, we care about bringing diversity, equity, and inclusion to the open-source community. We hope that our package can be used by a diverse group of people, including women, people of color, people with disabilities, and an exhaustive list consisting of minorities. We hope we can provide a safe space for motivating others to contribute and point out possible changes that need to be made for this open-sourced package. 
+
+This open-sourced package may be misused and cause some serious ethical issues. Although this package is an efficient tool to solve complex gradient problems without solving them by hand, we hope users can spend time understanding the real mathematical implications and uses of taking derivatives and gradients. Our package is primarily used for academic purposes and should not be for sale. 
+
+## Software Inclusivity
+
+Team23 is dedicated to creating the software space more inclusive to underrepresented groups. To promote this standard, the BAD package will be released to the open source community welcoming contribution from any person. The core developers of BAD package believe that any individual, regardless of background, is capable of making meaningful contributions within the software community. We welcome _all_ developers that believe in fostering a respectful environment to contributing to our package. To make BAD package more accessible to non-native English speakers, we have plans to translate our documentation to various languages. We welcome any new ideas and feedback to improve the BAD package! Team23 believes that the best work is a product of collaboration of diverse backgrounds.
+
+Pull requests will be reviewed blindly among the core developers to mitigate bias. If not approved by a majority vote, relevant supportive feedback will be provided.
+
+Any unethical activity under the BAD package that fails to uphold this inclusive standard will not be tolerated. Discrimination is not welcome here.
+
 # Getting Started
 
 ## Installation via PyPi
@@ -86,7 +120,7 @@
 ### Import modules
 
 ```python
->>> from bad_package.ad_interface import *
+>>> from bad_package.interface import *
 >>> from bad_package.elementary_functions import *
 >>> from bad_package.fad import *
 >>> import numpy as np
@@ -134,4 +168,77 @@ Tangent: [4]
 Primal: 12
 >>> print(f'Tangent: {ad.get_jacobian()}')
 Tangent: [2, 3]
+```
+
+## Using Reverse Mode
+
+### Import modules
+
+```python
+>>> from bad_package.interface import *
+>>> from bad_package.elementary_functions import *
+>>> from bad_pacakge.rad import *
+>>> import numpy as np
+```
+
+### How to use Reverse Mode
+
+#### Scalar 
+
+```python
+# User defines the function that they want to optimize. 
+>>> def scalar(x):
+>>>     return 4*x + 3
+
+# User creates a 1D numpy array/float/scalar of initial value for input to the function they want to optimize
+>>> x = np.array([2]) 
+
+# User instantiate ReverseAD class
+>>> rm = ReverseAD(scalar, x)
+
+# User can call the jacobian matrix
+>>> print(f'Jacobian: {rm.get_jacobian()}')
+Jacobian: [4]
+```
+
+#### Vector
+
+```python
+# User defines the function that they want to optimize. 
+>>> def vector(x):
+>>>     return x[0]**2 + 3*x[1] + 5
+
+# User creates a N-D numpy array of initial value for input to the function they want to optimize
+>>> x = np.array([1, 2])
+
+# User instantiate ReverseAD class
+>>> rm = ReverseAD(vector, x)
+
+# User can call the jacobian matrix
+>>> print(f'Jacobian: {rm.get_jacobian()}')
+Jacobian: [2, 3]
+```
+
+#### Vector 2 
+
+
+```python
+# User defines the functions that they want to optimize. 
+>>> def vector1(x):
+>>>     return (5*x + 50)/(2*x**2)
+
+>>> def vector2(x):
+>>>     return 10 + 2*x
+
+>>> func = np.array([vector1, vector2])
+
+# User creates a 1D numpy array/float/scalar of initial value for input to the function they want to optimize
+>>> x = np.array([5])
+
+# User instantiate ReverseAD class
+>>> rm = ReverseAD(vector, x)
+
+# User can call the jacobian matrix
+>>> print(f'Jacobian: {rm.get_jacobian()}')
+Jacobian: [-0.5, 2]
 ```
