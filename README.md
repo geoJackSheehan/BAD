@@ -18,15 +18,15 @@ Danhee Kim ([sharonkim@g.harvard.edu](mailto:user@example.com))
 
 # Documentation
 
-Documentation for this package can be found here (TODO after merging to branch)
+Documentation for this package can be found [here](docs/documentation.ipynb)
 
 # Getting Started
 
 ## Installation via PyPi
 
-1. Ensure your Python version is 3.8 or greater.
+1. Ensure your Python version is 3.8 or greater
 
-2. Ensure `pip` and `setuptools` are installed and up to date.
+2. Ensure `pip` and `setuptools` are installed and up to date
 
     ```
     # Linux (Ubuntu), MacOS
