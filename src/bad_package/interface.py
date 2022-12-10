@@ -107,7 +107,7 @@ class AutoDiff():
             # f = np.array(f)
         elif callable(f):
             self.func_is_callable = True
-            # f = np.array([f])
+            f = np.array([f])
         else:
             raise TypeError(f"First argument in {print(self)} must be a list of ndarray of functions or a single function.")
         
