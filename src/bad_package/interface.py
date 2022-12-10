@@ -2,12 +2,18 @@
 Explanation
 ------------------------------------
 Forward and backward auto-differentiation user interface
+
 Items
 ------------------------------------
 AutoDiff: 
     Forward-mode implementation. 
     Internally uses DualNumber objects to track accumulated function value and derivative value. 
     Supports any combination of scalar or vector variables and functions. 
+
+ReverseAD:
+    Reverse mode implementation
+    Internally uses ReverseMode objects to track accumulated function value and derivative value.
+    Supports any combination of scalar or vector variables and functions
 """
 
 import numpy as np
@@ -33,6 +39,7 @@ class AutoDiff():
         Number of arguments to calculate (dimensionality)
     trace:
         List of DualNumbers to keep track of the current trace of forward mode
+
     Methods
     ------------------------------------
     __init__(self, f, var_list)
@@ -51,6 +58,7 @@ class AutoDiff():
         Getter method of self.var_list
     get_f(self)
         Getter method of self.f
+
     Raises
     ------------------------------------
     TypeError if f is not callable (a function), list, or ndarray
@@ -116,6 +124,7 @@ class AutoDiff():
         Explanation
         ------------------------------------
         Base print of AutoDiff instantiation with passed values and memory location
+
         Inputs
         ------------------------------------
         None
@@ -127,6 +136,7 @@ class AutoDiff():
         Explanation
         ------------------------------------
         Pretty print of AutoDiff instantiation with more information
+
         Inputs
         ------------------------------------
         None
@@ -138,6 +148,7 @@ class AutoDiff():
         Explanation
         ------------------------------------
         Calculating primal trace and forward tangent trace to store in self.trace
+
         Inputs
         ------------------------------------
         None
@@ -314,6 +325,7 @@ class ReverseAD():
         Getter method of self.var_list
     get_f(self)
         Getter method of self.f
+
     Raises
     ------------------------------------
     TypeError if f is not callable (a function), list, or ndarray
@@ -365,6 +377,7 @@ class ReverseAD():
         Explanation
         ------------------------------------
         Base print of ReverseAD instantiation with passed values and memory location
+
         Inputs
         ------------------------------------
         None
@@ -376,6 +389,7 @@ class ReverseAD():
         Explanation
         ------------------------------------
         Pretty print of ReverseAD instantiation with more information
+
         Inputs
         ------------------------------------
         None
@@ -407,15 +421,13 @@ class ReverseAD():
                         z.gradient = 1.0
                         self.jacobian.append([trace.grad() for trace in self.trace])
                         for trace in self.trace:
-                            trace.child = []
-                            trace.gradient = None
+                            self._clear_reversemode(trace)
                             
                     # OPTION 1A1B: variable term is an array with one term        
                     elif self.len_var_list == 1:
                         x = ReverseMode(float(self.var_list[0]))
-                        z = self.f(x)
-                        z.gradient = 1.0
-                        self.jacobian.append(x.grad())
+                        self._compute_single_argument_jacobian(x)
+                        self.jacobian.append(x)
                        
                     # OPTION 1A1C: variable term is an empty array [INVALID]
                     else:
@@ -424,8 +436,7 @@ class ReverseAD():
                 # OPTION 1A2: variable term is a scalar
                 elif isinstance(self.var_list, (int,float)):
                     x = ReverseMode(float(self.var_list))
-                    z = self.f(x)
-                    z.gradient = 1.0
+                    self._compute_single_argument_jacobian(x)
                     self.jacobian_single = x.grad()
                  
                 # OPTION 1A3: variable term is neither array nor scalar [INVALID]
@@ -449,16 +460,11 @@ class ReverseAD():
                         z.gradient = 1.0
                         self.jacobian.append([trace.grad() for trace in self.trace])
                         for trace in self.trace:
-                            trace.child = []
-                            trace.gradient = None
-                            
+                            self._clear_reversemode(trace)
+
                 # OPTION 2A2: variable term is an array with one term
                 elif self.len_var_list == 1:
-                    for i in range(len(self.f)):             
-                        x = ReverseMode(float(self.var_list[0]))
-                        z = self.f[i](x)
-                        z.gradient = 1.0
-                        self.jacobian.append(x.grad())
+                    self._compute_multiple_functions_jacobian()
                         
                 # OPTION 2A3: variable term is an empty array [INVALID]
                 else:
@@ -467,11 +473,7 @@ class ReverseAD():
             # OPTION 2B: variable term is a scalar
             elif isinstance(self.var_list, (int,float)):
                 self.var_list = np.array([self.var_list])
-                for i in range(len(self.f)):             
-                    x = ReverseMode(float(self.var_list[0]))
-                    z = self.f[i](x)
-                    z.gradient = 1.0
-                    self.jacobian.append(x.grad())
+                self._compute_multiple_functions_jacobian()
                     
             # OPTION 2C: variable term is neither array nor scalar [INVALID]
             else:
@@ -480,40 +482,66 @@ class ReverseAD():
         # OPTION 3: function term is somehow some third option [INVALID]
         else:
             raise TypeError('Your function must be either an np.array with one or more functions, or a single callable function.')
-            
-            
-            
-#             if isinstance(self.var_list, (int, float)):
-#                 if len(self.f) == 1:
-#                     x = ReverseMode(float(self.var_list))
-#                     z = self.f[0](x)
-#                     z.gradient = 1.0
-#                     self.jacobian_single = x.grad()
-                
-#                 else:
-#                     raise TypeError('For multiple functions, variable(s) must be input as numpy array')
-                
-#             elif self.len_var_list == 1:
-#                 for i in range(len(self.f)):
-#                     x = ReverseMode(float(self.var_list[0]))
-#                     z = self.f[i](x)
-#                     z.gradient = 1.0
-#                     self.jacobian.append(x.grad())
 
-#             elif self.len_var_list > 1:
-#                 for i in range(len(self.f)):
-#                     z = self.f[i](self.trace)
-#                     z.gradient = 1.0
-#                     self.jacobian.append([trace.grad() for trace in self.trace])
-#                     for trace in self.trace:
-#                         trace.child = []
-#                         trace.gradient = None
+    def _clear_reversemode(self, x):
+        '''
+        Explanation
+        ------------------------------------
+        Helper method to only be used in _compute()
+        Clears a given ReverseMode object
 
-#             else:
-#                 raise TypeError('Variable list cannot be empty!')
-#         else:
-#             raise TypeError('Function must be either numpy array (for scalar or vector), or callable function (for scalar)')
-        
+        Inputs
+        ------------------------------------
+        x: ReverseMode object to be cleared
+
+        Raises
+        ------------------------------------
+        TypeError x must be a ReverseMode object
+        '''
+        if isinstance(x, ReverseMode):
+            x.child = []
+            x.gradient = None
+        else:
+            raise TypeError(f'{x} must be of ReverseMode type!')
+
+    def _compute_single_argument_jacobian(self, x):
+        '''
+        Explanation
+        ------------------------------------
+        Helper method to only be used in _compute()
+        Computes the Jacobian of a single argument
+
+        Inputs
+        ------------------------------------
+        x: ReverseMode object to find the Jacobian of
+
+        Raises
+        ------------------------------------
+        TypeError x must be a ReverseMode object
+        '''
+        if isinstance(x, ReverseMode):
+            z = self.f(x)
+            z.gradient = 1.0
+        else:
+            raise TypeError(f'{x} must be of ReverseMode type!')
+
+    def _compute_multiple_functions_jacobian(self):
+        '''
+        Explanation
+        ------------------------------------
+        Helper method to only be used in _compute()
+        Computes the Jacobian of multiple arguments
+
+        Inputs
+        ------------------------------------
+        None
+        '''
+        for i in range(len(self.f)):             
+            x = ReverseMode(float(self.var_list[0]))
+            z = self.f[i](x)
+            z.gradient = 1.0
+            self.jacobian.append(x.grad())
+
     def get_jacobian(self):
         '''
         Explanation
@@ -527,6 +555,7 @@ class ReverseAD():
 
         Outputs
         ------------------------------------
+        self.jacobian: flattened 1D array
         '''
         if isinstance(self.var_list, (int, float)):
             return self.jacobian_single
@@ -534,8 +563,3 @@ class ReverseAD():
             temp = np.array(self.jacobian)
             self.jacobian = temp.flatten().tolist()
             return self.jacobian
-      
-    
-    
-    
-    
