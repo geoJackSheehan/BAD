@@ -22,11 +22,11 @@ Documentation for this package can be found here (TODO after merging to branch)
 
 # Broader Impact and Inclusivity Statement
 
-## Broader Impact 
+## Broader Impact
 
-As developers of an open-sourced Auto Differentiation package, we care about bringing diversity, equity, and inclusion to the open-source community. We hope that our package can be used by a diverse group of people, including women, people of color, people with disabilities, and an exhaustive list consisting of minorities. We hope we can provide a safe space for motivating others to contribute and point out possible changes that need to be made for this open-sourced package. 
+As developers of an open-sourced Auto Differentiation package, we care about bringing diversity, equity, and inclusion to the open-source community. We hope that our package can be used by a diverse group of people, including women, people of color, people with disabilities, and an exhaustive list consisting of minorities. We hope we can provide a safe space for motivating others to contribute and point out possible changes that need to be made for this open-sourced package.
 
-This open-sourced package may be misused and cause some serious ethical issues. Although this package is an efficient tool to solve complex gradient problems without solving them by hand, we hope users can spend time understanding the real mathematical implications and uses of taking derivatives and gradients. Our package is primarily used for academic purposes and should not be for sale. 
+This open-sourced package may be misused and cause some serious ethical issues. Although this package is an efficient tool to solve complex gradient problems without solving them by hand, prior to using this package, we hope users can spend time understanding the real mathematical implications and uses of taking derivatives and gradients. Our package is primarily used for academic purposes and should not be for sale.
 
 ## Software Inclusivity
 
@@ -67,7 +67,7 @@ Any unethical activity under the BAD package that fails to uphold this inclusive
     ```
 
 ## Installation via GitHub
-  
+
 1. Clone the package repository to folder. Make sure to set up a SSH key beforehand.  
 
     ```
@@ -77,33 +77,33 @@ Any unethical activity under the BAD package that fails to uphold this inclusive
     cd team23
     ```
 
-2. Install virtualenv on your machine if not already installed. 
+2. Install virtualenv on your machine if not already installed.
 
     ```
     pip install virtualenv
     ```
-    
+
 3. Create virtual environment
 
     ```
     virtualenv cs107
-    ``` 
-  
+    ```
+
 4. Activate the new virutal environment
 
     Mac OS or Linux:
-    
+
     ```python
     source cs107/bin/activate
     ```
-    
+
     Windows:
-    
+
     ```python
     cs107\Scripts\activate    
     ```
 
-5. Install package and its requirements 
+5. Install package and its requirements
 
     ```python
     pip install ./
@@ -114,7 +114,7 @@ Any unethical activity under the BAD package that fails to uphold this inclusive
     ```python
     deactivate
     ```        
-    
+
 ## Using Forward Mode
 
 ### Import modules
@@ -128,10 +128,10 @@ Any unethical activity under the BAD package that fails to uphold this inclusive
 
 ### How to use Forward Mode
 
-#### Scalar 
+#### Scalar
 
 ```python
-# User defines the function that they want to optimize. 
+# User defines the function that they want to optimize.
 >>> def scalar(x):
 >>>     return 4*x + 3
 
@@ -152,7 +152,7 @@ Tangent: [4]
 #### Vector
 
 ```python
-# User defines the function that they want to optimize. 
+# User defines the function that they want to optimize.
 >>> def vector(x):
 >>>     return x[0]**2 + 3*x[1] + 5
 
@@ -183,15 +183,15 @@ Tangent: [2, 3]
 
 ### How to use Reverse Mode
 
-#### Scalar 
+#### Scalar
 
 ```python
-# User defines the function that they want to optimize. 
+# User defines the function that they want to optimize.
 >>> def scalar(x):
 >>>     return 4*x + 3
 
 # User creates a 1D numpy array/float/scalar of initial value for input to the function they want to optimize
->>> x = np.array([2]) 
+>>> x = np.array([2])
 
 # User instantiate ReverseAD class
 >>> rm = ReverseAD(scalar, x)
@@ -204,7 +204,7 @@ Jacobian: [4]
 #### Vector
 
 ```python
-# User defines the function that they want to optimize. 
+# User defines the function that they want to optimize.
 >>> def vector(x):
 >>>     return x[0]**2 + 3*x[1] + 5
 
@@ -219,11 +219,11 @@ Jacobian: [4]
 Jacobian: [2, 3]
 ```
 
-#### Vector 2 
+#### Vector 2
 
 
 ```python
-# User defines the functions that they want to optimize. 
+# User defines the functions that they want to optimize.
 >>> def vector1(x):
 >>>     return (5*x + 50)/(2*x**2)
 
