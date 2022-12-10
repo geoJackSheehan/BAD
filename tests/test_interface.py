@@ -24,7 +24,7 @@ class TestADInterface():
         x = 2
         ad = AutoDiff(func, x)
         result = ad.get_primal()
-        assert pytest.approx(11) == result   
+        assert pytest.approx(11) == result
 
         # Vector function
         def func2(x):
@@ -61,7 +61,7 @@ class TestADInterface():
         x = np.array([1, 2])
         ad = AutoDiff(func, x)
         result = ad.get_jacobian()
-        assert pytest.approx([2, 3]) == result
+        assert pytest.approx([2, 3]) == result[0]
 
         # Vector function
         def func2(x):
