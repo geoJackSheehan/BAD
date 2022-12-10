@@ -47,7 +47,7 @@ Documentation for this package can be found [here](docs/documentation.ipynb)
 4. Pip install from the test PyPI
 
     ```
-    python -m pip install https://test.pypi.org/simple/ bad_package
+    pip install -i https://test.pypi.org/simple/ bad-package==0.0.1
     ```
 
 ## Installation via GitHub
