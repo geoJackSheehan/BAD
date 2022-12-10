@@ -461,12 +461,8 @@ class ReverseMode():
         >>> print(x.real)
         -5
         '''
-        
-        if not isinstance(self, (*self._supported_scalars, ReverseMode)):
-            raise TypeError('Type not supported: must be int or float')
-        else:
-            f = ReverseMode(-self.real)
-            self.child.append((-1, f))
+        f = ReverseMode(-self.real)
+        self.child.append((-1, f))
         return f
 
     def __pow__(self, other):
