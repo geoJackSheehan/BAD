@@ -9,6 +9,20 @@ from bad_package.interface import ReverseAD
 
 class TestADInterface():
 
+    def test_invalid(self):
+        func = 'hello'
+        x = 2
+        x2 = 'world'
+
+        def func2(x):
+            return 6*x + 2
+
+        with pytest.raises('TypeError'):
+            AutoDiff(func, x)
+            AutoDiff(func2, x2)
+            ReverseAD(func, x)
+            ReverseAD(func2, x2)
+
     def test_forward_get_f(self):
         def func(x):
             return 4**x / 2
