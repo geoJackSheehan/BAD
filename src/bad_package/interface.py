@@ -574,3 +574,35 @@ class ReverseAD():
             return self.jacobian_single
         else:
             return self.jacobian
+
+    def get_var_list(self):
+        '''
+        Explanation
+        ------------------------------------
+        Return var_list passed by user for reverse mode
+
+        Inputs
+        ------------------------------------
+        None
+
+        Outputs
+        ------------------------------------
+        1-D list of originally passed variables
+        '''
+        return self.var_list
+
+    def get_f(self):
+        '''
+        Explanation
+        ------------------------------------
+        Return function f passed by user for reverse mode
+
+        Inputs
+        ------------------------------------
+        None
+
+        Outputs
+        ------------------------------------
+        1-D list of originally passed functions
+        '''
+        return self.f

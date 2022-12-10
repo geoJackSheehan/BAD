@@ -9,6 +9,45 @@ from bad_package.interface import ReverseAD
 
 class TestADInterface():
 
+    def test_forward_get_f(self):
+        def func(x):
+            return 4**x / 2
+        x = 3
+        ad = AutoDiff(func, x)
+        assert ad.get_f() == np.array(func)
+
+    def test_forward_get_var_list(self):
+        def func(x):
+            return x[0]**2 + 3*x[1] + 5
+        x = np.array([1, 2])
+        ad = AutoDiff(func, x)
+
+        assert x == ad.get_var_list()
+
+    def test_reverse_get_f(self):
+        def func1(x):
+            return (5*x[0] + 50)/(2*x[1]**2)
+        def func2(x):
+            return 10 + 2*x[1]
+            # return sin(x)
+        f = np.array([func1, func2])
+        x = np.array([1, 2])
+        rm = ReverseAD(f,x)
+
+        assert f == rm.get_f()
+
+    def test_reverse_get_var_list(self):
+        def func1(x):
+            return (5*x[0] + 50)/(2*x[1]**2)
+        def func2(x):
+            return 10 + 2*x[1]
+            # return sin(x)
+        f = np.array([func1, func2])
+        x = np.array([1, 2])
+        rm = ReverseAD(f,x)
+
+        assert x == rm.get_var_list()
+
     def test_scalar_get_primal(self):
         # Scalar function
         def func(x):
@@ -45,7 +84,6 @@ class TestADInterface():
 
         # Vector function
 
-
     def test_vector_get_primal(self):
         def func(x):
             return x[0]**2 + 3*x[1] + 5
@@ -72,16 +110,6 @@ class TestADInterface():
         result = ad.get_jacobian()
         assert pytest.approx([2, 3]) == result[0]
         assert pytest.approx([np.cos(1), -np.sin(2)]) == result[1]
-
-#     def test_scalar_get_jacobian_RM(self):
-#         def func(x):
-#             return 4*x
-#         x = np.array([2])
-#         rm = ReverseAD(func, x)
-#         rm.compute()
-#         result = rm.get_jacobian()
-#         assert pytest.approx([4]) == result
-        
         
     def test_scalar_get_jacobian_RM(self):
         def func(x):

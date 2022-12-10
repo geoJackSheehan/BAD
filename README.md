@@ -24,7 +24,7 @@ Documentation for this package can be found here (TODO after merging to branch)
 
 ## Installation via PyPi
 
-1. Ensure your Python version is 3.9 or greater.
+1. Ensure your Python version is 3.8 or greater.
 
 2. Ensure `pip` and `setuptools` are installed and up to date.
 
