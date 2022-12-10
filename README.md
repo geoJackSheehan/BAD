@@ -123,6 +123,7 @@ Any unethical activity under the BAD package that fails to uphold this inclusive
 >>> from bad_package.interface import *
 >>> from bad_package.elementary_functions import *
 >>> from bad_package.fad import *
+>>> from bad_pacakge.rad import *
 >>> import numpy as np
 ```
 
@@ -171,15 +172,6 @@ Tangent: [2, 3]
 ```
 
 ## Using Reverse Mode
-
-### Import modules
-
-```python
->>> from bad_package.interface import *
->>> from bad_package.elementary_functions import *
->>> from bad_pacakge.rad import *
->>> import numpy as np
-```
 
 ### How to use Reverse Mode
 
