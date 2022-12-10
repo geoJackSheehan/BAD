@@ -17,7 +17,7 @@ class TestADInterface():
         def func2(x):
             return 6*x + 2
 
-        with pytest.raises('TypeError'):
+        with pytest.raises(TypeError):
             AutoDiff(func, x)
             AutoDiff(func2, x2)
             ReverseAD(func, x)
@@ -37,18 +37,6 @@ class TestADInterface():
         ad = AutoDiff(func, x)
 
         assert pytest.approx(x) == ad.get_var_list()
-
-    def test_reverse_get_f(self):
-        def func1(x):
-            return (5*x[0] + 50)/(2*x[1]**2)
-        def func2(x):
-            return 10 + 2*x[1]
-            # return sin(x)
-        f = np.array([func1, func2])
-        x = np.array([1, 2])
-        rm = ReverseAD(f,x)
-
-        assert f == np.array(rm.get_f())
 
     def test_reverse_get_var_list(self):
         def func1(x):
