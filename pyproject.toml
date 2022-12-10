@@ -13,8 +13,12 @@ authors = [
 ]
 description = "Final Systems Development Project -- Automatic Differentiation Python Package"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License"
 ]
+dependencies = ["numpy >=1.21.0", "pip"]
+
+[project.urls]
+"Homepage" = "https://code.harvard.edu/CS107/team23"

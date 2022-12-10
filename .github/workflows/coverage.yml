@@ -4,9 +4,11 @@ on :
   push:
     branches:
       - main
+      - final_milestone
   pull_request:
     branches:
       - main
+      - final_milestone
 
   workflow_dispatch:
 
@@ -28,4 +30,4 @@ jobs:
         run: (python -m build --wheel && python -m pip install dist/*)
 
       - name: Run tests and generate coverage html
-        run: (cd tests && ./check_coverage.sh pytest) 
+        run: (cd tests && ./check_coverage.sh) 

@@ -1,6 +1,3 @@
-'''
-This module defines dunder methods to overload Python built-in operators in the Dual class.
-'''
 # Imports
 import numpy as np
 
@@ -13,7 +10,7 @@ class DualNumber:
         '''
         Explanation
         ------------------------------------
-        Constructor for the DualNumber class
+        Constructor for the DualNumber class to store numerical evaluation of functional and derived values.
         
         Inputs
         ------------------------------------
@@ -21,7 +18,25 @@ class DualNumber:
               int or float
         dual: [optional] the derivative of the object for the user's function
               int or float or None
-        
+
+        Outputs
+        ------------------------------------
+        self: DualNumber object
+            self.real: functional evaluation given a function and point of evaluation
+            self.dual: chain-rule derivative evaluation given a function and point of evaluation
+
+        Methods
+        ------------------------------------
+        __repr__(self)
+            Easy-to-read object instantiation with memory location
+
+        __str__(self)
+            Pretty print of the passed real and dual parts
+
+        Mathematical dunder methods: Add, subtract, multiply, divide, power, negation
+
+        Reverse mathematical dunder methods: Add, subtract, multiply, divide, and power
+
         Examples
         ------------------------------------
         >>> x = DualNumber(2)
@@ -39,11 +54,40 @@ class DualNumber:
         ------------------------------------
         At this stage, DualNumber only supports scalar functions
         '''
-        
-        self.real = real
-        self.dual = dual
+        if isinstance(real, self._supported_scalars) and isinstance(dual, self._supported_scalars):
+            self.real = real
+            self.dual = dual
+        else:
+            raise TypeError('DualNumber real and dual parts may only be initialized as integers or floats')
 
-        
+    def __repr__(self):
+        '''
+        Explanation
+        ------------------------------------
+        Base print of DualNumber instantiation with real, dual, and memory location
+
+        Inputs
+        ------------------------------------
+        None
+        '''  
+        return f'DualNumber({self.real}, {self.dual}, id: {id(self)})'
+
+    def __str__(self):
+        '''
+        Explanation
+        ------------------------------------
+        Pretty print of DualNumber instantiation
+
+        Inputs
+        ------------------------------------
+        None
+        '''  
+        return f'real: {self.real}, dual (derivative): {self.dual}'
+
+    def _validate(self, variable):
+        if not isinstance(variable, (*self._supported_scalars, DualNumber)):
+            raise TypeError("Type not supported: must be int or float")
+
     def __add__(self, other):
         '''
         Explanation
@@ -60,7 +104,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = a + b
-        a DualNumber object with the value and derivative of the self + other operation
+            DualNumber object with the value and derivative of the self + other operation
         
         Examples
         ------------------------------------
@@ -84,9 +128,8 @@ class DualNumber:
         5
         6
         '''
-        
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(other+self.real, self.dual)
         else:
@@ -108,7 +151,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = b + a
-        a DualNumber object with the value and derivative of the other + self operation
+            DualNumber object with the value and derivative of the other + self operation
         
         Examples
         ------------------------------------
@@ -132,9 +175,7 @@ class DualNumber:
         5
         18
         '''
-        
         return self.__add__(other)
-
     
     def __sub__(self, other):
         '''
@@ -152,7 +193,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = a - b
-        a DualNumber object with the value and derivative of the self - other operation
+            DualNumber object with the value and derivative of the self - other operation
         
         Examples
         ------------------------------------
@@ -176,15 +217,13 @@ class DualNumber:
         0
         2
         '''
-        
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(self.real-other, self.dual)
         else:
             return DualNumber(self.real-other.real, self.dual-other.dual)
-
-        
+ 
     def __rsub__(self, other):
         '''
         Explanation
@@ -201,7 +240,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = b - a
-        a DualNumber object with the value and derivative of the other - self operation
+            DualNumber object with the value and derivative of the other - self operation
         
         Examples
         ------------------------------------
@@ -225,15 +264,13 @@ class DualNumber:
         0
         2
         '''
-        
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(other-self.real, -self.dual)
         else:
             return DualNumber(-self.real+other.real, -self.dual+other.dual)
-    
-    
+       
     def __mul__(self, other):
         '''
         Explanation
@@ -250,7 +287,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = a*b
-        a DualNumber object with the value and derivative of the self*other operation
+            DualNumber object with the value and derivative of the self*other operation
         
         Examples
         ------------------------------------
@@ -274,14 +311,12 @@ class DualNumber:
         6
         19
         '''
-            
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(self.real*other.real, self.dual*other.real)
         else:
             return DualNumber(self.real*other.real, self.real*other.dual+other.real*self.dual)
-
         
     def __rmul__(self, other):
         '''
@@ -299,7 +334,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = b*a
-        a DualNumber object with the value and derivative of the other*self operation
+            DualNumber object with the value and derivative of the other*self operation
         
         Examples
         ------------------------------------
@@ -323,9 +358,7 @@ class DualNumber:
         6
         19
         '''
-        
         return self.__mul__(other)
-
     
     def __truediv__(self, other):
         '''
@@ -343,7 +376,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = a/b
-        a DualNumber object with the value and derivative of the self/other operation
+            DualNumber object with the value and derivative of the self/other operation
         
         Examples
         ------------------------------------
@@ -371,15 +404,13 @@ class DualNumber:
         ------------------------------------
         Only truediv is implemented here (as opposed to truediv and floordiv). Therefore, using the '/' operator will return a floating-point approximation, not the truncated down result of '//'
         '''
-        
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(self.real/other.real, self.dual/other.real)
         else:
             return DualNumber(self.real/other.real, (other.real*self.dual - self.real*other.dual)/(other.real*other.real))
-
-        
+      
     def __rtruediv__(self, other):
         '''
         Explanation
@@ -396,7 +427,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = b/a
-        a DualNumber object with the value and derivative of the other/self operation
+            DualNumber object with the value and derivative of the other/self operation
         
         Examples
         ------------------------------------
@@ -424,15 +455,13 @@ class DualNumber:
         ------------------------------------
         Only rtruediv is implemented here (as opposed to rtruediv and rfloordiv). Therefore, using the '/' operator will return a floating-point approximation, not the truncated down result of '//'
         '''
-        
-        if not isinstance(other, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(other.real/self.real, (-other.real*self.dual)/(self.real*self.real))
         else:
             return DualNumber(other.real/self.real, -(other.real*self.dual - self.real*other.dual)/(other.dual*other.dual))
-
-        
+  
     def __neg__(self):
         '''
         Explanation
@@ -447,7 +476,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = -a
-        a DualNumber object with the value and derivative of the -self operation
+            DualNumber object with the value and derivative of the -self operation
         
         Examples
         ------------------------------------
@@ -461,15 +490,9 @@ class DualNumber:
         -5
         -3
         '''
-        
-        if not isinstance(self, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
-        if isinstance(self, self._supported_scalars):
-            return DualNumber(self.real*(-1), self.dual*(-1))
-        else:
-            return DualNumber(self.real*(-1), self.dual*(-1))
+        # No need for type-checks, can only be enacted on a DualNumber object
+        return DualNumber(self.real*(-1), self.dual*(-1))
 
-        
     def __pow__(self, other):
         '''
         Explanation
@@ -486,7 +509,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = a**b
-        a DualNumber object with the value and derivative of the self**other operation
+            DualNumber object with the value and derivative of the self**other operation
         
         Examples
         ------------------------------------
@@ -510,16 +533,12 @@ class DualNumber:
         25
         311.6516346759676
         '''
-        
-        if not isinstance(self, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
+        self._validate(other)
+
         if isinstance(other, self._supported_scalars):
             return DualNumber(self.real**other.real, self.dual*other.real*self.real**(other.real-1))
-        elif isinstance(other, str):
-            raise TypeError("Type not supported: must be int or float")
         else:
             return DualNumber(self.real**other.real, self.real**other.real*(self.dual*(other.real/self.real) + other.dual*np.log(self.real)))
-
         
     def __rpow__(self, other):
         '''
@@ -537,7 +556,7 @@ class DualNumber:
         Outputs
         ------------------------------------
         x = b**a
-        a DualNumber object with the value and derivative of the other**self operation
+            DualNumber object with the value and derivative of the other**self operation
         
         Examples
         ------------------------------------
@@ -561,10 +580,7 @@ class DualNumber:
         25
         311.6516346759676
         '''
-        
-        if not isinstance(self, (*self._supported_scalars, DualNumber)):
-            raise TypeError("Type not supported: must be int or float")
-        if isinstance(other, self._supported_scalars):
-            return DualNumber(other.real**self.real, (other.real**self.real)*self.dual*np.log(other.real))
-        else:
-            return DualNumber(other.real**self.real, (other.real**self.real)*self.dual*np.log(other.real))
+        # Other type-error cases handled in __pow__
+        self._validate(other)
+
+        return DualNumber(other.real**self.real, (other.real**self.real)*self.dual*np.log(other.real))
