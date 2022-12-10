@@ -235,14 +235,14 @@ class TestADInterface():
         x = np.array([2])
         rm_scalar = ReverseAD(f, x)
         result = rm_scalar.get_jacobian()
-        assert pytest.approx([4]) == result[0]
+        assert pytest.approx(4) == result[0]
 
         def vector(x):
             return x[0]**2 + 3*x[1] + 5
         f = np.array([vector])
         x = np.array([1, 2])
         rm_vector = ReverseAD(f, x)
-        assert pytest.approx([2, 3]) == rm_vector.get_jacobian()
+        assert pytest.approx([2, 3]) == rm_vector.get_jacobian()[0]
 
     def scalar_func_array_variable(self):
         def func(x):
