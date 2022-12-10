@@ -18,12 +18,18 @@
     python -m pip install setuptools
     ```
 
-3. This package depends on `numpy` version 1.21.0 and greater. This should be handled during installation, but can be installed using the following command.
+3. This package depends on `numpy` version 1.21.0 and greater. Please ensure it is installed and up to date.
 
     ```
     # Linux (Ubuntu), MacOS
     python -m pip install numpy
     python -m pip install --upgrade numpy
+    ```
+
+4. Pip install from the test PyPI
+
+    ```
+    python -m pip install https://test.pypi.org/simple/ bad_package
     ```
 
 ## Installation via GitHub
