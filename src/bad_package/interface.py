@@ -102,7 +102,7 @@ class AutoDiff():
         elif isinstance(var_list, (list, np.ndarray)):
             var_list = np.array(var_list)
         else:
-            raise TypeError(f"Second argument in {print(self)} must be a list or ndarray of integers or float or single integers or floats.")
+            raise TypeError(f"Second argument in must be a list or ndarray of integers or float or single integers or floats.")
 
         self.func_is_callable = False
         if isinstance(f, (list, np.ndarray)):
@@ -112,7 +112,7 @@ class AutoDiff():
             self.func_is_callable = True
             f = np.array([f])
         else:
-            raise TypeError(f"First argument in {print(self)} must be a list of ndarray of functions or a single function.")
+            raise TypeError(f"First argument in must be a list of ndarray of functions or a single function.")
         
         self.f = f
         self.var_list = var_list
