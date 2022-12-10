@@ -30,7 +30,6 @@ class TestElementaryFunctions():
             exp(['3'])
             exp([])
         
-
     def test_ln(self):
         # DualNumber
         assert isinstance(ln(DualNumber(2, 2)), DualNumber)
@@ -57,7 +56,6 @@ class TestElementaryFunctions():
             ln(DualNumber(-1, -1))
             ln(ReverseMode(-1))
 
-
     def test_logbase(self):
         # DualNumber
         assert isinstance(logBase(DualNumber(2, 5), np.e), DualNumber)
@@ -79,7 +77,6 @@ class TestElementaryFunctions():
 
         with pytest.raises(TypeError):
             logBase(64, '2')
-
 
     def test_sin(self):
         # DualNumber
@@ -104,7 +101,6 @@ class TestElementaryFunctions():
         result_neg = sin(x_neg)
         assert pytest.approx(np.sin(-5)) == result_neg.real
 
-
     def test_cos(self):
         # DualNumber 
         assert isinstance(cos(DualNumber(2, 2)), DualNumber)
@@ -127,7 +123,6 @@ class TestElementaryFunctions():
         x_neg = ReverseMode(-2)
         result_neg = cos(x_neg)
         assert np.cos(-2) == result_neg.real
-
 
     def test_tan(self):
         # DualNumber
@@ -157,7 +152,6 @@ class TestElementaryFunctions():
             tan(DualNumber(pi/2))
             tan(ReverseMode(pi/2))
 
-
     def test_csc(self):
         # DualNumber
         # csc'(x) = -csc(x)cot(x)
@@ -177,7 +171,6 @@ class TestElementaryFunctions():
         with pytest.raises(ArithmeticError):
             csc(DualNumber(pi))
             csc(ReverseMode(pi))
-
 
     def test_sec(self):
         # DualNumber
@@ -199,7 +192,6 @@ class TestElementaryFunctions():
             sec(DualNumber(pi/2))
             sec(ReverseMode(pi/2))
 
-
     def test_cot(self):
         # DualNumber
         # cot'(x) = -csc^2(x)
@@ -220,7 +212,6 @@ class TestElementaryFunctions():
             cot(DualNumber(pi))
             cot(ReverseMode(pi))
 
-
     def test_sinh(self):
         # DualNumber
         assert isinstance(sinh(DualNumber(1, 1)), DualNumber)
@@ -234,7 +225,6 @@ class TestElementaryFunctions():
         x = ReverseMode(-0.25)
         result = sinh(x)
         assert np.sinh(-0.25) == result.real
-
 
     def test_cosh(self):
         # DualNumber
@@ -250,7 +240,6 @@ class TestElementaryFunctions():
         result = cosh(x)
         assert np.cosh(2) == result.real
 
-
     def test_tanh(self):
         # DualNumber
         # tanh'(x) = 1 - tanh^2(x)
@@ -265,7 +254,6 @@ class TestElementaryFunctions():
         x = DualNumber(.1)
         result = tanh(x)
         assert pytest.approx(np.tanh(.1)) == result.real
-
 
     def test_arcsin(self):
         # DualNumber
@@ -287,7 +275,6 @@ class TestElementaryFunctions():
             arcsin(ReverseMode(-2))
             arcsin(1.1)
 
-
     def test_arccos(self):
         # DualNumber
         assert isinstance(arccos(DualNumber(0.9, 3)), DualNumber)
@@ -308,7 +295,6 @@ class TestElementaryFunctions():
             arccos(ReverseMode(1.2))
             arccos(-1.1)
 
-
     def test_arctan(self):
         # DualNumber
         assert isinstance(arctan(DualNumber(2, 2)), DualNumber)
@@ -323,7 +309,6 @@ class TestElementaryFunctions():
         result = arctan(x)
         assert np.arctan(2) == result.real
 
-
     def test_arcsinh(self):
         # DualNumber
         assert isinstance(arcsinh(DualNumber(1, 1)), DualNumber)
@@ -337,7 +322,6 @@ class TestElementaryFunctions():
         x = ReverseMode(2)
         result = arcsinh(x)
         assert np.arcsinh(2) == result.real
-
 
     def test_arccosh(self):
         # DualNumber
@@ -359,7 +343,6 @@ class TestElementaryFunctions():
             arccosh(0.5)
             arccos(ReverseMode(-10))
 
-
     def test_arctanh(self):
         # DualNumber
         assert isinstance(arctanh(DualNumber(0.1, 0.3)), DualNumber)
@@ -379,7 +362,6 @@ class TestElementaryFunctions():
             arctanh(DualNumber(1))
             arctanh(DualNumber(0.5, 0.5))
             arctanh(ReverseMode(-1))
-
 
     def test_sqrt(self):
         # DualNumber

@@ -19,7 +19,6 @@ class DualNumber:
         dual: [optional] the derivative of the object for the user's function
               int or float or None
 
-
         Outputs
         ------------------------------------
         self: DualNumber object
@@ -55,7 +54,6 @@ class DualNumber:
         ------------------------------------
         At this stage, DualNumber only supports scalar functions
         '''
-
         if isinstance(real, self._supported_scalars) and isinstance(dual, self._supported_scalars):
             self.real = real
             self.dual = dual
@@ -90,7 +88,6 @@ class DualNumber:
         if not isinstance(variable, (*self._supported_scalars, DualNumber)):
             raise TypeError("Type not supported: must be int or float")
 
-        
     def __add__(self, other):
         '''
         Explanation
@@ -226,8 +223,7 @@ class DualNumber:
             return DualNumber(self.real-other, self.dual)
         else:
             return DualNumber(self.real-other.real, self.dual-other.dual)
-
-        
+ 
     def __rsub__(self, other):
         '''
         Explanation
@@ -274,8 +270,7 @@ class DualNumber:
             return DualNumber(other-self.real, -self.dual)
         else:
             return DualNumber(-self.real+other.real, -self.dual+other.dual)
-    
-    
+       
     def __mul__(self, other):
         '''
         Explanation
@@ -322,7 +317,6 @@ class DualNumber:
             return DualNumber(self.real*other.real, self.dual*other.real)
         else:
             return DualNumber(self.real*other.real, self.real*other.dual+other.real*self.dual)
-
         
     def __rmul__(self, other):
         '''
@@ -364,9 +358,7 @@ class DualNumber:
         6
         19
         '''
-        
         return self.__mul__(other)
-
     
     def __truediv__(self, other):
         '''
@@ -418,8 +410,7 @@ class DualNumber:
             return DualNumber(self.real/other.real, self.dual/other.real)
         else:
             return DualNumber(self.real/other.real, (other.real*self.dual - self.real*other.dual)/(other.real*other.real))
-
-        
+      
     def __rtruediv__(self, other):
         '''
         Explanation
@@ -470,8 +461,7 @@ class DualNumber:
             return DualNumber(other.real/self.real, (-other.real*self.dual)/(self.real*self.real))
         else:
             return DualNumber(other.real/self.real, -(other.real*self.dual - self.real*other.dual)/(other.dual*other.dual))
-
-        
+  
     def __neg__(self):
         '''
         Explanation
@@ -500,14 +490,9 @@ class DualNumber:
         -5
         -3
         '''
-        self._validate(self)
+        # No need for type-checks, can only be enacted on a DualNumber object
+        return DualNumber(self.real*(-1), self.dual*(-1))
 
-        if isinstance(self, self._supported_scalars):
-            return DualNumber(self.real*(-1), self.dual*(-1))
-        else:
-            return DualNumber(self.real*(-1), self.dual*(-1))
-
-        
     def __pow__(self, other):
         '''
         Explanation
@@ -549,7 +534,6 @@ class DualNumber:
         311.6516346759676
         '''
         self._validate(other)
-        self._validate(self)
 
         if isinstance(other, self._supported_scalars):
             return DualNumber(self.real**other.real, self.dual*other.real*self.real**(other.real-1))
@@ -596,9 +580,7 @@ class DualNumber:
         25
         311.6516346759676
         '''
+        # Other type-error cases handled in __pow__
         self._validate(other)
 
-        if isinstance(other, self._supported_scalars):
-            return DualNumber(other.real**self.real, (other.real**self.real)*self.dual*np.log(other.real))
-        else:
-            return DualNumber(other.real**self.real, (other.real**self.real)*self.dual*np.log(other.real))
+        return DualNumber(other.real**self.real, (other.real**self.real)*self.dual*np.log(other.real))

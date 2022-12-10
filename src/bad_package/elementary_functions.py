@@ -68,11 +68,10 @@ def exp(x):
     x = _validate(x, 'exp()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, inf)
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, inf)
             return DualNumber(exp(x.real), x.dual * exp(x.real))
         else:
-            # Derivative defined (-inf, inf)
             f = ReverseMode(exp(x.real))
             x.child.append((exp(x.real), f))
             return f
@@ -104,7 +103,7 @@ def ln(x):
     x = _validate(x, 'ln()')
 
     if not isinstance(x, float):
-        # Derivative defined (0, infinity); x.real cannot be 0
+        # Derivative cannot have x.real == 0
         if x.real > 0:
             if isinstance(x, DualNumber):
                 return DualNumber(ln(x.real), x.dual / x.real)
@@ -115,6 +114,7 @@ def ln(x):
         else:
             raise ArithmeticError(f'ln({type(x)}) -- Natural log is defined only for values greater than or equal to 1')
     else:
+        # Defined [1, inf)
         if x >= 1:
             return np.log(x)
         else:
@@ -147,7 +147,7 @@ def logBase(x, base):
 
     # Taking two arguments requires another check not included in basic validation
     if not isinstance(base, (int, float)):
-        raise TypeError('logBase() -- Base must be an integer or a float.')
+        raise TypeError(f'logBase({type(x)}, {base}) -- Base must be an integer or a float.')
 
     if not isinstance(x, float):
         # Defined everywhere that x and base are non-negative
@@ -190,11 +190,10 @@ def sin(x):
     x = _validate(x, 'sin()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, inf)
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, inf)
             return DualNumber(sin(x.real), x.dual * cos(x.real))
         else:
-            # Derivative defined (-inf, inf)
             f = ReverseMode(sin(x.real))
             x.child.append((cos(x.real), f))
             return f
@@ -225,11 +224,10 @@ def cos(x):
     x = _validate(x, 'cos()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, inf)
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, inf)
             return DualNumber(cos(x.real), -1 * sin(x.real) * x.dual)
         else:
-            # Derivative defined (-inf, inf)
             f = ReverseMode(cos(x.real))
             x.child.append((-1 * sin(x.real), f))
             return f
@@ -261,11 +259,10 @@ def tan(x):
     x = _validate(x, 'tan()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, 0) U (0, inf), but tan has the same bounding which is handled below before div 0 occurs
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, 0) U (0, inf), but tan has the same bounding which is handled below before div 0 occurs
             return DualNumber(tan(x.real), x.dual / cos(x.real)**2)
         else:
-            # Derivative defined (-inf, 0) U (0, inf), but tan has the same bounding which is handled below before div 0 occurs
             f = ReverseMode(tan(x.real))
             x.child.append((1/(cos(x.real)**2), f))
             return f
@@ -301,11 +298,10 @@ def csc(x):
     x = _validate(x, 'csc()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, inf), other div zero issues (csc and cot) handled in their functions
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, inf)
             return DualNumber(csc(x.real), -1 * x.dual * csc(x.real) * cot(x.real))
         else:
-            # Derivative defined (-inf, inf)
             f = ReverseMode(csc(x.real))
             x.child.append((-csc(x.real)*(1/tan(x.real)), f))
             return f
@@ -341,11 +337,10 @@ def sec(x):
     x = _validate(x, 'sec()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, inf), other div zero issues (sec) handled below
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, inf)
             return DualNumber(sec(x.real), sec(x.real) * tan(x.real) * x.dual)
         else:
-            # Derivative defined (-inf, inf)
             f = ReverseMode(sec(x.real))
             x.child.append((sec(x.real)*tan(x.real), f))
             return f
@@ -381,11 +376,10 @@ def cot(x):
     x = _validate(x, 'cot()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, inf), other div zero issues (csc) handled in its function
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, inf)
             return DualNumber(cot(x.real), -1 * csc(x.real) * csc(x.real) * x.dual)
         else:
-            # Derivative defined (-inf, inf)
             f = ReverseMode(cot(x.real))
             x.child.append(((-csc(x.real))**2, f))
             return f
@@ -419,11 +413,10 @@ def sinh(x):
     x = _validate(x, 'sinh()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, inf)
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, inf)
             return DualNumber(sinh(x.real), cosh(x.real) * x.dual)
         else:
-            # Derivative defined (-inf, inf)
             f = ReverseMode(sinh(x.real))
             x.child.append((cosh(x.real), f))
             return f
@@ -454,11 +447,10 @@ def cosh(x):
     x = _validate(x, 'cosh()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, inf)
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, inf)
             return DualNumber(cosh(x.real), sinh(x.real) * x.dual)
         else:
-            # Derivative defined (-inf, inf)
             f = ReverseMode(cosh(x.real))
             x.child.append((sinh(x.real), f))
             return f
@@ -489,11 +481,10 @@ def tanh(x):
     x = _validate(x, 'tanh()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, inf), Cosh is never 0
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, inf), Cosh is never 0
             return DualNumber(tanh(x.real), x.dual / cosh(x.real) ** 2)
         else:
-            # Derivative defined (-inf, inf), Cosh is never 0
             f = ReverseMode(tanh(x.real))
             x.child.append(((1/cosh(x.real))**2 ,f))
             return f
@@ -526,12 +517,11 @@ def arcsin(x):
     x = _validate(x, 'arcsin()')
 
     if not isinstance(x, float):
+        # Derivative defined (-1, 1)
         if x.real > -1 and x.real < 1:
             if isinstance(x, DualNumber):
-                # Derivative defined (-1, 1)
                 return DualNumber(arcsin(x.real), x.dual / sqrt(1 - x.real ** 2))
             else:
-                # Derivative defined (-1, 1)
                 f = ReverseMode(arcsin(x.real))
                 x.child.append((1/sqrt(1 - (x.real)**2), f))
                 return f
@@ -569,9 +559,9 @@ def arccos(x):
     x = _validate(x, 'arccos()')
 
     if not isinstance(x, float):
+        # Derivative defined (-1, 1)
         if x.real > -1 and x.real < 1:
             if isinstance(x, DualNumber):
-                # Derivative defined (-1, 1)
                 return DualNumber(arccos(x.real), (-1 * x.dual) / sqrt(1 - x.real ** 2))
             else:
                 f = ReverseMode(arccos(x.real))
@@ -609,11 +599,10 @@ def arctan(x):
     x = _validate(x, 'arctan()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, inf)
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, inf)
             return DualNumber(arctan(x.real), x.dual / (1 + x.real ** 2))
         else:
-            # Derivative defined (-inf, inf)
             f = ReverseMode(arctan(x.real))
             x.child.append((1/(1 + x.real**2), f))
             return f
@@ -644,11 +633,10 @@ def arcsinh(x):
     x = _validate(x, 'arcsinh()')
 
     if not isinstance(x, float):
+        # Derivative defined (-inf, inf)
         if isinstance(x, DualNumber):
-            # Derivative defined (-inf, inf)
             return DualNumber(arcsinh(x.real), x.dual / sqrt(1 + x.real ** 2))
         else:
-            # Derivative defined (-inf, inf)
             f = ReverseMode(arcsinh(x.real))
             x.child.append((1 / sqrt(1 + x.real ** 2), f))
             return f
@@ -681,12 +669,11 @@ def arccosh(x):
     x = _validate(x, 'arccosh()')
 
     if not isinstance(x, float):
+        # Derivative defined (1, inf)
         if x.real > 1:
             if isinstance(x, DualNumber):
-                # Derivative defined (1, inf)
                 return DualNumber(arccosh(x.real), x.dual / (sqrt(x.real - 1) * sqrt(x.real + 1)))
             else:
-                # Derivative defined (1, inf)
                 f = ReverseMode(arccosh(x.real))
                 x.child.append((1 / (sqrt(x.real - 1) * sqrt(x.real + 1)), f))
                 return f

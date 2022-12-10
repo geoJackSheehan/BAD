@@ -15,12 +15,9 @@ ReverseAD:
     Internally uses ReverseMode objects to track accumulated function value and derivative value.
     Supports any combination of scalar or vector variables and functions
 """
-
 import numpy as np
 from bad_package.fad import DualNumber
 from bad_package.rad import ReverseMode
-
-
 
 class AutoDiff():
     '''
@@ -107,7 +104,6 @@ class AutoDiff():
         self.func_is_callable = False
         if isinstance(f, (list, np.ndarray)):
             pass
-            # f = np.array(f)
         elif callable(f):
             self.func_is_callable = True
             f = np.array([f])
@@ -120,6 +116,7 @@ class AutoDiff():
         self.jacobian = []
         self.primal = []
         
+        # Make a DualNumber transformed copy of var_list
         trace = []
         for variable in var_list:
             trace.append(DualNumber(float(variable), 1))
@@ -162,22 +159,25 @@ class AutoDiff():
         ------------------------------------
         None
         '''
-        # Iterate through all passed functions (same shape)
+        # Iterate through all passed functions
         for f in self.f:
             if self.len_var_list == 1:
+                # Less computation for simple functions, just jacobian is not considered a "matrix"
                 value = f(self.trace[0])
                 self.primal.append(value.real)
                 self.jacobian.append(value.dual)
             else:
                 value = f(self.trace)
-                # Primal trace and tangent trace
+                # Primal trace (evals) and tangent trace (partials) container for this function instance
                 trace, tangent = [], []
                 for i in range(self.len_var_list):
+                    # Get current variable we want the partial of, set others as "constants", compute partial
                     x = self.trace[i]
                     y = [DualNumber(0, 0)]*self.len_var_list
                     y[i] = x
                     dp = f(y).dual
 
+                    # Append partial derivative to this function's tangent container and evaluation at this step to this function's primal container
                     updatedDual = DualNumber(value.real, dp)
                     trace.append(updatedDual)
                     tangent.append(updatedDual.dual)
@@ -223,6 +223,7 @@ class AutoDiff():
         print(f'Primal: {ad.get_primal()}')
         >>> [11, 5.67]
         '''
+        # Flatten the list if we have a single function
         if (self.func_is_callable and self.var_is_scalar):
             self.primal = self.primal[0]
         return self.primal
@@ -264,6 +265,7 @@ class AutoDiff():
         print(f'Tangent: {ad.get_jacobian()}')
         >>> [[2, 3], [0.54030, -0.90929]]
         '''
+        # Flatten the matrix if we have a single function 
         if (self.func_is_callable and self.var_is_scalar):
             self.jacobian = self.jacobian[0]
         return self.jacobian

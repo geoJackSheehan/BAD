@@ -19,14 +19,12 @@ class TestReverseMode:
             ReverseMode(DualNumber(1))
             ReverseMode([])
 
-
     def test_grad(self):
         rm = ReverseMode(3)
         res1 = rm**2
         res1.gradient = 1.0
         assert rm.grad() == sum(dvj_dvi * df_dvj.grad() for dvj_dvi, df_dvj in rm.child)
         assert rm.grad() == 6
-    
     
     def test_child(self):
         # Testing the self.child container
@@ -51,14 +49,12 @@ class TestReverseMode:
         # Child nodes for rm2 (not binary)
         assert len(rm2.child) == 3
 
-
     def test_return(self):
         rm = ReverseMode(2)
         rm2 = ReverseMode(-5)
 
         res1 = rm + 4 - rm2 * 3
         assert isinstance(res1, ReverseMode)
-
 
     def test_add(self):
         rm = ReverseMode(49)
@@ -115,7 +111,6 @@ class TestReverseMode:
             1 + ReverseMode(np.NaN)
             0 + ReverseMode((1, 2))
 
-
     def test_sub(self):
         rm = ReverseMode(1)
         rm2 = ReverseMode(-10)
@@ -148,7 +143,6 @@ class TestReverseMode:
             ReverseMode(np.NaN) - ReverseMode(np.Inf)
             ReverseMode((1, 2)) - ReverseMode(2)
 
-
     def test_rsub(self):
         rm = ReverseMode(6)
         rm2 = ReverseMode(-5)
@@ -175,7 +169,6 @@ class TestReverseMode:
             4 - ReverseMode([1, 2, 3])
             -10 - ReverseMode(np.Inf)
             1 - ReverseMode((1, 2))
-
 
     def test_mul(self):
         rm = ReverseMode(1)
@@ -204,7 +197,6 @@ class TestReverseMode:
             rm * '4'
             rm * DualNumber(1)
 
-
     def test_rmul(self):
         rm = ReverseMode(3)
 
@@ -230,7 +222,6 @@ class TestReverseMode:
             4 * ReverseMode([1,2])
             '4' * rm
             DualNumber(1) * rm
-
 
     def test_truediv(self):
         rm = ReverseMode(2)
@@ -258,7 +249,6 @@ class TestReverseMode:
         with pytest.raises(ArithmeticError):
             rm / ReverseMode(0)
 
-
     def test_rtruediv(self):
         rm = ReverseMode(2)
         rm2 = ReverseMode(3)
@@ -280,7 +270,6 @@ class TestReverseMode:
             [1, 2, 3] / rm
             (2, 3) / rm2
             DualNumber(1) / rm
-
 
     def test_neg(self):
         rm = ReverseMode(3)
@@ -304,7 +293,6 @@ class TestReverseMode:
             rm ** [1,2,3]
             rm ** (1,2)
             rm ** DualNumber(2)
-
 
     def test_rpow(self):
         rm = ReverseMode(4)

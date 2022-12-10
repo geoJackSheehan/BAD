@@ -111,7 +111,6 @@ class ReverseMode():
         Do we have to assign gradient to 1 before calling this in order for it to work? 
         Uses sum() for situations when self has more than one child
         '''
-        
         if self.gradient is None:
             self.gradient = sum(dvj_dvi * df_dvj.grad() for dvj_dvi, df_dvj in self.child)
         return self.gradient
@@ -146,7 +145,6 @@ class ReverseMode():
         >>> print(x.real)
         5
         '''
-        
         if not isinstance(other, (*self._supported_scalars, ReverseMode)):
             raise TypeError("Type not supported: must be int or float")
         if isinstance(other, self._supported_scalars):
@@ -188,7 +186,6 @@ class ReverseMode():
         >>> print(x.real)
         5
         '''
-        
         return self.__add__(other)
 
     def __sub__(self, other):
@@ -221,7 +218,6 @@ class ReverseMode():
         >>> print(x.real)
         0
         '''
-        
         if not isinstance(other, (*self._supported_scalars, ReverseMode)):
             raise TypeError("Type not supported: must be int or float")
         if isinstance(other, self._supported_scalars):
@@ -263,7 +259,6 @@ class ReverseMode():
         >>> print(x.real)
         0
         '''
-        
         if not isinstance(other, (*self._supported_scalars, ReverseMode)):
             raise TypeError("Type not supported: must be int or float")
             
@@ -306,7 +301,6 @@ class ReverseMode():
         >>> print(x.real); print(x.dual)
         6
         '''
-        
         if not isinstance(other, (*self._supported_scalars, ReverseMode)):
             raise TypeError('Type not supported: must be int or float')
         if isinstance(other, self._supported_scalars):
@@ -349,7 +343,6 @@ class ReverseMode():
         >>> print(x.real)
         6
         '''
-        
         return self.__mul__(other)
 
     def __truediv__(self, other):
@@ -386,7 +379,6 @@ class ReverseMode():
         ------------------------------------
         Only truediv is implemented here (as opposed to truediv and floordiv). Therefore, using the '/' operator will return a floating-point approximation, not the truncated down result of '//'
         '''
-        
         if not isinstance(other, (*self._supported_scalars, ReverseMode)):
             raise TypeError('Type not supported: must be int or float')
         if isinstance(other, self._supported_scalars):
@@ -397,7 +389,6 @@ class ReverseMode():
             other.child.append((-self.real / (other.real)**2, f))
             self.child.append((1.0 / other.real, f))
         return f
-
 
     def __rtruediv__(self, other):
         '''
@@ -433,7 +424,7 @@ class ReverseMode():
         ------------------------------------
         Only rtruediv is implemented here (as opposed to rtruediv and rfloordiv). Therefore, using the '/' operator will return a floating-point approximation, not the truncated down result of '//'
         '''
-        
+        # Other type-checks handled in __truediv__
         f = ReverseMode(other / self.real)
         self.child.append((other * (-self.real ** (-2)), f))
         return f
@@ -461,6 +452,7 @@ class ReverseMode():
         >>> print(x.real)
         -5
         '''
+        # No type check needed, can only ever be enacted on a ReverseMode object
         f = ReverseMode(-self.real)
         self.child.append((-1, f))
         return f
@@ -495,7 +487,6 @@ class ReverseMode():
         >>> print(x.real)
         25
         '''
-        
         if not isinstance(other, (*self._supported_scalars, ReverseMode)):
             raise TypeError('Type not supported: must be int or float')
         if isinstance(other, self._supported_scalars):
@@ -537,7 +528,7 @@ class ReverseMode():
         >>> print(x.real)
         25
         '''
-        
+        # Other type-error cases handled in __pow__
         f = ReverseMode(other ** self.real)
         self.child.append(((other ** self.real) * np.log(other) , f))
         return f
