@@ -107,21 +107,10 @@ class TestADInterface():
     def test_scalar_get_jacobian_scalar_RM(self):
         def func(x):
             return (5*x + 50)/(2*x**2)
-        f = np.array([func])
         x = 5
-        rm = ReverseAD(f, x)
+        rm = ReverseAD(func, x)
         result = rm.get_jacobian()
         assert pytest.approx(-0.5) == result
-
-    def test_vector_of_funcs_get_jacobian_scalar_RM(self):
-        def func1(x):
-            return (5*x + 50)/(2*x**2)
-        def func2(x):
-            return 10 + 2*x
-        f = np.array([func1,func2])
-        x = 5
-        with pytest.raises(TypeError):
-            ReverseAD(f, x)
         
 
 # Testing Elementary Functions for ReverseMode as I fix them
@@ -253,4 +242,84 @@ class TestADInterface():
         rm_vector = ReverseAD(f, x)
         assert pytest.approx([2, 3]) == rm_vector.get_jacobian()
 
+    def scalar_func_array_variable(self):
+        def func(x):
+            return (5*x + 50)/(2*x**2)
+        x = np.array([5])
+        rm = ReverseAD(func, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([-0.5]) == result
+        
+    def scalar_func_scalar_variable(self):
+        def func(x):
+            return (5*x + 50)/(2*x**2)
+        x = 5
+        rm = ReverseAD(func, x)
+        result = rm.get_jacobian()
+        assert pytest.approx(-0.5) == result
+        
+    def array_func_scalar_variable(self):
+        def func1(x):
+            return (5*x + 50)/(2*x**2)
+        def func2(x):
+            return 10 + 2*x
+        func = np.array([func1,func2])
+        x = 5
+        rm = ReverseAD(func, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([-0.5, 2]) == result
+        
+    def array_func_array_variable(self):
+        def func1(x):
+            return (5*x + 50)/(2*x**2)
+        def func2(x):
+            return 10 + 2*x
+        func = np.array([func1,func2])
+        x = np.array([5])
+        rm = ReverseAD(func, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([-0.5, 2]) == result
     
+    
+    
+    
+    
+    
+    
+    
+#     # 1A1B: should return a single list value
+#     def func_1A1B(x):
+#         return (5*x + 50)/(2*x**2)
+#     x = np.array([5])
+#     rm = ReverseAD(func_1A1B, x)
+#     result = rm.get_jacobian()
+#     print(result)
+    
+#     # 1A2: should return a single scalar value
+#     def func_1A2(x):
+#         return (5*x + 50)/(2*x**2)
+#     x = 5
+#     rm = ReverseAD(func_1A2, x)
+#     result = rm.get_jacobian()
+#     print(result)
+    
+    # 2B: should return 2 scalar values
+    def func1(x):
+        return (5*x + 50)/(2*x**2)
+#     def func2(x):
+#         return 10 + 2*x
+#     func = np.array([func1])
+    x = 5
+    rm = ReverseAD(func1, x)
+    result = rm.get_jacobian()
+    print(result)
+    
+#     def func1(x):
+#         return (5*x + 50)/(2*x**2)
+#     def func2(x):
+#         return 10 + 2*x
+#     func = np.array([func1,func2])
+#     x = 5
+#     rm = ReverseAD(func, x)
+#     result = rm.get_jacobian()
+#     print(result)
