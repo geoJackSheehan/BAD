@@ -20,22 +20,6 @@ Danhee Kim ([sharonkim@g.harvard.edu](mailto:user@example.com))
 
 Documentation for this package can be found here (TODO after merging to branch)
 
-# Broader Impact and Inclusivity Statement
-
-## Broader Impact
-
-As developers of an open-sourced Auto Differentiation package, we care about bringing diversity, equity, and inclusion to the open-source community. We hope that our package can be used by a diverse group of people, including women, people of color, people with disabilities, and an exhaustive list consisting of minorities. We hope we can provide a safe space for motivating others to contribute and point out possible changes that need to be made for this open-sourced package.
-
-This open-sourced package may be misused and cause some serious ethical issues. Although this package is an efficient tool to solve complex gradient problems without solving them by hand, prior to using this package, we hope users can spend time understanding the real mathematical implications and uses of taking derivatives and gradients. Our package is primarily used for academic purposes and should not be for sale.
-
-## Software Inclusivity
-
-Team23 is dedicated to creating the software space more inclusive to underrepresented groups. To promote this standard, the BAD package will be released to the open source community welcoming contribution from any person. The core developers of BAD package believe that any individual, regardless of background, is capable of making meaningful contributions within the software community. We welcome _all_ developers that believe in fostering a respectful environment to contributing to our package. To make BAD package more accessible to non-native English speakers, we have plans to translate our documentation to various languages. We welcome any new ideas and feedback to improve the BAD package! Team23 believes that the best work is a product of collaboration of diverse backgrounds.
-
-Pull requests will be reviewed blindly among the core developers to mitigate bias. If not approved by a majority vote, relevant supportive feedback will be provided.
-
-Any unethical activity under the BAD package that fails to uphold this inclusive standard will not be tolerated. Discrimination is not welcome here.
-
 # Getting Started
 
 ## Installation via PyPi
@@ -234,3 +218,19 @@ Jacobian: [2, 3]
 >>> print(f'Jacobian: {rm.get_jacobian()}')
 Jacobian: [-0.5, 2]
 ```
+
+# Broader Impact and Inclusivity Statement
+
+## Broader Impact
+
+As developers of an open-sourced Auto Differentiation package, we care about bringing diversity, equity, and inclusion to the open-source community. We hope that our package can be used by a diverse group of people, including women, people of color, people with disabilities, and an exhaustive list consisting of minorities. We hope we can provide a safe space for motivating others to contribute and point out possible changes that need to be made for this open-sourced package.
+
+This open-sourced package may be misused and cause some serious ethical issues. Although this package is an efficient tool to solve complex gradient problems without solving them by hand, prior to using this package, we hope users can spend time understanding the real mathematical implications and uses of taking derivatives and gradients. Our package is primarily used for academic purposes and should not be for sale.
+
+## Software Inclusivity
+
+Team23 is dedicated to creating the software space more inclusive to underrepresented groups. To promote this standard, the BAD package will be released to the open source community welcoming contribution from any person. The core developers of BAD package believe that any individual, regardless of background, is capable of making meaningful contributions within the software community. We welcome _all_ developers that believe in fostering a respectful environment to contributing to our package. To make BAD package more accessible to non-native English speakers, we have plans to translate our documentation to various languages. We welcome any new ideas and feedback to improve the BAD package! Team23 believes that the best work is a product of collaboration of diverse backgrounds.
+
+Pull requests will be reviewed blindly among the core developers to mitigate bias. If not approved by a majority vote, relevant supportive feedback will be provided.
+
+Any unethical activity under the BAD package that fails to uphold this inclusive standard will not be tolerated. Discrimination is not welcome here.
