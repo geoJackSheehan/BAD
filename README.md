@@ -4,7 +4,7 @@
 
 # CS107 Final Project - Team 23
 
-## Team Members:
+# Team Members:
 
 Feel free to contact the team via email for any further questions:
 
