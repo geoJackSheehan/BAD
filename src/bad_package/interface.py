@@ -442,7 +442,7 @@ class ReverseAD():
                     elif self.len_var_list == 1:
                         x = ReverseMode(float(self.var_list[0]))
                         self._compute_single_argument_jacobian(x)
-                        self.jacobian.append(x)
+                        # self.jacobian.append(x)
                        
                     # OPTION 1A1C: variable term is an empty array [INVALID]
                     else:
@@ -537,6 +537,7 @@ class ReverseAD():
         if isinstance(x, ReverseMode):
             z = self.f(x)
             z.gradient = 1.0
+            self.jacobian.append(x.grad())
         else:
             raise TypeError(f'{x} must be of ReverseMode type!')
 

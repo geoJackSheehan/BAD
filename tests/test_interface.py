@@ -147,6 +147,15 @@ class TestADInterface():
         result = rm.get_jacobian()
         assert pytest.approx(-0.5) == result
         
+    def test_scalar_get_jacobian_array_RM(self):
+        def scalar(x):
+            return 4*x + 2
+
+        x = np.array([2])
+        rm = ReverseAD(scalar,x)
+        result = rm.get_jacobian()
+        assert pytest.approx([4]) == result
+        
 
 # Testing Elementary Functions for ReverseMode as I fix them
         
