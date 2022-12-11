@@ -128,7 +128,7 @@ Documentation for this package can be found [here](docs/documentation.ipynb)
 
 # User can call the primal trace and jacobian matrix
 >>> print(f'Primal: {ad.get_primal()}')
-Primal: 11
+Primal: [11.0]
 >>> print(f'Tangent: {ad.get_jacobian()}')
 Tangent: [4]
 ```
