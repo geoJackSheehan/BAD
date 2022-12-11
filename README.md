@@ -210,11 +210,11 @@ Jacobian: [2, 3]
 >>> x = np.array([5])
 
 # User instantiate ReverseAD class
->>> rm = ReverseAD(vector, x)
+>>> rm = ReverseAD(func, x)
 
 # User can call the jacobian matrix
 >>> print(f'Jacobian: {rm.get_jacobian()}')
-Jacobian: [-0.5, 2]
+Jacobian: [-0.5, 2.0]
 ```
 
 # Broader Impact and Inclusivity Statement
