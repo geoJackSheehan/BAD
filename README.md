@@ -148,9 +148,9 @@ Tangent: [4]
 
 # User can call the primal trace and jacobian matrix
 >>> print(f'Primal: {ad.get_primal()}')
-Primal: 12
+Primal: [12.0]
 >>> print(f'Tangent: {ad.get_jacobian()}')
-Tangent: [2, 3]
+Tangent: [[2.0, 3]]
 ```
 
 ## Using Reverse Mode
