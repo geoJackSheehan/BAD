@@ -107,7 +107,7 @@ Documentation for this package can be found [here](docs/documentation.ipynb)
 >>> from bad_package.interface import *
 >>> from bad_package.elementary_functions import *
 >>> from bad_package.fad import *
->>> from bad_pacakge.rad import *
+>>> from bad_package.rad import *
 >>> import numpy as np
 ```
 
