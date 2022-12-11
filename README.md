@@ -190,7 +190,7 @@ Jacobian: [4]
 
 # User can call the jacobian matrix
 >>> print(f'Jacobian: {rm.get_jacobian()}')
-Jacobian: [2.0, 3.0]
+Jacobian: [[2.0, 3.0]]
 ```
 
 #### Vector 2
