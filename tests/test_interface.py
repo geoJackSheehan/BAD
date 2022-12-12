@@ -324,3 +324,60 @@ class TestADInterface():
         rm = ReverseAD(func, x)
         result = rm.get_jacobian()
         assert pytest.approx([-0.5, 2]) == result
+
+    def test_multiple_functions_reverse(x):
+        def f_1(x):
+            return x[0]**2 - x[1]**2
+        def f_2(x):
+            return 2*x[0]*x[1]
+
+        func = np.array([f_1, f_2])
+        x = np.array([1,1])
+        rm = ReverseAD(func, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([2, -2]) == result[0]
+        assert pytest.approx([2, 2]) == result[1]
+
+    def test_multiple_functions_forward(x):
+        def f_1(x):
+            return x[0]**2 - x[1]**2
+        def f_2(x):
+            return 2*x[0]*x[1]
+        func = np.array([f_1, f_2])
+        x = np.array([1,1])
+        ad = AutoDiff(func, x)
+        ad_result = ad.get_jacobian()
+        assert pytest.approx([2, -2]) == ad_result[0]
+        assert pytest.approx([2, 2]) == ad_result[1]
+
+    def test_multiple_functions_reverse(x):
+        def f1(x):
+            return x[1]*sin(x[2])
+        def f2(x):
+            return x[0]**3 - x[0]*x[2]
+        def f3(x):
+            return 3 + x[0]*x[1]
+
+        func = np.array([f1, f2, f3])
+        x = np.array([1, 2, 4])
+        rm = ReverseAD(func, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([0, np.sin(4), 2*np.cos(4)]) == result[0]
+        # assert pytest.approx([-1, 0, -1]) == result[1]
+        assert pytest.approx([2, 1, 0]) == result[2]
+
+    def test_multiple_functions_forward(x):
+        def f1(x):
+            return x[1]*sin(x[2])
+        def f2(x):
+            return x[0]**3 - x[0]*x[2]
+        def f3(x):
+            return 3 + x[0]*x[1]
+
+        func = np.array([f1, f2, f3])
+        x = np.array([1, 2, 4])
+        rm = AutoDiff(func, x)
+        result = rm.get_jacobian()
+        assert pytest.approx([0, np.sin(4), 2*np.cos(4)]) == result[0]
+        assert pytest.approx([-1, 0, -1]) == result[1]
+        assert pytest.approx([2, 1, 0]) == result[2]

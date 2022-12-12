@@ -47,7 +47,7 @@ Documentation for this package can be found [here](https://code.harvard.edu/CS10
 4. Pip install from the test PyPI
 
     ```
-    pip install -i https://test.pypi.org/simple/ bad-package==0.0.3
+    pip install -i https://test.pypi.org/simple/ bad-package==0.0.4
     ```
 
 ## Installation via GitHub

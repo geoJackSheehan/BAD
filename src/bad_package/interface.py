@@ -172,10 +172,10 @@ class AutoDiff():
                 trace, tangent = [], []
                 for i in range(self.len_var_list):
                     # Get current variable we want the partial of, set others as "constants", compute partial
-                    x = self.trace[i]
-                    y = [DualNumber(0, 0)]*self.len_var_list
-                    y[i] = x
-                    dp = f(y).dual
+                    for var in self.trace:
+                        var.dual = 0
+                    self.trace[i].dual = 1
+                    dp = f(self.trace).dual
 
                     # Append partial derivative to this function's tangent container and evaluation at this step to this function's primal container
                     updatedDual = DualNumber(value.real, dp)

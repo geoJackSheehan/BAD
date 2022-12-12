@@ -314,8 +314,10 @@ class DualNumber:
         self._validate(other)
 
         if isinstance(other, self._supported_scalars):
-            return DualNumber(self.real*other.real, self.dual*other.real)
+            return DualNumber(self.real*other, self.dual*other)
         else:
+            if other.dual == 0:
+                return DualNumber(self.real*other.real, self.dual*other.real)
             return DualNumber(self.real*other.real, self.real*other.dual+other.real*self.dual)
         
     def __rmul__(self, other):
@@ -407,7 +409,7 @@ class DualNumber:
         self._validate(other)
 
         if isinstance(other, self._supported_scalars):
-            return DualNumber(self.real/other.real, self.dual/other.real)
+            return DualNumber(self.real/other, self.dual/other)
         else:
             return DualNumber(self.real/other.real, (other.real*self.dual - self.real*other.dual)/(other.real*other.real))
       
@@ -458,7 +460,7 @@ class DualNumber:
         self._validate(other)
 
         if isinstance(other, self._supported_scalars):
-            return DualNumber(other.real/self.real, (-other.real*self.dual)/(self.real*self.real))
+            return DualNumber(other/self.real, (-other*self.dual)/(self.real*self.real))
         else:
             return DualNumber(other.real/self.real, -(other.real*self.dual - self.real*other.dual)/(other.dual*other.dual))
   
@@ -536,7 +538,7 @@ class DualNumber:
         self._validate(other)
 
         if isinstance(other, self._supported_scalars):
-            return DualNumber(self.real**other.real, self.dual*other.real*self.real**(other.real-1))
+            return DualNumber(self.real**other, self.dual*other*self.real**(other-1))
         else:
             return DualNumber(self.real**other.real, self.real**other.real*(self.dual*(other.real/self.real) + other.dual*np.log(self.real)))
         

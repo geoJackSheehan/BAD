@@ -225,8 +225,8 @@ class ReverseMode():
             self.child.append((1.0, f))
         else:
             f = ReverseMode(self.real - other.real)
-            other.child.append((1.0, f))
-            self.child.append((-1.0, f))
+            other.child.append((-1.0, f))
+            self.child.append((1.0, f))
         return f
 
     def __rsub__(self, other):
@@ -264,7 +264,7 @@ class ReverseMode():
             
         if isinstance(other, self._supported_scalars):
             f = ReverseMode(other - self.real)
-            self.child.append((1.0, f))
+            self.child.append((-1.0, f))
         else:
             f = ReverseMode(-self.real + other.real)
             other.child.append((1.0, f))
@@ -309,8 +309,14 @@ class ReverseMode():
         else:
             f = ReverseMode(self.real * other.real)
             f.gradient = 1.0
-            other.child.append((self.real, f))
+            # x = self.grad()
+            # y = other.grad()
+            self.gradient = 1
+            other.gradient = 1
             self.child.append((other.real, f))
+            self.gradient = None
+            other.child.append((self.real, f))
+            other.gradient = None
         return f
 
     def __rmul__(self, other):
