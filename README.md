@@ -18,7 +18,7 @@ Danhee Kim ([sharonkim@g.harvard.edu](mailto:user@example.com))
 
 # Documentation
 
-Documentation for this package can be found [here](docs/documentation.ipynb)
+Documentation for this package can be found [here](https://code.harvard.edu/CS107/team23/blob/main/docs/documentation.ipynb)
 
 # Getting Started
 
@@ -47,7 +47,7 @@ Documentation for this package can be found [here](docs/documentation.ipynb)
 4. Pip install from the test PyPI
 
     ```
-    pip install -i https://test.pypi.org/simple/ bad-package==0.0.1
+    pip install -i https://test.pypi.org/simple/ bad-package==0.0.3
     ```
 
 ## Installation via GitHub
